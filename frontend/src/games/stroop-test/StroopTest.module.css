@@ -1,0 +1,113 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.titulo {
+  color: #000000;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.painel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 24px;
+  background: #f8f9fa;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.reactionTime {
+  grid-column: span 2;
+  font-size: 1rem;
+  color: #666;
+  border-top: 1px solid #eaeaea;
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+/* Mensagem de fim de jogo baseada no seu exemplo */
+.mensagemVitoria {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease-in;
+}
+
+.wordDisplay {
+  font-size: 4rem;
+  font-weight: bolder;
+  margin: 10px 0 30px 0;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.gradeBotoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 450px;
+}
+
+.btnColor {
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #ffffff;
+  color: #333;
+  padding: 16px;
+  border: 2px solid #eaeaea;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btnColor:hover:not(:disabled) {
+  background-color: #f1f3f5;
+  border-color: #ced4da;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btnColor:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .titulo { font-size: 2rem; }
+  .painel { font-size: 1rem; }
+  .wordDisplay { font-size: 3rem; }
+  .btnColor { font-size: 1rem; padding: 12px; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
