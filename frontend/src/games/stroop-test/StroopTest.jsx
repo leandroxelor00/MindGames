@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { UseStroopTest } from "./useStroopTest";
 import styles from "./StroopTest.module.css";
 
@@ -12,68 +11,66 @@ export function StroopTest() {
     changeWord,
     colorCorrect,
     avgReactionTime,
+    gameOver,
   } = UseStroopTest();
 
+  // Função auxiliar para processar a jogada em cada botão
+  const handleAnswer = (colorName) => {
+    if (gameOver) return;
+    colorCorrect(colorName);
+    changeWord();
+    startTimer();
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <p>Stroop Test</p>
-      <div className={styles.infoContainer}>
-        <p>Tempo: {timer}</p>
+    <div className={styles.container}>
+      <h1 className={styles.titulo}>Stroop Test</h1>
+      
+      {/* Mensagem de Fim de Jogo bonita baseada no seu exemplo */}
+      {gameOver && (
+        <div className={styles.mensagemVitoria}>
+          Fim de jogo! Você fez {score} pontos com uma média de {avgReactionTime}ms de reação.
+        </div>
+      )}
+
+      <div className={styles.painel}>
+        <p>Tempo: {timer}s</p>
         <p>Pontuação: {score}</p>
         <p className={styles.reactionTime}>
           Tempo de reação (média): {avgReactionTime}ms
         </p>
       </div>
-      <p style={{ color: currentColor }}>{currentWord} </p>
 
-      <div
-        id="btn-container"
-        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 }}
-      >
+      <div className={styles.wordDisplay}>
+        <p style={{ color: currentColor }}>{currentWord}</p>
+      </div>
+
+      <div className={styles.gradeBotoes}>
         <button
-          className="btncolor"
-          onClick={() => {
-            colorCorrect("AZUL");
-            changeWord();
-            startTimer();
-          }}
+          disabled={gameOver}
+          className={styles.btnColor}
+          onClick={() => handleAnswer("AZUL")}
         >
           AZUL
         </button>
         <button
-          className="btncolor"
-          onClick={() => {
-            colorCorrect("VERDE");
-            changeWord();
-            startTimer();
-          }}
+          disabled={gameOver}
+          className={styles.btnColor}
+          onClick={() => handleAnswer("VERDE")}
         >
           VERDE
         </button>
         <button
-          className="btncolor"
-          onClick={() => {
-            colorCorrect("VERMELHO");
-            changeWord();
-            startTimer();
-          }}
+          disabled={gameOver}
+          className={styles.btnColor}
+          onClick={() => handleAnswer("VERMELHO")}
         >
           VERMELHO
         </button>
         <button
-          className="btncolor"
-          onClick={() => {
-            colorCorrect("AMARELO");
-            changeWord();
-            startTimer();
-          }}
+          disabled={gameOver}
+          className={styles.btnColor}
+          onClick={() => handleAnswer("AMARELO")}
         >
           AMARELO
         </button>

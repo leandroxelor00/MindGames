@@ -8,84 +8,76 @@ export function UseStroopTest() {
   const [gameOver, setGameOver] = useState(false);
 
   const words = ["AZUL", "AMARELO", "VERMELHO", "VERDE"];
-  const colors = ["#FF0000", "#00FF00", "#0000FF", "#EBE134"];
+  const colorMap = {
+    AZUL: "#0000FF",
+    AMARELO: "#EBE134",
+    VERMELHO: "#FF0000",
+    VERDE: "#00FF00",
+  };
 
   const [currentWord, setCurrentWord] = useState(words[0]);
-  const [currentColor, setCurrentColor] = useState(colors[0]);
+  const [currentColor, setCurrentColor] = useState(colorMap[words[0]]);
 
   const [reactionTimes, setReactionTimes] = useState([]);
   const startTime = useRef(performance.now());
 
+  // Fim de jogo sem alert
   useEffect(() => {
     if (timer === 0) {
       setGameOver(true);
       setIsTimerOn(false);
-      setTimer(0);
-
-      alert("O jogo acabou!");
-      alert(`Pontuação: ${score}`);
     }
   }, [timer]);
 
+  // Cronômetro regressivo
   useEffect(() => {
     if (!isTimerOn || gameOver) {
       return;
     }
 
     const interval = setInterval(() => {
-      setTimer((timer) => timer - 1);
+      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
     }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isTimerOn]);
+    return () => clearInterval(interval);
+  }, [isTimerOn, gameOver]);
 
   function startTimer() {
-    setIsTimerOn(true);
-  }
-
-  function removeColor(color) {
-    const newColors = colors.filter((item) => item !== color);
-    setCurrentColor(newColors[Math.floor(Math.random() * newColors.length)]);
+    if (!isTimerOn && !gameOver) {
+      setIsTimerOn(true);
+      startTime.current = performance.now();
+    }
   }
 
   function changeWord() {
+    if (gameOver) return;
+
+    const randomWord = words[Math.floor(Math.random() * words.length)];
+    const randomColorKey = words[Math.floor(Math.random() * words.length)];
+
+    setCurrentWord(randomWord);
+    setCurrentColor(colorMap[randomColorKey]);
     startTime.current = performance.now();
-    setCurrentWord(words[Math.floor(Math.random() * words.length)]);
+  }
 
-    if (currentWord === "VERMELHO") {
-      removeColor("#FF0000");
-    }
-    if (currentWord === "VERDE") {
-      removeColor("#00FF00");
-    }
-    if (currentWord === "AZUL") {
-      removeColor("#0000FF");
-    }
-    if (currentWord === "AMARELO") {
-      removeColor("#EBE134");
+  function colorCorrect(selectedColorName) {
+    if (gameOver || !isTimerOn) return;
+
+    const timeSpent = performance.now() - startTime.current;
+    setReactionTimes((prev) => [...prev, timeSpent]);
+
+    const correctColorName = Object.keys(colorMap).find(
+      (key) => colorMap[key] === currentColor
+    );
+
+    if (correctColorName === selectedColorName) {
+      setScore((prev) => prev + 1);
     }
   }
 
-  function colorCorrect(color) {
-    const timeSpend = performance.now() - startTime.current;
-    setReactionTimes((reactionTimes) => [...reactionTimes, timeSpend]);
-    if (gameOver) {
-      return;
-    }
-
-    if (currentWord === color) {
-      setScore((score) => score + 1);
-    }
-  }
-
-  const sumReactionTime = reactionTimes.reduce(
-    (a, reactionTime) => a + reactionTime,
-    0
-  );
-
-  const avg = sumReactionTime / reactionTimes.length;
+  const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
+  const avg =
+    reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
   const avgReactionTime = Number(avg.toFixed(2));
 
   return {
@@ -97,5 +89,6 @@ export function UseStroopTest() {
     changeWord,
     colorCorrect,
     avgReactionTime,
+    gameOver,
   };
 }

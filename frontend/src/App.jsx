@@ -1,8 +1,8 @@
-import MemoryMatch from "./games/memory-match/MemoryMatch";
+import {StroopTest} from "./games/stroop-test/StroopTest";
 
 function App() {
     return (
-        <MemoryMatch />
+        <StroopTest />
     );
 }
 
