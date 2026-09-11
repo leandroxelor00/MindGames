@@ -1,11 +1,9 @@
-import { StroopTest } from "./games/stroop-test/StroopTest.jsx";
+import MemoryMatch from "./games/memory-match/MemoryMatch";
 
 function App() {
-  return (
-    <main>
-      <StroopTest />
-    </main>
-  );
+    return (
+        <MemoryMatch />
+    );
 }
 
 export default App;
