@@ -1,9 +1,15 @@
-import {StroopTest} from "./games/stroop-test/StroopTest";
+import { Home } from "./pages/Home.jsx";
+import { GamePage } from "./pages/GamePage.jsx";
+
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-    return (
-        <StroopTest />
-    );
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/game/:id" element={<GamePage />} />
+    </Routes>
+  );
 }
 
 export default App;
