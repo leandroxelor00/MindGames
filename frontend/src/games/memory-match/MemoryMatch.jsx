@@ -1,7 +1,7 @@
 import { useMemoryMatch } from "./useMemoryMatch";
 import styles from "./MemoryMatch.module.css";
 
-function MemoryMatch() {
+export function MemoryMatch() {
   const { baralho, tentativas, segundos, jogoFinalizado, virarCarta } =
     useMemoryMatch();
 
@@ -50,4 +50,3 @@ function MemoryMatch() {
     </div>
   );
 }
-export default MemoryMatch;
