@@ -1,7 +1,9 @@
+import styles from "./Timer.module.css";
+
 export function Timer({ segundos, label = "Tempo" }) {
-    return (
-      <p>
-        {label}: {segundos}s
-      </p>
-    );
-  }
+  return (
+    <p className={styles.container}>
+      {label}: {segundos}s
+    </p>
+  );
+}
