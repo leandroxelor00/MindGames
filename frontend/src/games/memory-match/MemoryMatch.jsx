@@ -1,24 +1,26 @@
 import { useMemoryMatch } from "./useMemoryMatch";
 import styles from "./MemoryMatch.module.css";
+
 import { Timer } from "../../components/Timer/Timer";
-import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
 
 export function MemoryMatch() {
-  const {
-    baralho,
-    tentativas,
-    segundos,
-    jogoFinalizado,
-    virarCarta,
-    resetGame,
-  } = useMemoryMatch();
+  const { baralho, tentativas, segundos, jogoFinalizado, virarCarta } =
+    useMemoryMatch();
 
   return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Memory Match</h1>
 
       <div className={styles.painel}>
-        <span>Tentativas: {tentativas}</span>
+        <ScoreBoard
+          items={[
+            {
+              label: "Tentativas",
+              value: tentativas,
+            },
+          ]}
+        />
+
         <Timer segundos={segundos} />
       </div>
 
@@ -42,14 +44,11 @@ export function MemoryMatch() {
                 ${estaVirada ? styles.flipped : ""}
                 ${carta.pareada ? styles.pareada : ""}
               `}
-              onClick={() => {
-                if (!carta.virada && !carta.pareada) {
-                  virarCarta(carta.id);
-                }
-              }}
+              onClick={() => virarCarta(carta.id)}
             >
               <div className={styles.cartaInner}>
                 <div className={styles.cartaFront}>❔</div>
+
                 <div className={styles.cartaBack}>{carta.valor}</div>
               </div>
             </div>
