@@ -1,6 +1,7 @@
 import { gamesRegistry } from "../games/registry";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Button } from "../components/Button/Button";
 
 export function GamePage() {
   const { id } = useParams();
@@ -16,9 +17,9 @@ export function GamePage() {
   const GameComponent = selectedGame.component;
 
   return (
-    <div>
-      <Link to="/">
-        <button>Voltar</button>
+    <div style={{ marginLeft: 50, marginTop: 20 }}>
+      <Link style={{ display: "flex", width: 200 }} to="/">
+        <Button textContent="Voltar" />
       </Link>
       <GameComponent />
     </div>

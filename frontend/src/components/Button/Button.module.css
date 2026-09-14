@@ -1,0 +1,20 @@
+.btn {
+  text-align: center;
+  border: 2px solid lightgray;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  width: 200px;
+  height: 50px;
+  text-transform: uppercase;
+  transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: translateY(-2px);
+    background-color: aliceblue;
+  }
+}

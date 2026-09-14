@@ -15,6 +15,7 @@ export function useMemoryMatch() {
   const [viradasAgora, setViradasAgora] = useState([]);
   const [tentativas, setTentativas] = useState(0);
   const [segundos, setSegundos] = useState(0);
+
   // Valor derivado: verifica se todas as cartas foram pareadas
   const jogoFinalizado = baralho.every((carta) => carta.pareada);
   function virarCarta(id) {
@@ -75,6 +76,14 @@ export function useMemoryMatch() {
       clearInterval(intervalo);
     };
   }, [jogoFinalizado]);
+
+  function resetGame() {
+    setBaralho(criarBaralho());
+    setViradasAgora([]);
+    setTentativas(0);
+    setSegundos(0);
+  }
+
   return {
     baralho,
     viradasAgora,
@@ -82,5 +91,6 @@ export function useMemoryMatch() {
     segundos,
     jogoFinalizado,
     virarCarta,
+    resetGame,
   };
 }

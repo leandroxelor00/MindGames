@@ -1,24 +1,43 @@
 import { useMemoryMatch } from "./useMemoryMatch";
 import styles from "./MemoryMatch.module.css";
+import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
+import { Timer } from "../../components/Timer/Timer";
+import { ScoreBoard } from "../../components/ScoreBoard/ScoreBoard";
+import { Button } from "../../components/Button/Button";
 
 export function MemoryMatch() {
-  const { baralho, tentativas, segundos, jogoFinalizado, virarCarta } =
-    useMemoryMatch();
+  const {
+    baralho,
+    tentativas,
+    segundos,
+    jogoFinalizado,
+    virarCarta,
+    resetGame,
+  } = useMemoryMatch();
 
   return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Memory Match</h1>
 
       <div className={styles.painel}>
-        <span>Tentativas: {tentativas}</span>
-        <span>Tempo: {segundos}s</span>
+        <ScoreBoard
+          items={[
+            {
+              label: "Tentativas",
+              value: tentativas,
+            },
+          ]}
+        />
+
+        <Timer segundos={segundos} />
       </div>
 
       {jogoFinalizado && (
-        <div className={styles.mensagemVitoria}>
-          🎉 Parabéns! Você venceu em {tentativas} tentativas e {segundos}{" "}
-          segundos!
-        </div>
+        <GameOverModal
+          message={`Parabéns! Você venceu em ${tentativas} tentativas e ${segundos}
+          segundos!`}
+          onClick={resetGame}
+        />
       )}
 
       <div className={styles.grade}>
@@ -29,18 +48,15 @@ export function MemoryMatch() {
             <div
               key={carta.id}
               className={`
-                ${styles.cartaContainer} 
-                ${estaVirada ? styles.flipped : ""} 
+                ${styles.cartaContainer}
+                ${estaVirada ? styles.flipped : ""}
                 ${carta.pareada ? styles.pareada : ""}
               `}
-              onClick={() => {
-                if (!carta.virada && !carta.pareada) {
-                  virarCarta(carta.id);
-                }
-              }}
+              onClick={() => virarCarta(carta.id)}
             >
               <div className={styles.cartaInner}>
                 <div className={styles.cartaFront}>❔</div>
+
                 <div className={styles.cartaBack}>{carta.valor}</div>
               </div>
             </div>

@@ -1,9 +1,12 @@
-import { UseStroopTest } from "./useStroopTest";
+import { useStroopTest } from "./useStroopTest";
 import styles from "./StroopTest.module.css";
+import { Timer } from "../../components/Timer/Timer";
+import { ScoreBoard } from "../../components/ScoreBoard/ScoreBoard";
+import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
 
 export function StroopTest() {
   const {
-    timer,
+    segundos,
     score,
     startTimer,
     currentWord,
@@ -12,7 +15,8 @@ export function StroopTest() {
     colorCorrect,
     avgReactionTime,
     gameOver,
-  } = UseStroopTest();
+    resetGame,
+  } = useStroopTest();
 
   // Função auxiliar para processar a jogada em cada botão
   const handleAnswer = (colorName) => {
@@ -25,20 +29,25 @@ export function StroopTest() {
   return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Stroop Test</h1>
-      
+
       {/* Mensagem de Fim de Jogo bonita baseada no seu exemplo */}
       {gameOver && (
-        <div className={styles.mensagemVitoria}>
-          Fim de jogo! Você fez {score} pontos com uma média de {avgReactionTime}ms de reação.
-        </div>
+        <GameOverModal
+          customStyle={{ width: 800 }}
+          message={`Fim de jogo! Você fez ${score} pontos com uma média de
+          ${avgReactionTime}ms de reação.`}
+          onClick={resetGame}
+        />
       )}
 
       <div className={styles.painel}>
-        <p>Tempo: {timer}s</p>
-        <p>Pontuação: {score}</p>
-        <p className={styles.reactionTime}>
-          Tempo de reação (média): {avgReactionTime}ms
-        </p>
+        <Timer segundos={segundos} label="Tempo Restante" />
+        <ScoreBoard
+          items={[
+            { label: "Pontuação", value: score },
+            { label: "Tempo de reação (média)", value: `${avgReactionTime}ms` },
+          ]}
+        />
       </div>
 
       <div className={styles.wordDisplay}>
