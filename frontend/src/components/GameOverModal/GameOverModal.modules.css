@@ -1,0 +1,10 @@
+.mensagemVitoria {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 24px;
+    animation: fadeIn 0.5s ease-in;
+  }

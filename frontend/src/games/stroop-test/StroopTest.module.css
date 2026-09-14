@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 2rem 1rem;
   max-width: 800px;
   margin: 0 auto;
@@ -101,13 +101,28 @@
 }
 
 @media (max-width: 480px) {
-  .titulo { font-size: 2rem; }
-  .painel { font-size: 1rem; }
-  .wordDisplay { font-size: 3rem; }
-  .btnColor { font-size: 1rem; padding: 12px; }
+  .titulo {
+    font-size: 2rem;
+  }
+  .painel {
+    font-size: 1rem;
+  }
+  .wordDisplay {
+    font-size: 3rem;
+  }
+  .btnColor {
+    font-size: 1rem;
+    padding: 12px;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

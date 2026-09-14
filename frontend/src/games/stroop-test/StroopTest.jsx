@@ -25,11 +25,12 @@ export function StroopTest() {
   return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Stroop Test</h1>
-      
+
       {/* Mensagem de Fim de Jogo bonita baseada no seu exemplo */}
       {gameOver && (
         <div className={styles.mensagemVitoria}>
-          Fim de jogo! Você fez {score} pontos com uma média de {avgReactionTime}ms de reação.
+          Fim de jogo! Você fez {score} pontos com uma média de{" "}
+          {avgReactionTime}ms de reação.
         </div>
       )}
 
