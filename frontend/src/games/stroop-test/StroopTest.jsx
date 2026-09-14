@@ -1,9 +1,10 @@
-import { UseStroopTest } from "./useStroopTest";
+import { useStroopTest } from "./useStroopTest";
 import styles from "./StroopTest.module.css";
+import { Timer } from "../../components/Timer/Timer";
 
 export function StroopTest() {
   const {
-    timer,
+    segundos,
     score,
     startTimer,
     currentWord,
@@ -12,7 +13,7 @@ export function StroopTest() {
     colorCorrect,
     avgReactionTime,
     gameOver,
-  } = UseStroopTest();
+  } = useStroopTest();
 
   // Função auxiliar para processar a jogada em cada botão
   const handleAnswer = (colorName) => {
@@ -35,7 +36,7 @@ export function StroopTest() {
       )}
 
       <div className={styles.painel}>
-        <p>Tempo: {timer}s</p>
+        <Timer segundos={segundos} label="Tempo Restante" />
         <p>Pontuação: {score}</p>
         <p className={styles.reactionTime}>
           Tempo de reação (média): {avgReactionTime}ms
