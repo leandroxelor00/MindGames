@@ -1,9 +1,10 @@
-import { UseStroopTest } from "./useStroopTest";
+import { useStroopTest } from "./useStroopTest";
 import styles from "./StroopTest.module.css";
-
+import { Timer } from "../../components/Timer/Timer";
+ 
 export function StroopTest() {
   const {
-    timer,
+    segundos,
     score,
     startTimer,
     currentWord,
@@ -12,8 +13,8 @@ export function StroopTest() {
     colorCorrect,
     avgReactionTime,
     gameOver,
-  } = UseStroopTest();
-
+  } = useStroopTest();
+ 
   // Função auxiliar para processar a jogada em cada botão
   const handleAnswer = (colorName) => {
     if (gameOver) return;
@@ -21,30 +22,30 @@ export function StroopTest() {
     changeWord();
     startTimer();
   };
-
+ 
   return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Stroop Test</h1>
-      
+     
       {/* Mensagem de Fim de Jogo bonita baseada no seu exemplo */}
       {gameOver && (
         <div className={styles.mensagemVitoria}>
           Fim de jogo! Você fez {score} pontos com uma média de {avgReactionTime}ms de reação.
         </div>
       )}
-
+ 
       <div className={styles.painel}>
-        <p>Tempo: {timer}s</p>
+      <Timer segundos={segundos} label="Tempo Restante"/>
         <p>Pontuação: {score}</p>
         <p className={styles.reactionTime}>
           Tempo de reação (média): {avgReactionTime}ms
         </p>
       </div>
-
+ 
       <div className={styles.wordDisplay}>
         <p style={{ color: currentColor }}>{currentWord}</p>
       </div>
-
+ 
       <div className={styles.gradeBotoes}>
         <button
           disabled={gameOver}
