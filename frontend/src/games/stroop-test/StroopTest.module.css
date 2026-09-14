@@ -41,21 +41,6 @@
   margin-top: 4px;
 }
 
-/* Mensagem de fim de jogo baseada no seu exemplo */
-.mensagemVitoria {
-  background-color: #d4edda;
-  color: #155724;
-  padding: 16px 24px;
-  border-radius: 12px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 24px;
-  width: 100%;
-  max-width: 450px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  animation: fadeIn 0.5s ease-in;
-}
-
 .wordDisplay {
   font-size: 4rem;
   font-weight: bolder;

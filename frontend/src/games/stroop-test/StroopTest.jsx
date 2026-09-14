@@ -1,6 +1,8 @@
 import { useStroopTest } from "./useStroopTest";
 import styles from "./StroopTest.module.css";
 import { Timer } from "../../components/Timer/Timer";
+import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
+import { Button } from "../../components/Button/Button";
 
 export function StroopTest() {
   const {
@@ -13,6 +15,7 @@ export function StroopTest() {
     colorCorrect,
     avgReactionTime,
     gameOver,
+    resetGame,
   } = useStroopTest();
 
   // Função auxiliar para processar a jogada em cada botão
@@ -29,10 +32,12 @@ export function StroopTest() {
 
       {/* Mensagem de Fim de Jogo bonita baseada no seu exemplo */}
       {gameOver && (
-        <div className={styles.mensagemVitoria}>
-          Fim de jogo! Você fez {score} pontos com uma média de{" "}
-          {avgReactionTime}ms de reação.
-        </div>
+        <GameOverModal
+          customStyle={{ width: 800 }}
+          message={`Fim de jogo! Você fez ${score} pontos com uma média de
+        ${avgReactionTime}ms de reação.`}
+          onClick={resetGame}
+        />
       )}
 
       <div className={styles.painel}>

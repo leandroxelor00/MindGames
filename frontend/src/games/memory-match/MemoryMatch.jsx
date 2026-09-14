@@ -1,31 +1,39 @@
 import { useMemoryMatch } from "./useMemoryMatch";
 import styles from "./MemoryMatch.module.css";
 import { Timer } from "../../components/Timer/Timer";
- 
+import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
+
 export function MemoryMatch() {
-  const { baralho, tentativas, segundos, jogoFinalizado, virarCarta } =
-    useMemoryMatch();
- 
+  const {
+    baralho,
+    tentativas,
+    segundos,
+    jogoFinalizado,
+    virarCarta,
+    resetGame,
+  } = useMemoryMatch();
+
   return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Memory Match</h1>
- 
+
       <div className={styles.painel}>
         <span>Tentativas: {tentativas}</span>
         <Timer segundos={segundos} />
       </div>
- 
+
       {jogoFinalizado && (
-        <div className={styles.mensagemVitoria}>
-          🎉 Parabéns! Você venceu em {tentativas} tentativas e {segundos}{" "}
-          segundos!
-        </div>
+        <GameOverModal
+          message={`Parabéns! Você venceu em ${tentativas} tentativas e ${segundos}
+          segundos!`}
+          onClick={resetGame}
+        />
       )}
- 
+
       <div className={styles.grade}>
         {baralho.map((carta) => {
           const estaVirada = carta.virada || carta.pareada;
- 
+
           return (
             <div
               key={carta.id}
