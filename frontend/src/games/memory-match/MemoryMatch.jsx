@@ -1,11 +1,19 @@
 import { useMemoryMatch } from "./useMemoryMatch";
 import styles from "./MemoryMatch.module.css";
-
+import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
 import { Timer } from "../../components/Timer/Timer";
+import { ScoreBoard } from "../../components/ScoreBoard/ScoreBoard";
+import { Button } from "../../components/Button/Button";
 
 export function MemoryMatch() {
-  const { baralho, tentativas, segundos, jogoFinalizado, virarCarta } =
-    useMemoryMatch();
+  const {
+    baralho,
+    tentativas,
+    segundos,
+    jogoFinalizado,
+    virarCarta,
+    resetGame,
+  } = useMemoryMatch();
 
   return (
     <div className={styles.container}>
