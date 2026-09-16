@@ -1,7 +1,7 @@
 const { db } = require("../connection");
 
 db.exec(`
-    CREATE TABLE scores(
+    CREATE TABLE IF NOT EXISTS scores(
     id INTEGER primary key AUTOINCREMENT, 
     userId TEXT not null, 
     gameId TEXT not null, 
