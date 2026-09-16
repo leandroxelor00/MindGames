@@ -1,0 +1,202 @@
+.container {
+  min-height: 100vh;
+  padding: 40px;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+.titulo {
+  margin: 0 0 32px;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+/* =========================
+   RESUMO DOS JOGOS
+========================= */
+
+.secao {
+  margin-bottom: 40px;
+}
+
+.subtitulo {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.resumoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.cardJogo {
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.nomeJogo {
+  margin: 0 0 18px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.estatisticas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.estatistica {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.estatistica:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.label {
+  color: var(--cor-texto-suave);
+  font-size: 14px;
+}
+
+.valor {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+.historico {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.partida {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 18px 20px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.partida:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+}
+
+.infoPartida {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.jogo {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.data {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: 13px;
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.resultadoItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.resultadoLabel {
+  color: var(--cor-texto-suave);
+  font-size: 12px;
+}
+
+.resultadoValor {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* =========================
+   ESTADOS
+========================= */
+
+.carregando {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 300px;
+
+  color: var(--cor-texto-suave);
+  font-size: 16px;
+}
+
+.semPartidas {
+  padding: 40px;
+  text-align: center;
+
+  background: #ffffff;
+  border: 1px dashed #d8dbe3;
+  border-radius: 16px;
+
+  color: var(--cor-texto-suave);
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 700px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .titulo {
+    font-size: 26px;
+  }
+
+  .partida {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .resultado {
+    justify-content: space-between;
+  }
+
+  .resultadoItem {
+    align-items: flex-start;
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUserId } from "../services/userId";
 import { getHistory } from "../services/scoreService";
+import styles from "./Dashboard.module.css";
 
 function calcularMediasPorJogo(partidas) {
   const gameIds = [...new Set(partidas.map((partida) => partida.gameId))];
@@ -60,39 +61,117 @@ export function Dashboard() {
 
   const mediasPorJogo = calcularMediasPorJogo(partidas);
 
+  if (loading) {
+    return (
+      <main className={styles.container}>
+        <div className={styles.carregando}>
+          <p>Carregando...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <div>
-      {loading ? (
-        <p>Carregando...</p>
-      ) : (
-        <>
-          <h2>Resumo por jogo</h2>
+    <main className={styles.container}>
+      <h1 className={styles.titulo}>Dashboard</h1>
 
-          <ul>
+      <section className={styles.secao}>
+        <h2 className={styles.subtitulo}>Resumo por jogo</h2>
+
+        {Object.keys(mediasPorJogo).length === 0 ? (
+          <div className={styles.semPartidas}>
+            <p>Você ainda não possui partidas registradas.</p>
+          </div>
+        ) : (
+          <div className={styles.resumoGrid}>
             {Object.entries(mediasPorJogo).map(([gameId, media]) => (
-              <li key={gameId}>
-                <p>Jogo: {gameId}</p>
-                <p>Total de partidas: {media.totalPartidas}</p>
-                <p>Score médio: {media.mediaScore.toFixed(1)}</p>
-                <p>Precisão média: {media.mediaAccuracy.toFixed(1)}%</p>
-              </li>
+              <article className={styles.cardJogo} key={gameId}>
+                <h3 className={styles.nomeJogo}>{gameId}</h3>
+
+                <div className={styles.estatisticas}>
+                  <div className={styles.estatistica}>
+                    <span className={styles.label}>
+                      Total de partidas
+                    </span>
+
+                    <span className={styles.valor}>
+                      {media.totalPartidas}
+                    </span>
+                  </div>
+
+                  <div className={styles.estatistica}>
+                    <span className={styles.label}>
+                      Score médio
+                    </span>
+
+                    <span className={styles.valor}>
+                      {media.mediaScore.toFixed(1)}
+                    </span>
+                  </div>
+
+                  <div className={styles.estatistica}>
+                    <span className={styles.label}>
+                      Precisão média
+                    </span>
+
+                    <span className={styles.valor}>
+                      {media.mediaAccuracy.toFixed(1)}%
+                    </span>
+                  </div>
+                </div>
+              </article>
             ))}
-          </ul>
+          </div>
+        )}
+      </section>
 
-          <h2>Partidas</h2>
+      <section className={styles.secao}>
+        <h2 className={styles.subtitulo}>Histórico de partidas</h2>
 
-          <ul>
+        {partidas.length === 0 ? (
+          <div className={styles.semPartidas}>
+            <p>Nenhuma partida encontrada.</p>
+          </div>
+        ) : (
+          <div className={styles.historico}>
             {partidas.map((partida) => (
-              <li key={partida.id}>
-                <p>Jogo: {partida.gameId}</p>
-                <p>Score: {partida.score}</p>
-                <p>Precisão: {partida.accuracy}%</p>
-                <p>Data: {partida.playedAt}</p>
-              </li>
+              <article className={styles.partida} key={partida.id}>
+                <div className={styles.infoPartida}>
+                  <p className={styles.jogo}>
+                    {partida.gameId}
+                  </p>
+
+                  <p className={styles.data}>
+                    {partida.playedAt}
+                  </p>
+                </div>
+
+                <div className={styles.resultado}>
+                  <div className={styles.resultadoItem}>
+                    <span className={styles.resultadoLabel}>
+                      Score
+                    </span>
+
+                    <span className={styles.resultadoValor}>
+                      {partida.score}
+                    </span>
+                  </div>
+
+                  <div className={styles.resultadoItem}>
+                    <span className={styles.resultadoLabel}>
+                      Precisão
+                    </span>
+
+                    <span className={styles.resultadoValor}>
+                      {partida.accuracy}%
+                    </span>
+                  </div>
+                </div>
+              </article>
             ))}
-          </ul>
-        </>
-      )}
-    </div>
+          </div>
+        )}
+      </section>
+    </main>
   );
 }
