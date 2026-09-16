@@ -12,8 +12,11 @@ export async function apiFetch(path, options = {}) {
       ...options.headers,
     },
   });
+  // dentro de api.js, na apiFetch:
   if (!response.ok) {
-    throw new Error(`Erro na API: ${response.status}`);
+    const error = new Error(`Erro na API: ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
   // Se a requisição foi um sucesso, converte a resposta para um objeto JavaScript (JSON) e retorna esse resultado para quem chamou a função.
   return response.json();

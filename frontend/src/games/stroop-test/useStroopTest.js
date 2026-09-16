@@ -1,8 +1,13 @@
 import { useRef, useEffect, useState } from "react";
 
+import { getUserId } from "../../services/userId";
+import { postScore } from "../../services/scoreService";
+
 export function useStroopTest() {
   const [score, setScore] = useState(0);
+
   const [timer, setTimer] = useState(30);
+
   const [isTimerOn, setIsTimerOn] = useState(false);
 
   const startTime = useRef(0);
@@ -71,7 +76,7 @@ export function useStroopTest() {
     setReactionTimes((prev) => [...prev, timeSpent]);
 
     const correctColorName = Object.keys(colorMap).find(
-      (key) => colorMap[key] === currentColor
+      (key) => colorMap[key] === currentColor,
     );
 
     if (correctColorName === selectedColorName) {
@@ -85,6 +90,35 @@ export function useStroopTest() {
     reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
 
   const avgReactionTime = Number(avg.toFixed(2));
+
+  // Envia o resultado quando o jogo termina
+  useEffect(() => {
+    if (!gameOver) {
+      return;
+    }
+
+    async function enviar() {
+      const accuracy =
+        reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
+
+      const result = {
+        userId: getUserId(),
+        gameId: "stroop-test",
+        score,
+        accuracy,
+        avgReactionTime,
+        levelReached: 1,
+      };
+
+      try {
+        await postScore(result);
+      } catch (error) {
+        console.error("Não foi possível enviar o resultado:", error);
+      }
+    }
+
+    enviar();
+  }, [gameOver]);
 
   function resetGame() {
     setIsTimerOn(false);
