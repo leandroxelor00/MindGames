@@ -69,6 +69,18 @@
   padding: 0 1.5rem 4rem;
 }
 
+a:nth-child(odd) {
+  div {
+    background-color: burlywood;
+  }
+}
+
+a:nth-child(even) {
+  div {
+    background-color: antiquewhite;
+  }
+}
+
 .link {
   text-decoration: none;
   color: inherit;
@@ -83,9 +95,7 @@
   min-height: 96px;
   display: flex;
   align-items: center;
-  transition:
-    border-color 0.15s ease,
-    transform 0.15s ease;
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 .cardName {

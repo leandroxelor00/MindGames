@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getUserId } from "../services/userId";
 import { getHistory } from "../services/scoreService";
 import styles from "./Dashboard.module.css";
+import { Button } from "../components/Button/Button";
+import { Link } from "react-router-dom";
 
 function calcularMediasPorJogo(partidas) {
   const gameIds = [...new Set(partidas.map((partida) => partida.gameId))];
@@ -10,19 +12,19 @@ function calcularMediasPorJogo(partidas) {
 
   gameIds.forEach((gameId) => {
     const partidasDoJogo = partidas.filter(
-      (partida) => partida.gameId === gameId,
+      (partida) => partida.gameId === gameId
     );
 
     const totalPartidas = partidasDoJogo.length;
 
     const somaScore = partidasDoJogo.reduce(
       (total, partida) => total + partida.score,
-      0,
+      0
     );
 
     const somaAccuracy = partidasDoJogo.reduce(
       (total, partida) => total + partida.accuracy,
-      0,
+      0
     );
 
     const mediaScore = somaScore / totalPartidas;
@@ -74,7 +76,9 @@ export function Dashboard() {
   return (
     <main className={styles.container}>
       <h1 className={styles.titulo}>Dashboard</h1>
-
+      <Link to="/" style={{ marginTop: 770, position: "fixed", zIndex: 999 }}>
+        <Button textContent="Voltar" />
+      </Link>
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Resumo por jogo</h2>
 
@@ -90,19 +94,13 @@ export function Dashboard() {
 
                 <div className={styles.estatisticas}>
                   <div className={styles.estatistica}>
-                    <span className={styles.label}>
-                      Total de partidas
-                    </span>
+                    <span className={styles.label}>Total de partidas</span>
 
-                    <span className={styles.valor}>
-                      {media.totalPartidas}
-                    </span>
+                    <span className={styles.valor}>{media.totalPartidas}</span>
                   </div>
 
                   <div className={styles.estatistica}>
-                    <span className={styles.label}>
-                      Score médio
-                    </span>
+                    <span className={styles.label}>Score médio</span>
 
                     <span className={styles.valor}>
                       {media.mediaScore.toFixed(1)}
@@ -110,9 +108,7 @@ export function Dashboard() {
                   </div>
 
                   <div className={styles.estatistica}>
-                    <span className={styles.label}>
-                      Precisão média
-                    </span>
+                    <span className={styles.label}>Precisão média</span>
 
                     <span className={styles.valor}>
                       {media.mediaAccuracy.toFixed(1)}%
@@ -124,7 +120,6 @@ export function Dashboard() {
           </div>
         )}
       </section>
-
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Histórico de partidas</h2>
 
@@ -137,20 +132,14 @@ export function Dashboard() {
             {partidas.map((partida) => (
               <article className={styles.partida} key={partida.id}>
                 <div className={styles.infoPartida}>
-                  <p className={styles.jogo}>
-                    {partida.gameId}
-                  </p>
+                  <p className={styles.jogo}>{partida.gameId}</p>
 
-                  <p className={styles.data}>
-                    {partida.playedAt}
-                  </p>
+                  <p className={styles.data}>{partida.playedAt}</p>
                 </div>
 
                 <div className={styles.resultado}>
                   <div className={styles.resultadoItem}>
-                    <span className={styles.resultadoLabel}>
-                      Score
-                    </span>
+                    <span className={styles.resultadoLabel}>Score</span>
 
                     <span className={styles.resultadoValor}>
                       {partida.score}
@@ -158,12 +147,10 @@ export function Dashboard() {
                   </div>
 
                   <div className={styles.resultadoItem}>
-                    <span className={styles.resultadoLabel}>
-                      Precisão
-                    </span>
+                    <span className={styles.resultadoLabel}>Precisão</span>
 
                     <span className={styles.resultadoValor}>
-                      {partida.accuracy}%
+                      {partida.accuracy.toFixed(2)}%
                     </span>
                   </div>
                 </div>

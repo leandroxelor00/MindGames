@@ -43,7 +43,7 @@ export function useStroopTest() {
 
         return prevTimer - 1;
       });
-    }, 1000);
+    }, 1);
 
     return () => clearInterval(interval);
   }, [isTimerOn, gameOver]);
@@ -76,7 +76,7 @@ export function useStroopTest() {
     setReactionTimes((prev) => [...prev, timeSpent]);
 
     const correctColorName = Object.keys(colorMap).find(
-      (key) => colorMap[key] === currentColor,
+      (key) => colorMap[key] === currentColor
     );
 
     if (correctColorName === selectedColorName) {
