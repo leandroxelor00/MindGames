@@ -71,13 +71,13 @@
 
 a:nth-child(odd) {
   div {
-    background-color: burlywood;
+    background-color: #abc5fa;
   }
 }
 
 a:nth-child(even) {
   div {
-    background-color: antiquewhite;
+    background-color: #eeecfc;
   }
 }
 
