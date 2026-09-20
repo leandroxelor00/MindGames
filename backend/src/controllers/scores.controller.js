@@ -10,7 +10,7 @@ function createScore(req, res) {
     typeof score.avgReactionTime !== "number" ||
     typeof score.levelReached !== "number"
   ) {
-    return res.status(400).send("Campos inválidos");
+    return res.status(400).json({ message: "Campos inválidos" });
   }
 
   try {
@@ -21,9 +21,9 @@ function createScore(req, res) {
     });
   } catch (e) {
     if (e instanceof TypeError) {
-      return res.status(400).send(e.message);
+      return res.status(400).json({ message: e.message });
     } else {
-      return res.status(500).send(e.message);
+      return res.status(500).json({ message: e.message });
     }
   }
 }
@@ -32,7 +32,9 @@ function getScoresByUser(req, res) {
   const userId = req.params.userId;
   const result = getScoresByUserId(userId);
   if (result.length === 0) {
-    return res.status(404).send("Nenhum score desse usuário encontrado");
+    return res
+      .status(404)
+      .json({ message: "Nenhum score desse usuário encontrado" });
   }
   return res.status(200).json({
     message: "Usuário encontrado",
