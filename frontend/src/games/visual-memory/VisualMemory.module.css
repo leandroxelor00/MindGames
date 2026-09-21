@@ -1,0 +1,18 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  justify-self: center;
+  gap: 5px;
+  background-color: rgb(15, 11, 46);
+}
+
+.cell {
+  width: 100px;
+  aspect-ratio: 1/1;
+  background-color: rgb(1, 1, 127);
+}
+
+.highlightedCell {
+  background-color: rgb(140, 176, 207);
+}
