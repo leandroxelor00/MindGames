@@ -22,15 +22,15 @@ export async function apiFetch(path, options = {}) {
   if (!response.ok) {
     let errorMessage = `Erro na API: ${response.status}`;
     const errorText = await response.text();
-    
+
     try {
       const errorData = JSON.parse(errorText);
-      if (errorData && errorData.error) {
-        errorMessage = errorData.error;
+      if (errorData && (errorData.error || errorData.message)) {
+        errorMessage = errorData.error || errorData.message;
       }
     } catch {
       if (errorText) {
-        errorMessage = errorText; 
+        errorMessage = errorText;
       }
     }
     const error = new Error(errorMessage);
