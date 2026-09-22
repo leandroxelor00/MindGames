@@ -4,17 +4,17 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background: linear-gradient(#eeecfc 0%, #abc5fa 60%);
+  background: linear-gradient(#a0d5f1 0%, #eeecfc 60%);
   font-family: -apple-system, "Segoe UI", sans-serif;
 }
 
 .card {
   width: 100%;
   max-width: 380px;
-  background: #ffffff;
+  background: linear-gradient(#c8f2fb 0%, rgb(248, 248, 255) 30%);
   border-radius: 20px;
   padding: 2.5rem 2rem;
-  box-shadow: 0 20px 40px -12px rgba(26, 29, 41, 0.12);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   text-align: center;
 }
 
@@ -23,11 +23,12 @@
   height: 56px;
   margin: 0 auto 1.25rem;
   border-radius: 14px;
-  background: #eeecfc;
-  color: #5b4fe8;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .title {

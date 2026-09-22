@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getUserId } from "../services/userId";
 import { getHistory } from "../services/scoreService";
 import styles from "./Dashboard.module.css";
 import { Button } from "../components/Button/Button";
@@ -47,8 +46,7 @@ export function Dashboard() {
   useEffect(() => {
     async function carregarHistorico() {
       try {
-        const userId = getUserId();
-        const historico = await getHistory(userId);
+        const historico = await getHistory();
 
         setPartidas(historico);
       } catch (error) {
