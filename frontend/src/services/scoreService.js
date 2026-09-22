@@ -13,9 +13,9 @@ export async function postScore(result) {
   }
 }
 
-export async function getHistory(userId) {
+export async function getHistory() {
   try {
-    const resultado = await apiFetch(`/scores/${userId}`);
+    const resultado = await apiFetch("/scores/me");
     return resultado.result;
   } catch (error) {
     if (error.status === 404) {
@@ -25,10 +25,11 @@ export async function getHistory(userId) {
   }
 }
 
-export async function migrateScores(userIdAnonimo, userIdConta) {
+export async function migrateScores(oldUserId) {
   const resultado = await apiFetch("/scores/migrate", {
     method: "POST",
-    body: JSON.stringify({ userIdAnonimo, userIdConta }),
+    body: JSON.stringify({ oldUserId }),
   });
+
   return resultado;
 }
