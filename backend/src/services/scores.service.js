@@ -1,4 +1,8 @@
-const { insertScore, selectByUserId } = require("../models/score.model");
+const {
+  insertScore,
+  selectByUserId,
+  updateUserIdInScores,
+} = require("../models/score.model");
 
 const games = ["memory-match", "stroop-test"];
 
@@ -27,4 +31,14 @@ function getScoresByUserId(userId) {
   return selectByUserId(userId);
 }
 
-module.exports = { saveScore, getScoresByUserId };
+function migrateScores(oldUserId, newUserId) {
+  if (!oldUserId || !newUserId) {
+    throw new TypeError("É obrigatório ter o Id antigo e novo do usuário");
+  }
+
+  const changes = updateUserIdInScores(oldUserId, newUserId);
+
+  return changes;
+}
+
+module.exports = { saveScore, getScoresByUserId, migrateScores };

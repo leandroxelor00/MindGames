@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../services/authService";
 import { useAuth } from "../hooks/useAuth";
+import { getUserId } from "../services/userId";
+import { migrateScores } from "../services/scoreService";
 import styles from "./Register.module.css";
 
 export function Register() {
@@ -16,28 +18,26 @@ export function Register() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
     setError("");
-
-    // Valida se as senhas são iguais antes de chamar a API
     if (password !== confirmPassword) {
       setError("As senhas não coincidem.");
       return;
     }
-
-    // Valida o tamanho mínimo da senha
     if (password.length < 8) {
       setError("A senha deve ter mais de 8 caracteres.");
       return;
     }
-
     setLoading(true);
-
     try {
       const data = await register(email, password);
-
       setUser(data.user);
-      navigate("/dashboard");
+      try {
+        const userIdAnonimo = getUserId();
+        await migrateScores(userIdAnonimo, data.user.id);
+      } catch (err) {
+        console.error("Erro ao migrar scores:", err);
+      }
+      navigate("/");
     } catch (err) {
       setError(err.message);
     } finally {
