@@ -43,7 +43,7 @@ export function useStroopTest() {
 
         return prevTimer - 1;
       });
-    }, 1);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [isTimerOn, gameOver]);
