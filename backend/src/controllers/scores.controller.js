@@ -1,4 +1,8 @@
-const { saveScore, getScoresByUserId } = require("../services/scores.service");
+const {
+  saveScore,
+  getScoresByUserId,
+  migrateScores,
+} = require("../services/scores.service");
 
 function createScore(req, res) {
   const score = req.body;
@@ -29,7 +33,7 @@ function createScore(req, res) {
 }
 
 function getScoresByUser(req, res) {
-  const userId = req.params.userId;
+  const userId = req.user.id;
   const result = getScoresByUserId(userId);
   if (result.length === 0) {
     return res
@@ -42,4 +46,29 @@ function getScoresByUser(req, res) {
   });
 }
 
-module.exports = { createScore, getScoresByUser };
+function migrate(req, res) {
+  const oldUserId = req.body.oldUserId;
+  const newUserId = req.user.id;
+  try {
+    const migrate = migrateScores(oldUserId, newUserId);
+    if (migrate > 0) {
+      return res.status(200).json({
+        message: "Migração concluida com sucesso",
+        migratedRows: migrate,
+      });
+    } else {
+      return res.status(200).json({
+        message: "Nenhuma migração encontrada",
+        migratedRows: migrate,
+      });
+    }
+  } catch (e) {
+    if (e instanceof TypeError) {
+      return res.status(400).json({ message: e.message });
+    } else {
+      return res.status(500).json({ message: e.message });
+    }
+  }
+}
+
+module.exports = { createScore, getScoresByUser, migrate };

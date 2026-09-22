@@ -31,4 +31,10 @@ function insertScore(
   return rows;
 }
 
-module.exports = { selectByUserId, insertScore };
+function updateUserIdInScores(oldUserId, newUserId) {
+  const update = db.prepare(`UPDATE scores SET userId = ? WHERE userId = ?`);
+  const result = update.run(newUserId, oldUserId);
+  return result.changes;
+}
+
+module.exports = { selectByUserId, insertScore, updateUserIdInScores };
