@@ -1,136 +1,134 @@
 .page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    background: linear-gradient(
-      #eeecfc 0%,
-      #abc5fa 60%
-    );
-    font-family: -apple-system, "Segoe UI", sans-serif;
-  }
-  
-  .card {
-    width: 100%;
-    max-width: 380px;
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    box-shadow: 0 20px 40px -12px rgba(26, 29, 41, 0.12);
-    text-align: center;
-  }
-  
-  .badge {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 1.25rem;
-    border-radius: 14px;
-    background: #eeecfc;
-    color: #5b4fe8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .title {
-    font-family: "Space Grotesk", sans-serif;
-    font-weight: 700;
-    font-size: 1.5rem;
-    margin: 0 0 0.5rem;
-    color: #1a1d29;
-  }
-  
-  .subtitle {
-    font-size: 0.9rem;
-    color: #5c6072;
-    line-height: 1.5;
-    margin: 0 0 1.75rem;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    text-align: left;
-  }
-  
-  .inputGroup {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .inputIcon {
-    position: absolute;
-    left: 14px;
-    color: #9497a6;
-    pointer-events: none;
-    display: flex;
-  }
-  
-  .input {
-    width: 100%;
-    padding: 0.85rem 1rem 0.85rem 2.6rem;
-    border: 1px solid #e5e6ec;
-    border-radius: 12px;
-    background: #f7f8fa;
-    font-size: 0.95rem;
-    color: #1a1d29;
-    outline: none;
-    transition: border-color 0.15s ease, background 0.15s ease;
-  }
-  
-  .input::placeholder {
-    color: #9497a6;
-  }
-  
-  .input:focus {
-    border-color: #5b4fe8;
-    background: #ffffff;
-  }
-  
-  .submitButton {
-    margin-top: 0.5rem;
-    padding: 0.85rem 1rem;
-    border: none;
-    border-radius: 12px;
-    background: #e0dcfa;
-    color: #000;
-    font-size: 0.95rem;
-    font-weight: 500;
-    font-family: "Space Grotesk", sans-serif;
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-  
-  .submitButton:hover {
-    background: #abc5fa;
-  }
-  
-  .submitButton:disabled {
-    background: #b8b3f2;
-    cursor: not-allowed;
-  }
-  
-  .error {
-    background: #fdecec;
-    color: #c53030;
-    border-radius: 10px;
-    padding: 0.65rem 0.85rem;
-    font-size: 0.85rem;
-    text-align: left;
-  }
-  
-  .footerText {
-    margin-top: 1.5rem;
-    font-size: 0.85rem;
-    color: #5c6072;
-  }
-  
-  .footerLink {
-    color: #5b4fe8;
-    font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(#a0d5f1 0%, #eeecfc 60%);
+  font-family: -apple-system, "Segoe UI", sans-serif;
+}
+ 
+.card {
+  width: 100%;
+  max-width: 380px;
+  background: linear-gradient(#c8f2fb 0%, rgb(248, 248, 255) 30%);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  text-align: center;
+}
+ 
+.badge {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1.25rem;
+  border-radius: 14px;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+ 
+.title {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+  color: #1a1d29;
+}
+ 
+.subtitle {
+  font-size: 0.9rem;
+  color: #5c6072;
+  line-height: 1.5;
+  margin: 0 0 1.75rem;
+}
+ 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  text-align: left;
+}
+ 
+.inputGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+ 
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  color: #9497a6;
+  pointer-events: none;
+  display: flex;
+}
+ 
+.input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.6rem;
+  border: 1px solid #e5e6ec;
+  border-radius: 12px;
+  background: #f7f8fa;
+  font-size: 0.95rem;
+  color: #1a1d29;
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+ 
+.input::placeholder {
+  color: #9497a6;
+}
+ 
+.input:focus {
+  border-color: #5b4fe8;
+  background: #ffffff;
+}
+ 
+.submitButton {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background: #e0dcfa;
+  color: #000;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: "Space Grotesk", sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+ 
+.submitButton:hover {
+  background: #abc5fa;
+}
+ 
+.submitButton:disabled {
+  background: #b8b3f2;
+  cursor: not-allowed;
+}
+ 
+.error {
+  background: #fdecec;
+  color: #c53030;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.85rem;
+  text-align: left;
+}
+ 
+.footerText {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #5c6072;
+}
+ 
+.footerLink {
+  color: #5b4fe8;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

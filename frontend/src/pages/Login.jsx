@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 import { useAuth } from "../hooks/useAuth";
+import { getUserId } from "../services/userId";
+import { migrateScores } from "../services/scoreService";
 import styles from "./Login.module.css";
 
 export function Login() {
@@ -12,21 +14,26 @@ export function Login() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setError("");
-    setLoading(true);
-
+async function handleSubmit(event) {
+  event.preventDefault();
+  setError("");
+  setLoading(true);
+  try {
+    const data = await login(email, password);
+    setUser(data.user);
     try {
-      const data = await login(email, password);
-      setUser(data.user);
-      navigate("/dashboard");
+      const userIdAnonimo = getUserId();
+      await migrateScores(userIdAnonimo, data.user.id);
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      console.error("Erro ao migrar scores:", err);
     }
+    navigate("/");
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <div className={styles.page}>

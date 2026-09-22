@@ -24,3 +24,11 @@ export async function getHistory(userId) {
     throw error;
   }
 }
+
+export async function migrateScores(userIdAnonimo, userIdConta) {
+  const resultado = await apiFetch("/scores/migrate", {
+    method: "POST",
+    body: JSON.stringify({ userIdAnonimo, userIdConta }),
+  });
+  return resultado;
+}
