@@ -19,24 +19,31 @@ export function Register() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+
     if (password !== confirmPassword) {
       setError("As senhas não coincidem.");
       return;
     }
+
     if (password.length < 8) {
       setError("A senha deve ter mais de 8 caracteres.");
       return;
     }
+
     setLoading(true);
+
     try {
       const data = await register(email, password);
+
       setUser(data.user);
+
       try {
         const userIdAnonimo = getUserId();
-        await migrateScores(userIdAnonimo, data.user.id);
+        await migrateScores(userIdAnonimo);
       } catch (err) {
         console.error("Erro ao migrar scores:", err);
       }
+
       navigate("/");
     } catch (err) {
       setError(err.message);

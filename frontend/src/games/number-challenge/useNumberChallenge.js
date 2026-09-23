@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { getUserId } from "../../services/userId";
+import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
 
 function criarNovoDesafio(nivel) {
@@ -79,7 +79,7 @@ export function useNumberChallenge() {
         }
         return prevTimer - 1;
       });
-    }, 1000);
+    }, 1);
     return () => clearInterval(interval);
   }, [isTimerOn, gameOver]);
 
@@ -130,7 +130,7 @@ export function useNumberChallenge() {
         reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
 
       const result = {
-        userId: getUserId(),
+        userId: getCurrentUserId(),
         gameId: "number-challenge",
         score,
         accuracy,
