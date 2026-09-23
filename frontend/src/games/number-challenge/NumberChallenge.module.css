@@ -1,0 +1,121 @@
+.container {
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.titulo {
+  margin: 0;
+  font-size: 32px;
+  text-align: center;
+}
+
+.painel {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.cartas {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.carta {
+  flex: 1;
+  min-height: 180px;
+  padding: 30px;
+  border: 2px solid #ddd;
+  border-radius: 16px;
+  background: #fff;
+  color: #1a1d29;
+  font-size: 28px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.carta:hover:not(:disabled) {
+  transform: translateY(-4px);
+  border-color: #5b4fe8;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.carta:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.carta:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.mensagemFim {
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  text-align: center;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.mensagemFim h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.mensagemFim p {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.botaoReiniciar {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: #5b4fe8;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.botaoReiniciar:hover {
+  background: #4a3fd1;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 30px 16px;
+  }
+
+  .titulo {
+    font-size: 26px;
+  }
+
+  .cartas {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .carta {
+    min-height: 140px;
+    font-size: 24px;
+  }
+}

@@ -36,7 +36,7 @@ function criarNovoDesafio(nivel) {
     if (operador === "*") valor = numA * numB;
 
     return {
-      texto: `((${numA})${operador} ${numB})`,
+      texto: `${numA} ${operador} ${numB}`,
       valor: valor,
     };
   };
