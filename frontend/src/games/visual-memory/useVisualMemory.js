@@ -1,15 +1,23 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export function useVisualMemory() {
   const [gridLength, setGridLength] = useState(9);
   const [level, setLevel] = useState(1);
   const [cells, setCells] = useState(3);
   const [highlightedCells, setHighlightedCells] = useState(new Set());
+  const [showTime, setShowTime] = useState(1200);
+  const [isShowingPartern, setIsShowingPartern] = useState(true);
   const min = 0;
   const max = gridLength - 1;
 
   useEffect(() => {
     generateHighlightedCells();
+
+    const timeout = setTimeout(() => {
+      setIsShowingPartern(false);
+    }, showTime);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   function generateGrid() {
@@ -28,5 +36,5 @@ export function useVisualMemory() {
     setHighlightedCells(newHighlightedCells);
   }
 
-  return { generateGrid, highlightedCells };
+  return { generateGrid, highlightedCells, isShowingPartern };
 }
