@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getHistory } from "../services/scoreService";
 import styles from "./Dashboard.module.css";
-import { Button } from "../components/Button/Button";
 import { Link } from "react-router-dom";
 
 function calcularMediasPorJogo(partidas) {
@@ -11,19 +10,19 @@ function calcularMediasPorJogo(partidas) {
 
   gameIds.forEach((gameId) => {
     const partidasDoJogo = partidas.filter(
-      (partida) => partida.gameId === gameId
+      (partida) => partida.gameId === gameId,
     );
 
     const totalPartidas = partidasDoJogo.length;
 
     const somaScore = partidasDoJogo.reduce(
       (total, partida) => total + partida.score,
-      0
+      0,
     );
 
     const somaAccuracy = partidasDoJogo.reduce(
       (total, partida) => total + partida.accuracy,
-      0
+      0,
     );
 
     const mediaScore = somaScore / totalPartidas;
@@ -73,10 +72,12 @@ export function Dashboard() {
 
   return (
     <main className={styles.container}>
-      <h1 className={styles.titulo}>Dashboard</h1>
-      <Link to="/" style={{ marginTop: 770, position: "fixed", zIndex: 999 }}>
-        <Button textContent="Voltar" />
-      </Link>
+      <div className={styles.topo}>
+        <h1 className={styles.titulo}>Dashboard</h1>
+        <Link to="/" className={styles.voltarLink}>
+          ← Voltar
+        </Link>
+      </div>
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Resumo por jogo</h2>
 

@@ -71,7 +71,7 @@ export function useStroopTest() {
   }
 
   function colorCorrect(selectedColorName) {
-    if (gameOver || !isTimerOn) return;
+    if (gameOver) return;
 
     const timeSpent = performance.now() - startTime.current;
 

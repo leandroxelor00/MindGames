@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+
 import { getCurrentUserId } from "../../services/userId";
+
 import { postScore } from "../../services/scoreService";
 
 function criarNovoDesafio(nivel) {
@@ -11,6 +13,7 @@ function criarNovoDesafio(nivel) {
     let numB = sortearNumero(1, 20);
 
     const operacoesDisponiveis = ["+"];
+
     if (nivel >= 2) operacoesDisponiveis.push("-");
     if (nivel >= 3) operacoesDisponiveis.push("*");
 
@@ -31,18 +34,20 @@ function criarNovoDesafio(nivel) {
     }
 
     let valor = 0;
+
     if (operador === "+") valor = numA + numB;
     if (operador === "-") valor = numA - numB;
     if (operador === "*") valor = numA * numB;
 
     return {
       texto: `${numA} ${operador} ${numB}`,
-      valor: valor,
+      valor,
     };
   };
 
   let esquerda = criarOperacao();
   let direita = criarOperacao();
+
   let tentativas = 10;
 
   while (esquerda.valor === direita.valor && tentativas > 0) {
@@ -51,35 +56,51 @@ function criarNovoDesafio(nivel) {
   }
 
   const ladoMaior = esquerda.valor > direita.valor ? "esquerda" : "direita";
-  return { esquerda, direita, ladoMaior };
+
+  return {
+    esquerda,
+    direita,
+    ladoMaior,
+  };
 }
 
 export function useNumberChallenge() {
   const [nivel, setNivel] = useState(1);
+
   const [acertosConsecutivos, setAcertosConsecutivos] = useState(0);
+
   const [desafio, setDesafio] = useState(criarNovoDesafio(1));
 
   const [score, setScore] = useState(0);
+
   const [timer, setTimer] = useState(30);
+
   const [isTimerOn, setIsTimerOn] = useState(false);
+
   const [reactionTimes, setReactionTimes] = useState([]);
 
+  const [feedback, setFeedback] = useState(null);
+
   const startTime = useRef(0);
+
   const gameOver = timer === 0;
 
   useEffect(() => {
     if (!isTimerOn || gameOver) {
       return;
     }
+
     const interval = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer <= 1) {
           setIsTimerOn(false);
           return 0;
         }
+
         return prevTimer - 1;
       });
-    }, 1);
+    }, 1000);
+
     return () => clearInterval(interval);
   }, [isTimerOn, gameOver]);
 
@@ -91,35 +112,53 @@ export function useNumberChallenge() {
   }
 
   function escolher(lado) {
-    if (gameOver || !isTimerOn) return;
+    if (gameOver || feedback) {
+      return;
+    }
 
     const timeSpent = performance.now() - startTime.current;
+
     setReactionTimes((prev) => [...prev, timeSpent]);
 
+    const acertou = lado === desafio.ladoMaior;
+
+    setFeedback({
+      lado,
+      resultado: acertou ? "acerto" : "erro",
+    });
+
     let novoNivel = nivel;
-    let acertou = lado === desafio.ladoMaior;
 
     if (acertou) {
       setScore((prev) => prev + 1);
 
       const novosAcertos = acertosConsecutivos + 1;
+
       setAcertosConsecutivos(novosAcertos);
 
       if (novosAcertos % 3 === 0) {
         novoNivel = Math.min(nivel + 1, 3);
+
         setNivel(novoNivel);
       }
     } else {
       setAcertosConsecutivos(0);
     }
 
-    setDesafio(criarNovoDesafio(novoNivel));
-    startTime.current = performance.now();
+    setTimeout(() => {
+      setDesafio(criarNovoDesafio(novoNivel));
+
+      startTime.current = performance.now();
+
+      setFeedback(null);
+    }, 150);
   }
 
   const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
+
   const avg =
     reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
+
   const avgReactionTime = Number(avg.toFixed(2));
 
   useEffect(() => {
@@ -155,6 +194,7 @@ export function useNumberChallenge() {
     setTimer(30);
     setNivel(1);
     setAcertosConsecutivos(0);
+    setFeedback(null);
     setDesafio(criarNovoDesafio(1));
   }
 
@@ -168,5 +208,6 @@ export function useNumberChallenge() {
     avgReactionTime,
     resetGame,
     nivel,
+    feedback,
   };
 }

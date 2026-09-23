@@ -1,6 +1,9 @@
 import { useNumberChallenge } from "./useNumberChallenge";
+
 import { Timer } from "../../components/Timer/Timer";
+
 import { ScoreBoard } from "../../components/ScoreBoard/ScoreBoard";
+
 import styles from "./NumberChallenge.module.css";
 
 export function NumberChallenge() {
@@ -14,11 +17,24 @@ export function NumberChallenge() {
     avgReactionTime,
     resetGame,
     nivel,
+    feedback,
   } = useNumberChallenge();
 
   function handleEscolher(lado) {
     startTimer();
     escolher(lado);
+  }
+
+  function getClasseCarta(lado) {
+    if (!feedback || feedback.lado !== lado) {
+      return styles.carta;
+    }
+
+    if (feedback.resultado === "acerto") {
+      return `${styles.carta} ${styles.acerto}`;
+    }
+
+    return `${styles.carta} ${styles.erro}`;
   }
 
   return (
@@ -37,25 +53,42 @@ export function NumberChallenge() {
       </div>
 
       {!gameOver && (
-        <div className={styles.cartas}>
-          <button
-            type="button"
-            className={styles.carta}
-            onClick={() => handleEscolher("esquerda")}
-            disabled={gameOver}
-          >
-            {desafio.esquerda.texto}
-          </button>
+        <>
+          <div className={styles.indicadorNivel}>
+            <span className={styles.labelNivel}>Nível {nivel}</span>
 
-          <button
-            type="button"
-            className={styles.carta}
-            onClick={() => handleEscolher("direita")}
-            disabled={gameOver}
-          >
-            {desafio.direita.texto}
-          </button>
-        </div>
+            <div className={styles.niveis}>
+              {[1, 2, 3].map((numero) => (
+                <span
+                  key={numero}
+                  className={`${styles.pontoNivel} ${
+                    numero <= nivel ? styles.pontoNivelAtivo : ""
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.cartas}>
+            <button
+              type="button"
+              className={getClasseCarta("esquerda")}
+              onClick={() => handleEscolher("esquerda")}
+              disabled={gameOver || feedback !== null}
+            >
+              {desafio.esquerda.texto}
+            </button>
+
+            <button
+              type="button"
+              className={getClasseCarta("direita")}
+              onClick={() => handleEscolher("direita")}
+              disabled={gameOver || feedback !== null}
+            >
+              {desafio.direita.texto}
+            </button>
+          </div>
+        </>
       )}
 
       {gameOver && (
@@ -67,8 +100,7 @@ export function NumberChallenge() {
           </p>
 
           <p>
-            Tempo médio de reação:{" "}
-            <strong>{avgReactionTime} ms</strong>
+            Tempo médio de reação: <strong>{avgReactionTime} ms</strong>
           </p>
 
           <button
