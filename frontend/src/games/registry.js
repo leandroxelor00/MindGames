@@ -17,8 +17,8 @@ export const gamesRegistry = [
   {
     id: "number-challenge",
     name: "Desafio Numérico",
-    component: NumberChallenge
-  }
+    component: NumberChallenge,
+  },
   {
     id: "visual-memory",
     name: "Memoria Visual",
