@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 
-import { getUserId } from "../../services/userId";
+import { getCurrentUserId } from "../../services/userId";
+
 import { postScore } from "../../services/scoreService";
 
 export function useStroopTest() {
@@ -22,11 +23,11 @@ export function useStroopTest() {
   };
 
   const [currentWord, setCurrentWord] = useState(words[0]);
+
   const [currentColor, setCurrentColor] = useState(colorMap[words[0]]);
 
   const [reactionTimes, setReactionTimes] = useState([]);
 
-  // gameOver é derivado do timer
   const gameOver = timer === 0;
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export function useStroopTest() {
 
         return prevTimer - 1;
       });
-    }, 1);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [isTimerOn, gameOver]);
@@ -63,13 +64,14 @@ export function useStroopTest() {
     const randomColorKey = words[Math.floor(Math.random() * words.length)];
 
     setCurrentWord(randomWord);
+
     setCurrentColor(colorMap[randomColorKey]);
 
     startTime.current = performance.now();
   }
 
   function colorCorrect(selectedColorName) {
-    if (gameOver || !isTimerOn) return;
+    if (gameOver) return;
 
     const timeSpent = performance.now() - startTime.current;
 
@@ -87,11 +89,12 @@ export function useStroopTest() {
   const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
 
   const avg =
-    reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
+    reactionTimes.length > 0
+      ? sumReactionTime / reactionTimes.length
+      : 0;
 
   const avgReactionTime = Number(avg.toFixed(2));
 
-  // Envia o resultado quando o jogo termina
   useEffect(() => {
     if (!gameOver) {
       return;
@@ -99,10 +102,12 @@ export function useStroopTest() {
 
     async function enviar() {
       const accuracy =
-        reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
+        reactionTimes.length > 0
+          ? (score / reactionTimes.length) * 100
+          : 0;
 
       const result = {
-        userId: getUserId(),
+        userId: getCurrentUserId(),
         gameId: "stroop-test",
         score,
         accuracy,

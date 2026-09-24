@@ -2,7 +2,7 @@ const { db } = require("../db/connection");
 
 function selectByUserId(userId) {
   const select = db.prepare("SELECT * FROM scores WHERE userId = ?");
-  const rows = select.all(userId);
+  const rows = select.all(String(userId));
   return rows;
 }
 

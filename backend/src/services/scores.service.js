@@ -4,7 +4,7 @@ const {
   updateUserIdInScores,
 } = require("../models/score.model");
 
-const games = ["memory-match", "stroop-test"];
+const games = ["memory-match", "stroop-test","number-challenge"];
 
 function saveScore(score) {
   if (
