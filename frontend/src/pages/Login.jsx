@@ -14,26 +14,26 @@ export function Login() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
-async function handleSubmit(event) {
-  event.preventDefault();
-  setError("");
-  setLoading(true);
-  try {
-    const data = await login(email, password);
-    setUser(data.user);
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError("");
+    setLoading(true);
     try {
-      const userIdAnonimo = getUserId();
-      await migrateScores(userIdAnonimo, data.user.id);
+      const data = await login(email, password);
+      setUser(data.user);
+      try {
+        const userIdAnonimo = getUserId();
+        await migrateScores(userIdAnonimo);
+      } catch (err) {
+        console.error("Erro ao migrar scores:", err);
+      }
+      navigate("/");
     } catch (err) {
-      console.error("Erro ao migrar scores:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    navigate("/");
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
   }
-}
 
   return (
     <div className={styles.page}>
@@ -110,7 +110,11 @@ async function handleSubmit(event) {
             />
           </div>
 
-          <button className={styles.submitButton} type="submit" disabled={loading}>
+          <button
+            className={styles.submitButton}
+            type="submit"
+            disabled={loading}
+          >
             {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>

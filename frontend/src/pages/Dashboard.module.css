@@ -1,14 +1,39 @@
 .container {
+  --cor-fundo: #f7f8fa;
+  --cor-texto: #1a1d29;
+  --cor-texto-suave: #5c6072;
+  --cor-accent: #5b4fe8;
+  --fonte-titulo: "Space Grotesk", sans-serif;
+
   min-height: 100vh;
   padding: 40px;
   background: var(--cor-fundo);
   color: var(--cor-texto);
+  font-family: -apple-system, "Segoe UI", sans-serif;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto 32px;
 }
 
 .titulo {
-  margin: 0 0 32px;
-  font-size: 32px;
+  margin: 0;
+  font-family: var(--fonte-titulo);
   font-weight: 700;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+}
+
+.voltarLink {
+  color: var(--cor-accent);
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* =========================
@@ -16,12 +41,14 @@
 ========================= */
 
 .secao {
-  margin-bottom: 40px;
+  max-width: 900px;
+  margin: 0 auto 40px;
 }
 
 .subtitulo {
   margin: 0 0 20px;
-  font-size: 22px;
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -34,15 +61,22 @@
 .cardJogo {
   padding: 22px;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e6ec;
+  border-radius: 14px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.cardJogo:hover {
+  border-color: var(--cor-accent);
+  transform: translateY(-2px);
 }
 
 .nomeJogo {
   margin: 0 0 18px;
-  font-size: 18px;
+  font-family: var(--fonte-titulo);
+  font-size: 17px;
   font-weight: 600;
+  text-transform: capitalize;
 }
 
 .estatisticas {
@@ -67,12 +101,13 @@
 
 .label {
   color: var(--cor-texto-suave);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .valor {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 15px;
+  color: var(--cor-accent);
 }
 
 /* =========================
@@ -82,7 +117,7 @@
 .historico {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .partida {
@@ -90,39 +125,34 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-
-  padding: 18px 20px;
-
+  padding: 16px 20px;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  border: 1px solid #e5e6ec;
+  border-radius: 12px;
+  transition: border-color 0.15s ease;
 }
 
 .partida:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+  border-color: var(--cor-accent);
 }
 
 .infoPartida {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .jogo {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
+  text-transform: capitalize;
 }
 
 .data {
   margin: 0;
   color: var(--cor-texto-suave);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .resultado {
@@ -140,12 +170,14 @@
 
 .resultadoLabel {
   color: var(--cor-texto-suave);
-  font-size: 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .resultadoValor {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 /* =========================
@@ -156,22 +188,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
   min-height: 300px;
-
   color: var(--cor-texto-suave);
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .semPartidas {
   padding: 40px;
   text-align: center;
-
   background: #ffffff;
   border: 1px dashed #d8dbe3;
-  border-radius: 16px;
-
+  border-radius: 14px;
   color: var(--cor-texto-suave);
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* =========================

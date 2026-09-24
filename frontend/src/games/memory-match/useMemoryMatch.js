@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
-import { getUserId } from "../../services/userId";
+import { getCurrentUserId } from "../../services/userId";
+
 import { postScore } from "../../services/scoreService";
 
 export function criarBaralho() {
@@ -20,11 +21,13 @@ export function criarBaralho() {
 
 export function useMemoryMatch() {
   const [baralho, setBaralho] = useState(criarBaralho());
+
   const [viradasAgora, setViradasAgora] = useState([]);
+
   const [tentativas, setTentativas] = useState(0);
+
   const [segundos, setSegundos] = useState(0);
 
-  // Valor derivado: verifica se todas as cartas foram pareadas
   const jogoFinalizado = baralho.every((carta) => carta.pareada);
 
   function virarCarta(id) {
@@ -50,7 +53,6 @@ export function useMemoryMatch() {
     setViradasAgora([...viradasAgora, id]);
   }
 
-  // Compara as duas cartas selecionadas
   useEffect(() => {
     if (viradasAgora.length !== 2) {
       return;
@@ -90,7 +92,6 @@ export function useMemoryMatch() {
     return () => clearTimeout(timer);
   }, [viradasAgora]);
 
-  // Cronômetro
   useEffect(() => {
     if (jogoFinalizado) {
       return;
@@ -105,7 +106,6 @@ export function useMemoryMatch() {
     };
   }, [jogoFinalizado]);
 
-  // Envia o resultado quando o jogo termina
   useEffect(() => {
     if (!jogoFinalizado) {
       return;
@@ -121,7 +121,7 @@ export function useMemoryMatch() {
           : 0;
 
       const result = {
-        userId: getUserId(),
+        userId: getCurrentUserId(),
         gameId: "memory-match",
         score: paresAcertados,
         accuracy,

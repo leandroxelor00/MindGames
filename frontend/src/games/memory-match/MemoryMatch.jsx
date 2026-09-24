@@ -3,7 +3,6 @@ import styles from "./MemoryMatch.module.css";
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
 import { Timer } from "../../components/Timer/Timer";
 import { ScoreBoard } from "../../components/ScoreBoard/ScoreBoard";
-import { Button } from "../../components/Button/Button";
 
 export function MemoryMatch() {
   const {
