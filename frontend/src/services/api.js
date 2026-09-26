@@ -1,4 +1,5 @@
 export const CHAVE_TOKEN = "mindgames_auth_token";
+export const CHAVE_USER = "mindgames_auth_user";
 
 const BASE_URL = "http://localhost:3001/api";
 
