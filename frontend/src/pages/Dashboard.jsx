@@ -38,6 +38,21 @@ function calcularMediasPorJogo(partidas) {
   return medias;
 }
 
+function formatarData(playedAt) {
+  const dataCorrigida = playedAt.replace(" ", "T") + "Z";
+
+  const data = new Date(dataCorrigida);
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "America/Sao_Paulo",
+  }).format(data);
+}
+
 export function Dashboard() {
   const [partidas, setPartidas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +61,6 @@ export function Dashboard() {
     async function carregarHistorico() {
       try {
         const historico = await getHistory();
-
         setPartidas(historico);
       } catch (error) {
         console.error("Erro ao carregar histórico:", error);
@@ -74,10 +88,12 @@ export function Dashboard() {
     <main className={styles.container}>
       <div className={styles.topo}>
         <h1 className={styles.titulo}>Dashboard</h1>
+
         <Link to="/" className={styles.voltarLink}>
           ← Voltar
         </Link>
       </div>
+
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Resumo por jogo</h2>
 
@@ -94,13 +110,11 @@ export function Dashboard() {
                 <div className={styles.estatisticas}>
                   <div className={styles.estatistica}>
                     <span className={styles.label}>Total de partidas</span>
-
                     <span className={styles.valor}>{media.totalPartidas}</span>
                   </div>
 
                   <div className={styles.estatistica}>
                     <span className={styles.label}>Score médio</span>
-
                     <span className={styles.valor}>
                       {media.mediaScore.toFixed(1)}
                     </span>
@@ -108,7 +122,6 @@ export function Dashboard() {
 
                   <div className={styles.estatistica}>
                     <span className={styles.label}>Precisão média</span>
-
                     <span className={styles.valor}>
                       {media.mediaAccuracy.toFixed(1)}%
                     </span>
@@ -119,6 +132,7 @@ export function Dashboard() {
           </div>
         )}
       </section>
+
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Histórico de partidas</h2>
 
@@ -133,7 +147,9 @@ export function Dashboard() {
                 <div className={styles.infoPartida}>
                   <p className={styles.jogo}>{partida.gameId}</p>
 
-                  <p className={styles.data}>{partida.playedAt}</p>
+                  <p className={styles.data}>
+                    {formatarData(partida.playedAt)}
+                  </p>
                 </div>
 
                 <div className={styles.resultado}>
