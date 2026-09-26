@@ -13,10 +13,88 @@
   font-family: var(--fonte-corpo);
 }
 
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 24px 0;
+}
+
+.brand {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navLink {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--cor-texto);
+}
+
+.navButtonPrimary {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: var(--cor-accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.navButtonPrimary:hover {
+  background: var(--cor-accent-hover);
+}
+
+.navUser {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navEmail {
+  font-size: 14px;
+  color: var(--cor-texto-suave);
+}
+
+.navEmail strong {
+  color: var(--cor-texto);
+}
+
+.navButtonGhost {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e6ec;
+  background: #fff;
+  color: var(--cor-texto);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.navButtonGhost:hover {
+  border-color: var(--cor-accent);
+  color: var(--cor-accent);
+}
+
 .hero {
   max-width: 640px;
   margin: 0 auto;
-  padding: 4rem 1.5rem 3rem;
+  padding: 3rem 1.5rem 3rem;
   text-align: left;
 }
 
@@ -35,19 +113,6 @@
   color: var(--cor-texto-suave);
   max-width: 42ch;
   margin: 0 0 1.5rem;
-}
-
-.dashboardLink {
-  display: inline-block;
-  color: var(--cor-accent);
-  font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1.5px;
-}
-
-.dashboardLink:hover {
-  color: var(--cor-accent-hover);
 }
 
 .sectionLabel {
@@ -108,6 +173,8 @@ a:nth-child(even) {
   border-color: var(--cor-accent);
   transform: translateX(2px);
 }
+
+
 
 @media (prefers-reduced-motion: reduce) {
   .card {
