@@ -1,24 +1,30 @@
 import { use, useEffect, useState } from "react";
+import { levels } from "./levels";
 
 export function useVisualMemory() {
-  const [gridLength, setGridLength] = useState(9);
   const [level, setLevel] = useState(1);
+  const [gridLength, setGridLength] = useState(9);
   const [cells, setCells] = useState(3);
   const [highlightedCells, setHighlightedCells] = useState(new Set());
-  const [visibleCells, setVisibleCells] = useState(new Set());
   const [selectedCells, setSelectedCells] = useState(new Set());
-  const [showTime, setShowTime] = useState(600);
+  const [showTime, setShowTime] = useState(800);
   const [index, setIndex] = useState(0);
   const [isShowingPartern, setIsShowingPartern] = useState(true);
   const [gameOver, setGameOver] = useState(false);
-  const [gameStopped, setGameStopped] = useState(false);
+  const [gameStopped, setGameStopped] = useState(true);
+  const [levelDone, setLevelDone] = useState(false);
   const [tries, setTries] = useState(cells);
   const min = 0;
   const max = gridLength - 1;
 
   useEffect(() => {
-    generateHighlightedCells();
+    if (!isShowingPartern) {
+      setGameStopped(false);
+    }
+  }, [isShowingPartern]);
 
+  function runGame() {
+    generateHighlightedCells();
     const interval = setInterval(() => {
       setIndex((index) => {
         const next = index + 1;
@@ -30,13 +36,17 @@ export function useVisualMemory() {
       });
     }, showTime);
     return () => clearInterval(interval);
-  }, []);
+  }
+
+  function currentLevel() {
+    const level = levels.map((element, index) => {
+      return setCells(element);
+    });
+  }
 
   useEffect(() => {
-    const highlightedCellsArr = [...highlightedCells];
-    const slicedArr = highlightedCellsArr.slice(0, index);
-    setVisibleCells(slicedArr);
-  }, [index]);
+    runGame();
+  }, []);
 
   function generateGrid() {
     return Array.from({ length: gridLength }, (_, i) => i);
@@ -63,14 +73,13 @@ export function useVisualMemory() {
     setTries((tries) => tries - 1);
     setSelectedCells(cellClicked);
   }
-  console.log(highlightedCells);
 
   function checkCorrectCells(cell) {
     const selectedCellsArr = [...selectedCells];
     const isCorrect = selectedCellsArr.every((element) => {
       return highlightedCells.has(element);
     });
-    isCorrect ? console.log("Acertou") : console.log("Errou");
+    isCorrect ? setLevelDone(true) : setGameOver(true);
   }
 
   useEffect(() => {
@@ -81,5 +90,27 @@ export function useVisualMemory() {
     }
   }, [tries]);
 
-  return { generateGrid, highlightedCells, isShowingPartern, handleCellClick };
+  function resetGame() {
+    setTimeout(() => {
+      setGameOver(false);
+      runGame();
+      setIsShowingPartern(true);
+      setSelectedCells(new Set());
+      setGameStopped(true);
+      setLevelDone(false);
+      setIndex(0);
+      setTries(cells);
+    }, 400);
+  }
+
+  return {
+    generateGrid,
+    highlightedCells,
+    isShowingPartern,
+    handleCellClick,
+    selectedCells,
+    levelDone,
+    gameOver,
+    resetGame,
+  };
 }
