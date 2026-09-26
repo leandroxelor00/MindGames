@@ -1,0 +1,29 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.voltarLink {
+  display: inline-flex;
+  margin-bottom: 16px;
+}
+
+.naoEncontrado {
+  max-width: 500px;
+  margin: 80px auto;
+  text-align: center;
+  padding: 40px;
+  background: #ffffff;
+  border: 1px solid #e5e6ec;
+  border-radius: 14px;
+}
+
+.naoEncontrado h1 {
+  margin: 0 0 12px;
+}
+
+.naoEncontrado p {
+  color: #5c6072;
+  margin: 0 0 20px;
+}

@@ -1,24 +1,30 @@
 import { gamesRegistry } from "../games/registry";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Button } from "../components/Button/Button";
+import styles from "./GamePage.module.css";
 
 export function GamePage() {
   const { id } = useParams();
 
-  const selectedGame = gamesRegistry.find((registry) => {
-    return id === registry.id;
-  });
+  const selectedGame = gamesRegistry.find((registry) => id === registry.id);
 
   if (!selectedGame) {
-    return <h1>Jogo não encontrado</h1>;
+    return (
+      <div className={styles.naoEncontrado}>
+        <h1>Jogo não encontrado</h1>
+        <p>O jogo "{id}" não existe ou foi removido.</p>
+        <Link to="/">
+          <Button textContent="Voltar para a Home" />
+        </Link>
+      </div>
+    );
   }
 
   const GameComponent = selectedGame.component;
 
   return (
-    <div style={{ marginLeft: 50, marginTop: 20 }}>
-      <Link style={{ display: "flex", width: 200 }} to="/">
+    <div className={styles.container}>
+      <Link className={styles.voltarLink} to="/">
         <Button textContent="Voltar" />
       </Link>
       <GameComponent />
