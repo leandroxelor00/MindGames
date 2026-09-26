@@ -15,7 +15,7 @@
   max-width: 700px;
   height: 500px;
   margin: 8px auto 0;
-  background: #f8f9fa;
+  background: #c2e3f0;
   border: 2px solid #eaeaea;
   border-radius: 16px;
   overflow: hidden;
@@ -28,8 +28,8 @@
 
   transform: translate(-50%, -50%);
 
-  width: 72px;
-  height: 72px;
+  width: 16px;
+  height: 16px;
 
   display: flex;
   align-items: center;
