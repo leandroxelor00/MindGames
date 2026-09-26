@@ -2,8 +2,11 @@ import styles from "./Timer.module.css";
 
 export function Timer({ segundos, label = "Tempo" }) {
   return (
-    <p className={styles.container}>
-      {label}: {segundos}s
-    </p>
+    <div className={styles.container}>
+      <div className={styles.item}>
+        <span className={styles.label}>{label}</span>
+        <span className={styles.value}>{segundos}s</span>
+      </div>
+    </div>
   );
 }
