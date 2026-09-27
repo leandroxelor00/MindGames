@@ -1,4 +1,3 @@
-import { Button } from "../../components/Button/Button";
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
 import { useVisualMemory } from "./useVisualMemory";
 import styles from "./VisualMemory.module.css";
@@ -29,6 +28,7 @@ export function VisualMemory() {
           message={
             "Você venceu todos os níveis, parabéns!! Em breve terá o modo infinito, fique no aguardo!!"
           }
+          onClick={resetGame}
           customStyle={{
             position: "fixed",
             top: "50%",
