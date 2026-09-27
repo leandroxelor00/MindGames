@@ -1,12 +1,19 @@
 import { Button } from "../Button/Button";
 import styles from "./GameOverModal.module.css";
 
-export function GameOverModal({ customStyle, message, onClick }) {
+export function GameOverModal({
+  textContent,
+  customStyle,
+  message,
+  onClick,
+  buttonText = "Jogar novamente",
+}) {
   return (
-    <div className={styles.mensagemVitoria} style={customStyle}>
-      {message}
-
-      <Button textContent="Jogar novamente" onClick={onClick} />
+    <div className={styles.overlay}>
+      <div className={styles.mensagemVitoria} style={customStyle}>
+        {message}
+        <Button textContent={buttonText} onClick={onClick} />
+      </div>
     </div>
   );
 }
