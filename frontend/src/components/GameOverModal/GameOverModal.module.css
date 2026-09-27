@@ -18,6 +18,8 @@
   justify-content: center;
   align-items: center;
   gap: 30px;
+  position: relative;
+  z-index: 101;
 
   button {
     margin: 0;

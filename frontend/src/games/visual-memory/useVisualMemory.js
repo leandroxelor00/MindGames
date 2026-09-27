@@ -2,20 +2,20 @@ import { use, useEffect, useState } from "react";
 import { levels } from "./levels";
 
 export function useVisualMemory() {
-  const [level, setLevel] = useState(1);
-  const [gridLength, setGridLength] = useState(9);
-  const [cells, setCells] = useState(3);
+  const [levelIndex, setLevelIndex] = useState(14);
+  const [gridLength, setGridLength] = useState(levels[levelIndex].gridLength);
+  const [cells, setCells] = useState(levels[levelIndex].cells);
+  const [showTime, setShowTime] = useState(levels[levelIndex].showTime);
   const [highlightedCells, setHighlightedCells] = useState(new Set());
   const [selectedCells, setSelectedCells] = useState(new Set());
-  const [showTime, setShowTime] = useState(800);
-  const [index, setIndex] = useState(0);
   const [isShowingPartern, setIsShowingPartern] = useState(true);
   const [gameOver, setGameOver] = useState(false);
-  const [gameStopped, setGameStopped] = useState(true);
+  const [gameStopped, setGameStopped] = useState(false);
   const [levelDone, setLevelDone] = useState(false);
   const [tries, setTries] = useState(cells);
+  const [allLevelsDone, setAllLevelsDone] = useState(false);
   const min = 0;
-  const max = gridLength - 1;
+  const max = levels[levelIndex].gridLength - 1;
 
   useEffect(() => {
     if (!isShowingPartern) {
@@ -24,29 +24,31 @@ export function useVisualMemory() {
   }, [isShowingPartern]);
 
   function runGame() {
-    generateHighlightedCells();
-    const interval = setInterval(() => {
-      setIndex((index) => {
-        const next = index + 1;
-        if (next >= cells) {
-          clearInterval(interval);
-          setIsShowingPartern(false);
-        }
-        return next;
-      });
+    const currentCells = levels[levelIndex].cells;
+    const showTime = levels[levelIndex].showTime;
+    generateHighlightedCells(currentCells);
+    const timeout = setTimeout(() => {
+      setIsShowingPartern(false);
     }, showTime);
-    return () => clearInterval(interval);
+    return () => clearTimeout(timeout);
   }
 
-  function currentLevel() {
-    const level = levels.map((element, index) => {
-      return setCells(element);
-    });
+  function nextLevel() {
+    setLevelIndex((levelIndex) => levelIndex + 1);
   }
 
   useEffect(() => {
-    runGame();
-  }, []);
+    resetGame();
+    setTimeout(() => {
+      setCells(levels[levelIndex].cells);
+      setGridLength(levels[levelIndex].gridLength);
+      setShowTime(levels[levelIndex].showTime);
+    }, 400);
+  }, [levelIndex]);
+
+  function gridTemplate() {
+    return Math.sqrt(gridLength);
+  }
 
   function generateGrid() {
     return Array.from({ length: gridLength }, (_, i) => i);
@@ -54,24 +56,23 @@ export function useVisualMemory() {
   function randomPos(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-  function generateHighlightedCells() {
-    if (gameOver) {
-      return;
-    }
+  function generateHighlightedCells(currentCells) {
     const newHighlightedCells = new Set();
-    while (newHighlightedCells.size < cells) {
+    while (newHighlightedCells.size < currentCells) {
       newHighlightedCells.add(randomPos(min, max));
     }
     setHighlightedCells(newHighlightedCells);
   }
   function handleCellClick(cell) {
-    if (gameStopped) {
+    if (isShowingPartern) {
       return;
     }
     const cellClicked = new Set(selectedCells);
     cellClicked.add(cell);
-    setTries((tries) => tries - 1);
-    setSelectedCells(cellClicked);
+    if (!selectedCells.has(cell)) {
+      setTries((tries) => tries - 1);
+      setSelectedCells(cellClicked);
+    }
   }
 
   function checkCorrectCells(cell) {
@@ -79,7 +80,11 @@ export function useVisualMemory() {
     const isCorrect = selectedCellsArr.every((element) => {
       return highlightedCells.has(element);
     });
-    isCorrect ? setLevelDone(true) : setGameOver(true);
+    if (levelIndex === 14) {
+      isCorrect ? setAllLevelsDone(true) : setGameOver(true);
+    } else {
+      isCorrect ? setLevelDone(true) : setGameOver(true);
+    }
   }
 
   useEffect(() => {
@@ -90,17 +95,31 @@ export function useVisualMemory() {
     }
   }, [tries]);
 
+  function getCellStatus(cell) {
+    if (highlightedCells.has(cell)) {
+      return "correctCell";
+    } else if (selectedCells.has(cell)) {
+      return "wrongCell";
+    } else {
+      return "neutralCell";
+    }
+  }
+
   function resetGame() {
+    const currentCells = levels[levelIndex].cells;
     setTimeout(() => {
       setGameOver(false);
       runGame();
+      setGameStopped(false);
       setIsShowingPartern(true);
       setSelectedCells(new Set());
-      setGameStopped(true);
       setLevelDone(false);
-      setIndex(0);
-      setTries(cells);
+      setTries(currentCells);
     }, 400);
+  }
+
+  function newGame() {
+    setLevelIndex(0);
   }
 
   return {
@@ -109,8 +128,15 @@ export function useVisualMemory() {
     isShowingPartern,
     handleCellClick,
     selectedCells,
+    levelIndex,
     levelDone,
     gameOver,
     resetGame,
+    nextLevel,
+    gridTemplate,
+    gameStopped,
+    getCellStatus,
+    newGame,
+    allLevelsDone,
   };
 }
