@@ -1,5 +1,7 @@
 import { use, useEffect, useState } from "react";
 import { levels } from "./levels";
+import { getCurrentUserId } from "../../services/userId";
+import { postScore } from "../../services/scoreService";
 
 export function useVisualMemory() {
   const [levelIndex, setLevelIndex] = useState(14);
@@ -121,6 +123,31 @@ export function useVisualMemory() {
   function newGame() {
     setLevelIndex(0);
   }
+
+  useEffect(() => {
+    if (!gameOver && !allLevelsDone) {
+      return;
+    }
+
+    async function enviar() {
+      const result = {
+        userId: getCurrentUserId(),
+        gameId: "visual-memory",
+        score: levelIndex + 1,
+        accuracy: 0,
+        avgReactionTime: 0,
+        levelReached: levelIndex + 1,
+      };
+
+      try {
+        await postScore(result);
+      } catch (error) {
+        console.error("Não foi possível enviar o resultado:", error);
+      }
+    }
+
+    enviar();
+  }, [gameOver, allLevelsDone]);
 
   return {
     generateGrid,
