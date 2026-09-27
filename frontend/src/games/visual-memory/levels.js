@@ -1,0 +1,17 @@
+export const levels = [
+  { level: 1, gridLength: 9, cells: 3, showTime: 1200 },
+  { level: 2, gridLength: 9, cells: 4, showTime: 950 },
+  { level: 3, gridLength: 9, cells: 5, showTime: 400 },
+  { level: 4, gridLength: 16, cells: 4, showTime: 850 },
+  { level: 5, gridLength: 16, cells: 5, showTime: 800 },
+  { level: 6, gridLength: 16, cells: 6, showTime: 750 },
+  { level: 7, gridLength: 25, cells: 5, showTime: 700 },
+  { level: 8, gridLength: 25, cells: 6, showTime: 650 },
+  { level: 9, gridLength: 25, cells: 7, showTime: 600 },
+  { level: 10, gridLength: 36, cells: 6, showTime: 550 },
+  { level: 11, gridLength: 36, cells: 7, showTime: 500 },
+  { level: 12, gridLength: 36, cells: 8, showTime: 450 },
+  { level: 13, gridLength: 25, cells: 7, showTime: 500 },
+  { level: 14, gridLength: 36, cells: 8, showTime: 550 },
+  { level: 15, gridLength: 49, cells: 9, showTime: 600 },
+];
