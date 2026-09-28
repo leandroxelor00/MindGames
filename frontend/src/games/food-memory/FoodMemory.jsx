@@ -1,7 +1,5 @@
 import { useFoodMemory } from "./useFoodMemory";
-
 import { ScoreBoard } from "../../components/ScoreBoard/ScoreBoard";
-
 import styles from "./FoodMemory.module.css";
 
 export function FoodMemory() {
@@ -12,6 +10,7 @@ export function FoodMemory() {
     gameOver,
     venceu,
     feedback,
+    transicionando,
     clicarImagem,
     reiniciarJogo,
   } = useFoodMemory();
@@ -28,6 +27,7 @@ export function FoodMemory() {
           />
         </div>
       </div>
+
       <div className={styles.area}>
         {imagens.map((imagem) => (
           <button
@@ -44,11 +44,17 @@ export function FoodMemory() {
               top: `${imagem.y}%`,
             }}
             onClick={() => clicarImagem(imagem.id)}
-            disabled={!!feedback}
+            disabled={!!feedback || transicionando}
           >
             {imagem.emoji}
           </button>
         ))}
+
+        {transicionando && (
+          <div className={styles.transicao}>
+            <div className={styles.toalha}></div>
+          </div>
+        )}
 
         {gameOver && (
           <div className={styles.mensagem}>

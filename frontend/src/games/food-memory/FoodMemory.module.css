@@ -3,19 +3,24 @@
   flex-direction: column;
   align-items: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  padding: 2rem 1rem;
+  padding: 0.5rem 1rem;
   max-width: 800px;
   margin: 0 auto;
 }
-
 /* Área do jogo */
+
 .area {
   position: relative;
   width: 100%;
   max-width: 700px;
   height: 500px;
-  margin: 8px auto 0;
-  background: #c2e3f0;
+  margin: 2px auto 0;
+  background: linear-gradient(
+  135deg,
+  #f5e8d2 0%,
+  #ead6b7 50%,
+  #dfc39b 100%
+);
   border: 2px solid #eaeaea;
   border-radius: 16px;
   overflow: hidden;
@@ -23,43 +28,34 @@
 }
 
 /* Comida */
+
 .imagem {
   position: absolute;
-
   transform: translate(-50%, -50%);
-
-  width: 16px;
-  height: 16px;
-
+  width: 72px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   font-size: 36px;
   line-height: 1;
-
   background-color: #ffffff;
   color: #333;
-
   border: 2px solid #eaeaea;
   border-radius: 50%;
-
   cursor: pointer;
-
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-
   transition:
     transform 0.15s ease,
     background-color 0.15s ease,
     border-color 0.15s ease,
     box-shadow 0.15s ease;
-
   user-select: none;
 }
 
 /* Hover */
+
 .imagem:hover:not(:disabled) {
   transform: translate(-50%, -50%) scale(1.1);
   background-color: #f1f3f5;
@@ -68,11 +64,13 @@
 }
 
 /* Clique */
+
 .imagem:active:not(:disabled) {
   transform: translate(-50%, -50%) scale(0.95);
 }
 
 /* Evita clique durante feedback */
+
 .imagem:disabled {
   cursor: not-allowed;
 }
@@ -85,7 +83,6 @@
   background-color: #d4edda !important;
   border-color: #28a745 !important;
   color: #155724 !important;
-
   animation: piscarAcerto 0.2s ease-in-out;
 }
 
@@ -97,7 +94,6 @@
   background-color: #f8d7da !important;
   border-color: #dc3545 !important;
   color: #721c24 !important;
-
   animation: piscarErro 0.2s ease-in-out;
 }
 
@@ -136,47 +132,127 @@
 }
 
 /* =========================
+   TRANSIÇÃO DA TOALHA
+   ========================= */
+
+.transicao {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: all;
+  animation: aparecerToalha 0.5s ease-in-out forwards;
+}
+
+.toalha {
+  position: absolute;
+  inset: -20px;
+
+  background-color: #ffffff;
+
+  background-image:
+    linear-gradient(90deg, rgba(190, 35, 35, 0.9) 50%, transparent 50%),
+    linear-gradient(rgba(190, 35, 35, 0.9) 50%, transparent 50%);
+
+  background-size: 64px 64px;
+  background-position: 0 0;
+
+  box-shadow:
+    0 0 25px rgba(0, 0, 0, 0.2),
+    inset 0 0 25px rgba(120, 0, 0, 0.12);
+
+  transform: translateX(-110%);
+
+  animation: deslizarToalha 1.8s ease-in-out forwards;
+}
+
+/*
+  Pequena sobreposição para deixar
+  o xadrez com aparência mais natural.
+*/
+.toalha::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 100%
+  );
+
+  animation: brilhoToalha 0.8s ease-in-out;
+}
+
+@keyframes aparecerToalha {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes deslizarToalha {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  40% {
+    transform: translateX(0);
+  }
+
+  60% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes brilhoToalha {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* =========================
    FIM DE JOGO
    ========================= */
 
 .mensagem {
   position: absolute;
-
   top: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%);
-
   width: calc(100% - 40px);
   max-width: 450px;
-
   padding: 32px 24px;
-
   background-color: #ffffff;
-
   border: 2px solid #eaeaea;
   border-radius: 16px;
-
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-
   text-align: center;
-
   z-index: 10;
-
   animation: fadeIn 0.4s ease-in;
 }
 
 .mensagem h2 {
   margin-top: 0;
   margin-bottom: 12px;
-
   font-size: 1.8rem;
   color: #333;
 }
 
 .mensagem p {
   margin: 8px 0;
-
   font-size: 1.05rem;
   color: #555;
 }
@@ -185,20 +261,14 @@
 
 .mensagem button {
   margin-top: 20px;
-
   padding: 12px 24px;
-
   border: none;
   border-radius: 8px;
-
   background-color: #5b4fe8;
   color: #ffffff;
-
   font-size: 1rem;
   font-weight: bold;
-
   cursor: pointer;
-
   transition:
     background-color 0.2s ease,
     transform 0.15s ease,
@@ -207,9 +277,7 @@
 
 .mensagem button:hover {
   background-color: #4a3fd1;
-
   transform: translateY(-2px);
-
   box-shadow: 0 6px 12px rgba(91, 79, 232, 0.25);
 }
 

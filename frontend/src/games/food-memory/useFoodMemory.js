@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
+
 const emojis = [
   "🍔",
   "🍕",
@@ -26,19 +27,23 @@ export function gerarPosicao(posisoesExistentes) {
   for (let tentativas = 0; tentativas < tentativasMaximas; tentativas++) {
     const x = Math.floor(Math.random() * 81) + 10;
     const y = Math.floor(Math.random() * 81) + 10;
+
     let muitoPerto = false;
 
     for (const posicao of posisoesExistentes) {
       const distancia = Math.hypot(x - posicao.x, y - posicao.y);
+
       if (distancia < distanciaMinima) {
         muitoPerto = true;
         break;
       }
     }
+
     if (!muitoPerto) {
       return { x, y };
     }
   }
+
   return {
     x: Math.floor(Math.random() * 81) + 10,
     y: Math.floor(Math.random() * 81) + 10,
@@ -52,7 +57,9 @@ export function gerarFase(numeroFase) {
 
   emojisDaFase.forEach((emoji, index) => {
     const novaPosicao = gerarPosicao(posicoesOcupadas);
+
     posicoesOcupadas.push(novaPosicao);
+
     imagensGeradas.push({
       id: index,
       emoji: emoji,
@@ -60,6 +67,7 @@ export function gerarFase(numeroFase) {
       y: novaPosicao.y,
     });
   });
+
   return imagensGeradas;
 }
 
@@ -70,6 +78,7 @@ export function useFoodMemory() {
   const [gameOver, setGameOver] = useState(false);
   const [venceu, setVenceu] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const [transicionando, setTransicionando] = useState(false);
 
   useEffect(() => {
     if (!gameOver) return;
@@ -97,7 +106,7 @@ export function useFoodMemory() {
   }, [gameOver]);
 
   function clicarImagem(id) {
-    if (gameOver || venceu || feedback) return;
+    if (gameOver || venceu || feedback || transicionando) return;
 
     const idNovoEmoji = fase - 1;
 
@@ -113,13 +122,22 @@ export function useFoodMemory() {
         if (fase === 15) {
           setVenceu(true);
           setGameOver(true);
-        } else {
+          return;
+        }
+
+        setTransicionando(true);
+
+        setTimeout(() => {
           const novaFase = fase + 1;
 
           setFase(novaFase);
           setErros(0);
           setImagens(gerarFase(novaFase));
-        }
+
+          setTimeout(() => {
+            setTransicionando(false);
+          }, 900);
+        }, 900);
       }, 200);
     } else {
       setFeedback({
@@ -128,7 +146,6 @@ export function useFoodMemory() {
       });
 
       const quantidadeErros = erros + 1;
-
       setErros(quantidadeErros);
 
       setTimeout(() => {
@@ -147,6 +164,7 @@ export function useFoodMemory() {
     setGameOver(false);
     setVenceu(false);
     setFeedback(null);
+    setTransicionando(false);
     setImagens(gerarFase(1));
   }
 
@@ -157,6 +175,7 @@ export function useFoodMemory() {
     gameOver,
     venceu,
     feedback,
+    transicionando,
     clicarImagem,
     reiniciarJogo,
   };
