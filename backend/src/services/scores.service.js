@@ -4,7 +4,14 @@ const {
   updateUserIdInScores,
 } = require("../models/score.model");
 
-const games = ["memory-match", "stroop-test","number-challenge","visual-memory","food-memory"];
+const games = [
+  "memory-match",
+  "stroop-test",
+  "number-challenge",
+  "visual-memory",
+  "food-memory",
+  "reaction-time",
+];
 
 function saveScore(score) {
   if (
@@ -23,7 +30,7 @@ function saveScore(score) {
     score.score,
     score.accuracy,
     score.avgReactionTime,
-    score.levelReached
+    score.levelReached,
   );
 }
 
