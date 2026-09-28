@@ -1,10 +1,10 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { levels } from "./levels";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
 
 export function useVisualMemory() {
-  const [levelIndex, setLevelIndex] = useState(14);
+  const [levelIndex, setLevelIndex] = useState(0);
   const [gridLength, setGridLength] = useState(levels[levelIndex].gridLength);
   const [cells, setCells] = useState(levels[levelIndex].cells);
   const [showTime, setShowTime] = useState(levels[levelIndex].showTime);

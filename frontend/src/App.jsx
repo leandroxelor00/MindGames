@@ -4,7 +4,7 @@ import { Dashboard } from "./pages/Dashboard.jsx";
 import { Login } from "./pages/Login.jsx";
 import { Register } from "./pages/Register.jsx";
 import { Routes, Route } from "react-router-dom";
-import { VisualMemory } from "./games/visual-memory/VisualMemory.jsx";
+import { NotFound } from "./pages/NotFound.jsx";
 
 function App() {
   return (
@@ -14,6 +14,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/game/:id" element={<GamePage />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

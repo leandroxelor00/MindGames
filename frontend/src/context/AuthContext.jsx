@@ -1,23 +1,21 @@
 import { createContext, useState } from "react";
-import { CHAVE_TOKEN } from "../services/api";
+import { CHAVE_TOKEN, CHAVE_USER } from "../services/api";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
 
 function recuperarUsuario() {
-  const token = localStorage.getItem(CHAVE_TOKEN);
+  const usuarioSalvo = localStorage.getItem(CHAVE_USER);
 
-  if (!token) {
+  if (!usuarioSalvo) {
     return null;
   }
 
   try {
-    const partes = token.split(".");
-    const payload = JSON.parse(atob(partes[1]));
-
-    return payload;
+    return JSON.parse(usuarioSalvo);
   } catch {
     localStorage.removeItem(CHAVE_TOKEN);
+    localStorage.removeItem(CHAVE_USER);
     return null;
   }
 }

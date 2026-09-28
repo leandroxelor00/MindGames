@@ -2,7 +2,7 @@ import { MemoryMatch } from "./memory-match/MemoryMatch";
 import { StroopTest } from "./stroop-test/StroopTest";
 import { NumberChallenge } from "./number-challenge/NumberChallenge";
 import { VisualMemory } from "./visual-memory/VisualMemory";
-
+import { FoodMemory } from "./food-memory/FoodMemory";
 export const gamesRegistry = [
   {
     id: "memory-match",
@@ -17,11 +17,16 @@ export const gamesRegistry = [
   {
     id: "number-challenge",
     name: "Desafio Numérico",
-    component: NumberChallenge,
+    component: NumberChallenge
   },
   {
     id: "visual-memory",
     name: "Memoria Visual",
-    component: VisualMemory,
+    component: VisualMemory
   },
+  {
+    id: "food-memory",
+    name: "Food Memory",
+    component: FoodMemory
+  }
 ];

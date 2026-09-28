@@ -33,7 +33,7 @@ function insertScore(
 
 function updateUserIdInScores(oldUserId, newUserId) {
   const update = db.prepare(`UPDATE scores SET userId = ? WHERE userId = ?`);
-  const result = update.run(newUserId, oldUserId);
+  const result = update.run(String(newUserId), String(oldUserId));
   return result.changes;
 }
 

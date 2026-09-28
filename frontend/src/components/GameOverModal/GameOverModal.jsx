@@ -2,7 +2,6 @@ import { Button } from "../Button/Button";
 import styles from "./GameOverModal.module.css";
 
 export function GameOverModal({
-  textContent,
   customStyle,
   message,
   onClick,
