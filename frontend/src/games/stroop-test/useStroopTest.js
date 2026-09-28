@@ -1,19 +1,17 @@
 import { useRef, useEffect, useState } from "react";
-
 import { getCurrentUserId } from "../../services/userId";
-
 import { postScore } from "../../services/scoreService";
 
 export function useStroopTest() {
   const [score, setScore] = useState(0);
-
   const [timer, setTimer] = useState(30);
-
   const [isTimerOn, setIsTimerOn] = useState(false);
-
   const startTime = useRef(0);
-
   const words = ["AZUL", "AMARELO", "VERMELHO", "VERDE"];
+  const [currentWord, setCurrentWord] = useState(words[0]);
+  const [currentColor, setCurrentColor] = useState(colorMap[words[0]]);
+  const [reactionTimes, setReactionTimes] = useState([]);
+  const gameOver = timer === 0;
 
   const colorMap = {
     AZUL: "#0000FF",
@@ -21,14 +19,6 @@ export function useStroopTest() {
     VERMELHO: "#FF0000",
     VERDE: "#00FF00",
   };
-
-  const [currentWord, setCurrentWord] = useState(words[0]);
-
-  const [currentColor, setCurrentColor] = useState(colorMap[words[0]]);
-
-  const [reactionTimes, setReactionTimes] = useState([]);
-
-  const gameOver = timer === 0;
 
   useEffect(() => {
     if (!isTimerOn || gameOver) {
@@ -60,11 +50,9 @@ export function useStroopTest() {
     if (gameOver) return;
 
     const randomWord = words[Math.floor(Math.random() * words.length)];
-
     const randomColorKey = words[Math.floor(Math.random() * words.length)];
 
     setCurrentWord(randomWord);
-
     setCurrentColor(colorMap[randomColorKey]);
 
     startTime.current = performance.now();
@@ -74,11 +62,10 @@ export function useStroopTest() {
     if (gameOver) return;
 
     const timeSpent = performance.now() - startTime.current;
-
     setReactionTimes((prev) => [...prev, timeSpent]);
 
     const correctColorName = Object.keys(colorMap).find(
-      (key) => colorMap[key] === currentColor
+      (key) => colorMap[key] === currentColor,
     );
 
     if (correctColorName === selectedColorName) {
@@ -89,9 +76,7 @@ export function useStroopTest() {
   const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
 
   const avg =
-    reactionTimes.length > 0
-      ? sumReactionTime / reactionTimes.length
-      : 0;
+    reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
 
   const avgReactionTime = Number(avg.toFixed(2));
 
@@ -102,9 +87,7 @@ export function useStroopTest() {
 
     async function enviar() {
       const accuracy =
-        reactionTimes.length > 0
-          ? (score / reactionTimes.length) * 100
-          : 0;
+        reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
 
       const result = {
         userId: getCurrentUserId(),
