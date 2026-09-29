@@ -1,7 +1,11 @@
 import { useMemoryMatch } from "./useMemoryMatch";
+
 import styles from "./MemoryMatch.module.css";
+
 import { GameOverModal } from "../../components/GameOverModal/GameOverModal";
+
 import { Timer } from "../../components/Timer/Timer";
+
 import { ScoreBoard } from "../../components/ScoreBoard/ScoreBoard";
 
 export function MemoryMatch() {
@@ -9,6 +13,7 @@ export function MemoryMatch() {
     baralho,
     tentativas,
     segundos,
+    memorizando,
     jogoFinalizado,
     virarCarta,
     resetGame,
@@ -31,10 +36,15 @@ export function MemoryMatch() {
         <Timer segundos={segundos} />
       </div>
 
+      {memorizando && (
+        <div className={styles.mensagemMemoria}>
+          Memorize as cartas! O jogo começa em alguns segundos...
+        </div>
+      )}
+
       {jogoFinalizado && (
         <GameOverModal
-          message={`Parabéns! Você venceu em ${tentativas} tentativas e ${segundos}
-          segundos!`}
+          message={`Parabéns! Você venceu em ${tentativas} tentativas e ${segundos} segundos!`}
           onClick={resetGame}
         />
       )}

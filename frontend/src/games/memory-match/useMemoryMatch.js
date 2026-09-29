@@ -14,7 +14,7 @@ export function criarBaralho() {
   return cartas.map((valor, index) => ({
     id: index,
     valor,
-    virada: false,
+    virada: true,
     pareada: false,
   }));
 }
@@ -28,9 +28,34 @@ export function useMemoryMatch() {
 
   const [segundos, setSegundos] = useState(0);
 
+  const [memorizando, setMemorizando] = useState(true);
+
   const jogoFinalizado = baralho.every((carta) => carta.pareada);
 
+  useEffect(() => {
+    if (!memorizando) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setBaralho((baralhoAtual) =>
+        baralhoAtual.map((carta) => ({
+          ...carta,
+          virada: false,
+        }))
+      );
+
+      setMemorizando(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [memorizando]);
+
   function virarCarta(id) {
+    if (memorizando || jogoFinalizado) {
+      return;
+    }
+
     if (viradasAgora.length >= 2) {
       return;
     }
@@ -93,7 +118,7 @@ export function useMemoryMatch() {
   }, [viradasAgora]);
 
   useEffect(() => {
-    if (jogoFinalizado) {
+    if (jogoFinalizado || memorizando) {
       return;
     }
 
@@ -104,10 +129,10 @@ export function useMemoryMatch() {
     return () => {
       clearInterval(intervalo);
     };
-  }, [jogoFinalizado]);
+  }, [jogoFinalizado, memorizando]);
 
   useEffect(() => {
-    if (!jogoFinalizado) {
+    if (!jogoFinalizado || memorizando) {
       return;
     }
 
@@ -137,13 +162,14 @@ export function useMemoryMatch() {
     }
 
     enviar();
-  }, [jogoFinalizado]);
+  }, [jogoFinalizado, memorizando]);
 
   function resetGame() {
     setBaralho(criarBaralho());
     setViradasAgora([]);
     setTentativas(0);
     setSegundos(0);
+    setMemorizando(true);
   }
 
   return {
@@ -151,6 +177,7 @@ export function useMemoryMatch() {
     viradasAgora,
     tentativas,
     segundos,
+    memorizando,
     jogoFinalizado,
     virarCarta,
     resetGame,
