@@ -90,8 +90,6 @@ function avgAccuracyByCategory(category) {
   }
 }
 
-summary("b063ad41-4251-4bb4-bab4-26d2c6cb3ad5");
-
 function filterScoresByCategory(scores, list) {
   const scoresByCategory = scores.filter((score) =>
     list.includes(score.gameId)
