@@ -13,6 +13,12 @@ const games = [
   "reaction-time",
 ];
 
+const summaryCategory = {
+  memory: ["memory-match", "food-memory", "visual-memory"],
+  attention: ["stroop-test"],
+  velocity: ["reaction-time"],
+  logic: ["number-challenge"],
+};
 function saveScore(score) {
   if (
     !games.includes(score.gameId) ||
@@ -30,7 +36,7 @@ function saveScore(score) {
     score.score,
     score.accuracy,
     score.avgReactionTime,
-    score.levelReached,
+    score.levelReached
   );
 }
 
@@ -48,4 +54,49 @@ function migrateScores(oldUserId, newUserId) {
   return changes;
 }
 
-module.exports = { saveScore, getScoresByUserId, migrateScores };
+function summary(userId) {
+  const scores = selectByUserId(userId);
+  const memoryCategory = filterScoresByCategory(scores, summaryCategory.memory);
+  const attentionCategory = filterScoresByCategory(
+    scores,
+    summaryCategory.attention
+  );
+  const velocityCategory = filterScoresByCategory(
+    scores,
+    summaryCategory.velocity
+  );
+  const logicCategory = filterScoresByCategory(scores, summaryCategory.logic);
+
+  const avgMemoryAccuracy = avgAccuracyByCategory(memoryCategory);
+  const avgAttentionAccuracy = avgAccuracyByCategory(attentionCategory);
+  const avgVelocityAccuracy = avgAccuracyByCategory(velocityCategory);
+  const avgLogicAccuracy = avgAccuracyByCategory(logicCategory);
+
+  return {
+    memoria: avgMemoryAccuracy,
+    atencao: avgAttentionAccuracy,
+    velocidade: avgVelocityAccuracy,
+    logica: avgLogicAccuracy,
+  };
+}
+
+function avgAccuracyByCategory(category) {
+  if (category.length === 0) {
+    return 0;
+  } else {
+    return (
+      category.reduce((acc, cur) => acc + cur.accuracy, 0) / category.length
+    );
+  }
+}
+
+summary("b063ad41-4251-4bb4-bab4-26d2c6cb3ad5");
+
+function filterScoresByCategory(scores, list) {
+  const scoresByCategory = scores.filter((score) =>
+    list.includes(score.gameId)
+  );
+  return scoresByCategory;
+}
+
+module.exports = { saveScore, getScoresByUserId, migrateScores, summary };

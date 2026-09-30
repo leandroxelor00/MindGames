@@ -2,6 +2,7 @@ const {
   saveScore,
   getScoresByUserId,
   migrateScores,
+  summary,
 } = require("../services/scores.service");
 
 function createScore(req, res) {
@@ -25,7 +26,6 @@ function createScore(req, res) {
       result: result,
     });
   } catch (e) {
-
     if (e instanceof TypeError) {
       return res.status(400).json({ message: e.message });
     } else {
@@ -75,4 +75,18 @@ function migrate(req, res) {
   }
 }
 
-module.exports = { createScore, getScoresByUser, migrate };
+function getSummary(req, res) {
+  const userId = req.user ? req.user.id : req.params.userId;
+
+  try {
+    const result = summary(userId);
+    return res.status(200).json({
+      message: "Resumo calculado com sucesso",
+      result: result,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+}
+
+module.exports = { createScore, getScoresByUser, getSummary, migrate };
