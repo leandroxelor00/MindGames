@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getHistory } from "../services/scoreService";
+import { getHistory, getSummary } from "../services/scoreService";
 import styles from "./Dashboard.module.css";
 import { Link } from "react-router-dom";
+import { CognitiveRadar } from "../components/CognitiveRadar/CognitiveRadar";
 
 function calcularMediasPorJogo(partidas) {
   const gameIds = [...new Set(partidas.map((partida) => partida.gameId))];
@@ -40,7 +41,6 @@ function calcularMediasPorJogo(partidas) {
 
 function formatarData(playedAt) {
   const dataCorrigida = playedAt.replace(" ", "T") + "Z";
-
   const data = new Date(dataCorrigida);
 
   return new Intl.DateTimeFormat("pt-BR", {
@@ -57,13 +57,25 @@ export function Dashboard() {
   const [partidas, setPartidas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [summary, setSummary] = useState({
+    memoria: 0,
+    atencao: 0,
+    velocidade: 0,
+    logica: 0,
+  });
+
   useEffect(() => {
     async function carregarHistorico() {
       try {
-        const historico = await getHistory();
+        const [historico, resumo] = await Promise.all([
+          getHistory(),
+          getSummary(),
+        ]);
+
         setPartidas(historico);
+        setSummary(resumo);
       } catch (error) {
-        console.error("Erro ao carregar histórico:", error);
+        console.error("Erro ao carregar dashboard:", error);
       } finally {
         setLoading(false);
       }
@@ -92,6 +104,10 @@ export function Dashboard() {
         <Link to="/" className={styles.voltarLink}>
           ← Voltar
         </Link>
+      </div>
+
+      <div className={styles.grafico}>
+        <CognitiveRadar summary={summary} />
       </div>
 
       <section className={styles.secao}>
@@ -157,7 +173,7 @@ export function Dashboard() {
                     <span className={styles.resultadoLabel}>Score</span>
 
                     <span className={styles.resultadoValor}>
-                      {partida.score}
+                      {Number(partida.score).toFixed(2)}
                     </span>
                   </div>
 

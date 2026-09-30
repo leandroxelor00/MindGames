@@ -204,6 +204,11 @@
   margin: 0 auto;
 }
 
+.grafico {
+  max-width: 900px;
+  margin: 50px auto 50px;
+}
+
 /* =========================
    RESPONSIVO
 ========================= */

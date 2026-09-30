@@ -1,15 +1,9 @@
-import { apiFetch } from "./api";
+import { apiFetch, CHAVE_TOKEN } from "./api";
 import { salvarPendente } from "./pendingScores";
 import { getCurrentUserId, getUserId } from "./userId";
 
 export async function postScore(result) {
   const userId = getCurrentUserId();
-
-  console.log("ID usado para salvar score:", userId);
-  console.log("Resultado enviado:", {
-    ...result,
-    userId,
-  });
 
   const resultadoComUsuario = {
     ...result,
@@ -28,7 +22,7 @@ export async function postScore(result) {
 }
 
 export async function getHistory() {
-  const token = localStorage.getItem("mindgames_auth_token");
+  const token = localStorage.getItem(CHAVE_TOKEN);
 
   try {
     if (token) {
@@ -48,7 +42,7 @@ export async function getHistory() {
     }
 
     throw error;
-  } 
+  }
 }
 
 export async function migrateScores(oldUserId) {
@@ -58,4 +52,24 @@ export async function migrateScores(oldUserId) {
   });
 
   return resultado;
+}
+
+export async function getSummary() {
+  const token = localStorage.getItem(CHAVE_TOKEN);
+
+  try {
+    if (token) {
+      const resultado = await apiFetch("/scores/me/summary");
+      return resultado.result;
+    }
+
+    const userId = getUserId();
+    const resultado = await apiFetch(`/scores/${userId}/summary`);
+    return resultado.result;
+  } catch (error) {
+    if (error.status === 404) {
+      return { memoria: 0, atencao: 0, velocidade: 0, logica: 0 };
+    }
+    throw error;
+  }
 }
