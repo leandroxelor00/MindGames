@@ -106,7 +106,9 @@ export function Dashboard() {
         </Link>
       </div>
 
-      <CognitiveRadar summary={summary} />
+      <div className={styles.grafico}>
+        <CognitiveRadar summary={summary} />
+      </div>
 
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Resumo por jogo</h2>
@@ -171,7 +173,7 @@ export function Dashboard() {
                     <span className={styles.resultadoLabel}>Score</span>
 
                     <span className={styles.resultadoValor}>
-                      {partida.score}
+                      {Number(partida.score).toFixed(2)}
                     </span>
                   </div>
 
