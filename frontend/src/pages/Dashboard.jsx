@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getHistory } from "../services/scoreService";
+import { getHistory, getSummary } from "../services/scoreService";
 import styles from "./Dashboard.module.css";
 import { Link } from "react-router-dom";
+import { CognitiveRadar } from "../components/CognitiveRadar/CognitiveRadar";
 
 function calcularMediasPorJogo(partidas) {
   const gameIds = [...new Set(partidas.map((partida) => partida.gameId))];
@@ -10,19 +11,19 @@ function calcularMediasPorJogo(partidas) {
 
   gameIds.forEach((gameId) => {
     const partidasDoJogo = partidas.filter(
-      (partida) => partida.gameId === gameId,
+      (partida) => partida.gameId === gameId
     );
 
     const totalPartidas = partidasDoJogo.length;
 
     const somaScore = partidasDoJogo.reduce(
       (total, partida) => total + partida.score,
-      0,
+      0
     );
 
     const somaAccuracy = partidasDoJogo.reduce(
       (total, partida) => total + partida.accuracy,
-      0,
+      0
     );
 
     const mediaScore = somaScore / totalPartidas;
@@ -40,7 +41,6 @@ function calcularMediasPorJogo(partidas) {
 
 function formatarData(playedAt) {
   const dataCorrigida = playedAt.replace(" ", "T") + "Z";
-
   const data = new Date(dataCorrigida);
 
   return new Intl.DateTimeFormat("pt-BR", {
@@ -57,13 +57,25 @@ export function Dashboard() {
   const [partidas, setPartidas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [summary, setSummary] = useState({
+    memoria: 0,
+    atencao: 0,
+    velocidade: 0,
+    logica: 0,
+  });
+
   useEffect(() => {
     async function carregarHistorico() {
       try {
-        const historico = await getHistory();
+        const [historico, resumo] = await Promise.all([
+          getHistory(),
+          getSummary(),
+        ]);
+
         setPartidas(historico);
+        setSummary(resumo);
       } catch (error) {
-        console.error("Erro ao carregar histórico:", error);
+        console.error("Erro ao carregar dashboard:", error);
       } finally {
         setLoading(false);
       }
@@ -93,6 +105,8 @@ export function Dashboard() {
           ← Voltar
         </Link>
       </div>
+
+      <CognitiveRadar summary={summary} />
 
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Resumo por jogo</h2>
