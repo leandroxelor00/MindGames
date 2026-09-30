@@ -2,23 +2,28 @@ import { useRef, useEffect, useState } from "react";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
 
+const words = ["AZUL", "AMARELO", "VERMELHO", "VERDE"];
+
+const colorMap = {
+  AZUL: "#0000FF",
+  AMARELO: "#EBE134",
+  VERMELHO: "#FF0000",
+  VERDE: "#00FF00",
+};
+
 export function useStroopTest() {
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(30);
   const [isTimerOn, setIsTimerOn] = useState(false);
   const startTime = useRef(0);
-  const words = ["AZUL", "AMARELO", "VERMELHO", "VERDE"];
   const [currentWord, setCurrentWord] = useState(words[0]);
   const [currentColor, setCurrentColor] = useState(colorMap[words[0]]);
   const [reactionTimes, setReactionTimes] = useState([]);
   const gameOver = timer === 0;
 
-  const colorMap = {
-    AZUL: "#0000FF",
-    AMARELO: "#EBE134",
-    VERMELHO: "#FF0000",
-    VERDE: "#00FF00",
-  };
+  useEffect(() => {
+    startTime.current = performance.now();
+  }, []);
 
   useEffect(() => {
     if (!isTimerOn || gameOver) {
@@ -31,18 +36,15 @@ export function useStroopTest() {
           setIsTimerOn(false);
           return 0;
         }
-
         return prevTimer - 1;
       });
     }, 1000);
 
     return () => clearInterval(interval);
   }, [isTimerOn, gameOver]);
-
   function startTimer() {
     if (!isTimerOn && !gameOver) {
       setIsTimerOn(true);
-      startTime.current = performance.now();
     }
   }
 
@@ -113,6 +115,7 @@ export function useStroopTest() {
     setScore(0);
     setReactionTimes([]);
     setTimer(30);
+    startTime.current = performance.now(); 
   }
 
   return {
