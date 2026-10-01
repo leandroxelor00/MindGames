@@ -54,19 +54,15 @@
 .idle {
   background: #5b4fe8;
 }
-
 .waiting {
   background: #d9463c;
 }
-
 .ready {
   background: #2e7d32;
 }
-
 .tooSoon {
   background: #c62828;
 }
-
 .done {
   background: #1a1d29;
 }
@@ -76,12 +72,28 @@
     min-height: 320px;
     margin: 1.5rem 1rem;
   }
-
   .mensagem {
     font-size: 1.4rem;
   }
-
   .tempo {
     font-size: 2.2rem;
   }
+}
+
+.leitorTela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.area:focus-visible {
+  outline: 4px solid #ffffff;
+  outline-offset: 6px;
+}
+
+.botao:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
 }

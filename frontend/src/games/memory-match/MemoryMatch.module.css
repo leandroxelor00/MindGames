@@ -59,6 +59,17 @@
   width: 100%;
   perspective: 1000px;
   cursor: pointer;
+  border: none;
+  padding: 0;
+  background: transparent;
+  font: inherit;
+  appearance: none;
+}
+
+.cartaContainer:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 0.75rem;
 }
 
 /* O "miolo" que vai efetivamente girar */
@@ -137,6 +148,15 @@
   text-align: center;
   margin-bottom: 1.5rem;
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.leitorTela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 /* Celulares */

@@ -16,22 +16,21 @@ export function FoodMemory() {
   } = useFoodMemory();
 
   return (
-    <div>
-      <div className={styles.container}>
-        <div className={styles.painel}>
-          <ScoreBoard
-            items={[
-              { label: "Fase", value: fase },
-              { label: "Erros", value: `${erros}/3` },
-            ]}
-          />
-        </div>
+    <div className={styles.container}>
+      <div className={styles.painel}>
+        <ScoreBoard
+          items={[
+            { label: "Fase", value: fase },
+            { label: "Erros", value: `${erros}/3` },
+          ]}
+        />
       </div>
 
       <div className={styles.area}>
         {imagens.map((imagem) => (
           <button
             key={imagem.id}
+            type="button"
             className={`${styles.imagem} ${
               feedback?.id === imagem.id
                 ? feedback.tipo === "acerto"
@@ -45,6 +44,7 @@ export function FoodMemory() {
             }}
             onClick={() => clicarImagem(imagem.id)}
             disabled={!!feedback || transicionando}
+            aria-label={`Comida ${imagem.emoji}`}
           >
             {imagem.emoji}
           </button>
@@ -70,7 +70,9 @@ export function FoodMemory() {
               </>
             )}
 
-            <button onClick={reiniciarJogo}>Jogar novamente</button>
+            <button type="button" onClick={reiniciarJogo}>
+              Jogar novamente
+            </button>
           </div>
         )}
       </div>

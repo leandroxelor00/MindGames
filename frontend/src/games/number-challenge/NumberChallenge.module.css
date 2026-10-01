@@ -208,6 +208,29 @@
   }
 }
 
+.leitorTela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.carta:focus-visible,
+.botaoReiniciar:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.acerto::after {
+  content: " ✓";
+}
+
+.erro::after {
+  content: " ✕";
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

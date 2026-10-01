@@ -307,3 +307,20 @@
     font-size: 1.5rem;
   }
 }
+
+.imagem:focus-visible,
+.mensagem button:focus-visible {
+  outline: 3px solid #5b4fe8;
+  outline-offset: 3px;
+}
+
+/* reduz movimento para usuários com preferência */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -106,3 +106,20 @@
     transform: translateY(0);
   }
 }
+
+.leitorTela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+}
+
+
+.btnColor:focus-visible {
+
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+}
