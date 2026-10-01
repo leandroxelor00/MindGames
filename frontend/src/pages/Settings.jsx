@@ -1,4 +1,5 @@
 import { useAccessibility } from "../hooks/useAccessibility";
+
 import { Link } from "react-router-dom";
 
 import styles from "./Settings.module.css";
@@ -32,7 +33,13 @@ export function Settings() {
         <div className={styles.opcoes}>
           <div className={styles.opcao}>
             <div className={styles.info}>
-              <span className={styles.nome}>Alto contraste</span>
+              <label
+                htmlFor="alto-contraste"
+                className={styles.nome}
+              >
+                Alto contraste
+              </label>
+
               <span className={styles.detalhe}>
                 Aumenta o contraste entre o fundo, textos e elementos da
                 interface.
@@ -40,6 +47,7 @@ export function Settings() {
             </div>
 
             <input
+              id="alto-contraste"
               className={styles.checkbox}
               type="checkbox"
               checked={altoContraste}
@@ -49,13 +57,20 @@ export function Settings() {
 
           <div className={styles.opcao}>
             <div className={styles.info}>
-              <span className={styles.nome}>Reduzir animações</span>
+              <label
+                htmlFor="reduzir-animacoes"
+                className={styles.nome}
+              >
+                Reduzir animações
+              </label>
+
               <span className={styles.detalhe}>
                 Reduz transições e animações da interface.
               </span>
             </div>
 
             <input
+              id="reduzir-animacoes"
               className={styles.checkbox}
               type="checkbox"
               checked={reduzirAnimacoes}
@@ -65,7 +80,13 @@ export function Settings() {
 
           <div className={styles.opcao}>
             <div className={styles.info}>
-              <span className={styles.nome}>Tamanho da fonte</span>
+              <label
+                htmlFor="tamanho-fonte"
+                className={styles.nome}
+              >
+                Tamanho da fonte
+              </label>
+
               <span className={styles.detalhe}>
                 Ajuste o tamanho dos textos da aplicação.
               </span>
@@ -73,6 +94,7 @@ export function Settings() {
 
             <div className={styles.sliderContainer}>
               <input
+                id="tamanho-fonte"
                 className={styles.slider}
                 type="range"
                 min={1}
