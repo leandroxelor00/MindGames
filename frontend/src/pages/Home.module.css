@@ -181,3 +181,26 @@ a:nth-child(even) {
     grid-template-columns: 1fr;
   }
 }
+
+html[data-alto-contraste="true"] .navButtonPrimary {
+  background: #ffff00;
+  color: #000000 !important;
+  border: 2px solid #ffffff;
+}
+
+html[data-alto-contraste="true"] .navButtonPrimary:hover {
+  background: #ffff66;
+  color: #000000 !important;
+}
+
+html[data-alto-contraste="true"] .navButtonGhost {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .navButtonGhost:hover {
+  background: #111111;
+  color: #ffff00;
+  border-color: #ffff00;
+}

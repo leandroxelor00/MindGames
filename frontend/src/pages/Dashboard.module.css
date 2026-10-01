@@ -52,8 +52,8 @@
 
 .cardJogo {
   padding: 22px;
-  background: #ffffff;
-  border: 1px solid #e5e6ec;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 14px;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
@@ -83,7 +83,7 @@
   align-items: center;
   gap: 16px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--cor-borda-suave);
 }
 
 .estatistica:last-child {
@@ -118,8 +118,8 @@
   justify-content: space-between;
   gap: 20px;
   padding: 16px 20px;
-  background: #ffffff;
-  border: 1px solid #e5e6ec;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 12px;
   transition: border-color 0.15s ease;
 }
@@ -188,8 +188,8 @@
 .semPartidas {
   padding: 40px;
   text-align: center;
-  background: #ffffff;
-  border: 1px dashed #d8dbe3;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 14px;
   color: var(--cor-texto-suave);
   max-width: 900px;

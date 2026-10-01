@@ -32,8 +32,8 @@
   max-width: 40rem;
   margin: 0 auto;
   padding: 1.75rem;
-  background: #ffffff;
-  border: 1px solid #e5e6ec;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 0.875rem;
 }
 
@@ -56,7 +56,7 @@
   justify-content: space-between;
   gap: 1.5rem;
   padding: 1.25rem 0;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--cor-borda-suave);
 }
 
 .opcao:first-child {

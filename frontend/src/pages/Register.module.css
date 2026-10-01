@@ -11,10 +11,13 @@
 .card {
   width: 100%;
   max-width: 380px;
-  background: linear-gradient(#f8f8ff 50%, #c8f2fb 90%);
+  background: linear-gradient(
+    var(--cor-superficie) 0%,
+    var(--cor-superficie) 100%
+  );
   border-radius: 20px;
   padding: 2.5rem 2rem;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
   text-align: center;
 }
 
@@ -23,114 +26,90 @@
   height: 56px;
   margin: 0 auto 1.25rem;
   border-radius: 14px;
-  background: #fff;
-  color: #1a1d29;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
 }
 
 .title {
-  font-family: "Space Grotesk", sans-serif;
-
+  font-family: var(--fonte-titulo);
   font-weight: 700;
   font-size: 1.5rem;
-
   margin: 0 0 0.5rem;
-
-  color: #1a1d29;
+  color: var(--cor-texto);
 }
 
 .subtitle {
   font-size: 0.9rem;
-
-  color: #5c6072;
-
+  color: var(--cor-texto-suave);
   line-height: 1.5;
-
   margin: 0 0 1.75rem;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-
   gap: 0.85rem;
-
   text-align: left;
 }
 
 .inputGroup {
   position: relative;
-
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.inputLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cor-texto);
 }
 
 .inputIcon {
   position: absolute;
-
   left: 14px;
-
-  color: #9497a6;
-
+  top: 2.35rem;
+  color: var(--cor-texto-suave);
   pointer-events: none;
-
   display: flex;
 }
 
 .input {
   width: 100%;
-
   padding: 0.85rem 1rem 0.85rem 2.6rem;
-
-  border: 1px solid #e5e6ec;
-
+  border: 1px solid var(--cor-borda);
   border-radius: 12px;
-
-  background: #f7f8fa;
-
+  background: var(--cor-input);
   font-size: 0.95rem;
-
-  color: #1a1d29;
-
+  color: var(--cor-texto);
   outline: none;
-
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .input::placeholder {
-  color: #9497a6;
+  color: var(--cor-texto-suave);
 }
 
 .input:focus {
-  border-color: #5b4fe8;
-
-  background: #ffffff;
+  border-color: var(--cor-accent);
+  background: var(--cor-input-focus);
 }
 
 .submitButton {
   margin-top: 0.5rem;
-
   padding: 0.85rem 1rem;
-
   border: none;
-
   border-radius: 12px;
-
   background: #e0dcfa;
-
   color: #1a1d29;
-
   font-size: 0.95rem;
-
   font-weight: 500;
-
-  font-family: "Space Grotesk", sans-serif;
-
+  font-family: var(--fonte-titulo);
   cursor: pointer;
-
   transition: background 0.15s ease;
 }
 
@@ -139,39 +118,62 @@
 }
 
 .submitButton:disabled {
-  background: #b8b3f2;
-
+  background: var(--cor-desativado);
   cursor: not-allowed;
 }
 
 .error {
-  background: #fdecec;
-
-  color: #c53030;
-
+  background: var(--cor-erro-fundo);
+  color: var(--cor-erro-texto);
   border-radius: 10px;
-
   padding: 0.65rem 0.85rem;
-
   font-size: 0.85rem;
-
   text-align: left;
 }
 
 .footerText {
   margin-top: 1.5rem;
-
   font-size: 0.85rem;
-
-  color: #5c6072;
+  color: var(--cor-texto-suave);
 }
 
 .footerLink {
-  color: #5b4fe8;
-
+  color: var(--cor-accent);
   font-weight: 500;
-
   text-decoration: underline;
-
   text-underline-offset: 2px;
+}
+
+/* Alto contraste */
+html[data-alto-contraste="true"] .page {
+  background: #000000;
+}
+
+html[data-alto-contraste="true"] .card {
+  background: #000000;
+  border: 2px solid #ffffff;
+  box-shadow: none;
+}
+
+html[data-alto-contraste="true"] .badge {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: none;
+}
+
+html[data-alto-contraste="true"] .submitButton {
+  background: #ffff00;
+  color: #000000;
+  border: 2px solid #ffff00;
+}
+
+html[data-alto-contraste="true"] .submitButton:hover {
+  background: #ffff66;
+}
+
+html[data-alto-contraste="true"] .submitButton:disabled {
+  background: #666666;
+  color: #000000;
+  border-color: #666666;
 }

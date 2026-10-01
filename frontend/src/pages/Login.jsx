@@ -11,6 +11,7 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
@@ -18,15 +19,19 @@ export function Login() {
     event.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       const data = await login(email, password);
+
       setUser(data.user);
+
       try {
         const userIdAnonimo = getUserId();
         await migrateScores(userIdAnonimo);
       } catch (err) {
         console.error("Erro ao migrar scores:", err);
       }
+
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -38,7 +43,7 @@ export function Login() {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.badge}>
+        <div className={styles.badge} aria-hidden="true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
               d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"
@@ -51,15 +56,24 @@ export function Login() {
         </div>
 
         <h2 className={styles.title}>Entrar no MindGames</h2>
+
         <p className={styles.subtitle}>
           Acesse sua conta para acompanhar sua evolução nos jogos.
         </p>
 
-        {error && <div className={styles.error}>{error}</div>}
+        {error && (
+          <div className={styles.error} role="alert">
+            {error}
+          </div>
+        )}
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
-            <span className={styles.inputIcon}>
+            <label className={styles.inputLabel} htmlFor="login-email">
+              Email
+            </label>
+
+            <span className={styles.inputIcon} aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M3 6h18v12H3V6Zm0 0 9 7 9-7"
@@ -70,18 +84,25 @@ export function Login() {
                 />
               </svg>
             </span>
+
             <input
+              id="login-email"
               className={styles.input}
               type="email"
-              placeholder="Email"
+              placeholder="Digite seu email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
               required
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <span className={styles.inputIcon}>
+            <label className={styles.inputLabel} htmlFor="login-password">
+              Senha
+            </label>
+
+            <span className={styles.inputIcon} aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <rect
                   x="5"
@@ -100,12 +121,15 @@ export function Login() {
                 />
               </svg>
             </span>
+
             <input
+              id="login-password"
               className={styles.input}
               type="password"
-              placeholder="Senha"
+              placeholder="Digite sua senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
               required
             />
           </div>
