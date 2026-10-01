@@ -1,3 +1,58 @@
+:root {
+  --fonte-escala: 1;
+  --cor-fundo: #f7f8fa;
+  --cor-texto: #1a1d29;
+  --cor-texto-suave: #5c6072;
+  --cor-accent: #5b4fe8;
+  --cor-accent-hover: #4a3fd1;
+  --fonte-titulo: "Space Grotesk", sans-serif;
+}
+
+body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+ 
+html {
+  font-size: calc(16px * var(--fonte-escala));
+}
+ 
+/* Alto contraste */
+html[data-alto-contraste="true"] {
+  --cor-fundo: #000000;
+  --cor-texto: #ffffff;
+  --cor-texto-suave: #e0e0e0;
+  --cor-accent: #ffff00;
+  --cor-accent-hover: #ffff66;
+}
+ 
+html[data-alto-contraste="true"] body {
+  background: #000000;
+  color: #ffffff;
+}
+ 
+html[data-alto-contraste="true"] .card,
+html[data-alto-contraste="true"] [class*="card"] {
+  background: #000000 !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+}
+ 
+/* Redução de animações */
+html[data-reduzir-animacoes="true"] *,
+html[data-reduzir-animacoes="true"] *::before,
+html[data-reduzir-animacoes="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+ 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 a {
   text-decoration: none;
   color: inherit;

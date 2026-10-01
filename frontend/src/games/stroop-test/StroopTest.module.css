@@ -19,15 +19,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 1.5rem;
   font-size: 1.2rem;
   font-weight: 600;
   color: #555;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
   background: #f8f9fa;
-  padding: 16px 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 700px;
 }
@@ -35,24 +35,18 @@
 .wordDisplay {
   font-size: 4rem;
   font-weight: bolder;
-
-  margin: 10px 0 30px 0;
-
-  min-height: 90px;
-
+  margin: 0.625rem 0 1.875rem;
+  min-height: 5.625rem;
   display: flex;
   align-items: center;
   justify-content: center;
-
   user-select: none;
 }
 
 .gradeBotoes {
   display: grid;
   grid-template-columns: 1fr 1fr;
-
-  gap: 12px;
-
+  gap: 0.75rem;
   width: 100%;
   max-width: 450px;
 }
@@ -60,29 +54,21 @@
 .btnColor {
   font-size: 1.2rem;
   font-weight: bold;
-
   background-color: #ffffff;
   color: #333;
-
-  padding: 16px;
-
+  padding: 1rem;
   border: 2px solid #eaeaea;
-  border-radius: 12px;
-
+  border-radius: 0.75rem;
   cursor: pointer;
-
   transition: all 0.2s ease;
-
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
 }
 
 .btnColor:hover:not(:disabled) {
   background-color: #f1f3f5;
   border-color: #ced4da;
-
-  transform: translateY(-2px);
-
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
 .btnColor:disabled {
@@ -94,23 +80,27 @@
   .titulo {
     font-size: 2rem;
   }
+
   .painel {
     font-size: 1rem;
   }
+
   .wordDisplay {
     font-size: 3rem;
   }
+
   .btnColor {
     font-size: 1rem;
-    padding: 12px;
+    padding: 0.75rem;
   }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-0.625rem);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

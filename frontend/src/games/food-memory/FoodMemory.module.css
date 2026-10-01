@@ -7,6 +7,7 @@
   max-width: 800px;
   margin: 0 auto;
 }
+
 /* Área do jogo */
 
 .area {
@@ -14,17 +15,12 @@
   width: 100%;
   max-width: 700px;
   height: 500px;
-  margin: 2px auto 0;
-  background: linear-gradient(
-  135deg,
-  #f5e8d2 0%,
-  #ead6b7 50%,
-  #dfc39b 100%
-);
+  margin: 0.125rem auto 0;
+  background: linear-gradient(135deg, #f5e8d2 0%, #ead6b7 50%, #dfc39b 100%);
   border: 2px solid #eaeaea;
-  border-radius: 16px;
+  border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
 }
 
 /* Comida */
@@ -46,31 +42,19 @@
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  transition:
-    transform 0.15s ease,
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: transform 0.15s ease, background-color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
   user-select: none;
-}
-
-/* Hover */
-
+} /* Hover */
 .imagem:hover:not(:disabled) {
   transform: translate(-50%, -50%) scale(1.1);
   background-color: #f1f3f5;
   border-color: #ced4da;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Clique */
-
+} /* Clique */
 .imagem:active:not(:disabled) {
   transform: translate(-50%, -50%) scale(0.95);
-}
-
-/* Evita clique durante feedback */
-
+} /* Evita clique durante feedback */
 .imagem:disabled {
   cursor: not-allowed;
 }
@@ -108,7 +92,7 @@
 
   50% {
     transform: translate(-50%, -50%) scale(1.15);
-    box-shadow: 0 0 18px rgba(40, 167, 69, 0.45);
+    box-shadow: 0 0 1.125rem rgba(40, 167, 69, 0.45);
   }
 
   100% {
@@ -123,7 +107,7 @@
 
   50% {
     transform: translate(-50%, -50%) scale(1.15);
-    box-shadow: 0 0 18px rgba(220, 53, 69, 0.45);
+    box-shadow: 0 0 1.125rem rgba(220, 53, 69, 0.45);
   }
 
   100% {
@@ -146,23 +130,19 @@
 
 .toalha {
   position: absolute;
-  inset: -20px;
-
+  inset: -1.25rem;
   background-color: #ffffff;
-
-  background-image:
-    linear-gradient(90deg, rgba(190, 35, 35, 0.9) 50%, transparent 50%),
+  background-image: linear-gradient(
+      90deg,
+      rgba(190, 35, 35, 0.9) 50%,
+      transparent 50%
+    ),
     linear-gradient(rgba(190, 35, 35, 0.9) 50%, transparent 50%);
-
-  background-size: 64px 64px;
+  background-size: 4rem 4rem;
   background-position: 0 0;
-
-  box-shadow:
-    0 0 25px rgba(0, 0, 0, 0.2),
-    inset 0 0 25px rgba(120, 0, 0, 0.12);
-
+  box-shadow: 0 0 1.5625rem rgba(0, 0, 0, 0.2),
+    inset 0 0 1.5625rem rgba(120, 0, 0, 0.12);
   transform: translateX(-110%);
-
   animation: deslizarToalha 1.8s ease-in-out forwards;
 }
 
@@ -170,18 +150,17 @@
   Pequena sobreposição para deixar
   o xadrez com aparência mais natural.
 */
+
 .toalha::after {
   content: "";
   position: absolute;
   inset: 0;
-
   background: linear-gradient(
     90deg,
     transparent 0%,
     rgba(255, 255, 255, 0.18) 50%,
     transparent 100%
   );
-
   animation: brilhoToalha 0.8s ease-in-out;
 }
 
@@ -232,13 +211,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: calc(100% - 40px);
-  max-width: 450px;
-  padding: 32px 24px;
+  width: calc(100% - 2.5rem);
+  max-width: 28.125rem;
+  padding: 2rem 1.5rem;
   background-color: #ffffff;
   border: 2px solid #eaeaea;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.15);
   text-align: center;
   z-index: 10;
   animation: fadeIn 0.4s ease-in;
@@ -246,13 +225,13 @@
 
 .mensagem h2 {
   margin-top: 0;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
   font-size: 1.8rem;
   color: #333;
 }
 
 .mensagem p {
-  margin: 8px 0;
+  margin: 0.5rem 0;
   font-size: 1.05rem;
   color: #555;
 }
@@ -260,25 +239,23 @@
 /* Botão de reiniciar */
 
 .mensagem button {
-  margin-top: 20px;
-  padding: 12px 24px;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background-color: #5b4fe8;
   color: #ffffff;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease,
+  transition: background-color 0.2s ease, transform 0.15s ease,
     box-shadow 0.15s ease;
 }
 
 .mensagem button:hover {
   background-color: #4a3fd1;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(91, 79, 232, 0.25);
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.375rem 0.75rem rgba(91, 79, 232, 0.25);
 }
 
 .mensagem button:active {
@@ -312,18 +289,18 @@
 
   .area {
     height: 400px;
-    border-radius: 12px;
+    border-radius: 0.75rem;
   }
 
   .imagem {
-    width: 58px;
-    height: 58px;
-    font-size: 29px;
+    width: 3.625rem;
+    height: 3.625rem;
+    font-size: 1.8125rem;
   }
 
   .mensagem {
-    width: calc(100% - 24px);
-    padding: 24px 18px;
+    width: calc(100% - 1.5rem);
+    padding: 1.5rem 1.125rem;
   }
 
   .mensagem h2 {

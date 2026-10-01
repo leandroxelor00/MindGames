@@ -1,14 +1,6 @@
 .container {
-  --cor-fundo: #f7f8fa;
-  --cor-texto: #1a1d29;
-  --cor-texto-suave: #5c6072;
-  --cor-accent: #5b4fe8;
-  --fonte-titulo: "Space Grotesk", sans-serif;
-
   min-height: 100vh;
   padding: 40px;
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
   font-family: -apple-system, "Segoe UI", sans-serif;
 }
 
