@@ -81,6 +81,22 @@
   animation: piscarErro 0.2s ease-in-out;
 }
 
+.feedbackIcone {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
 /* =========================
    ANIMAÇÕES
    ========================= */

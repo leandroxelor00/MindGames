@@ -38,15 +38,15 @@ export function FoodMemory() {
                   : styles.erro
                 : ""
             }`}
-            style={{
-              left: `${imagem.x}%`,
-              top: `${imagem.y}%`,
-            }}
+            style={{ left: `${imagem.x}%`, top: `${imagem.y}%` }}
             onClick={() => clicarImagem(imagem.id)}
-            disabled={!!feedback || transicionando}
-            aria-label={`Comida ${imagem.emoji}`}
           >
             {imagem.emoji}
+            {feedback?.id === imagem.id && (
+              <span className={styles.feedbackIcone} aria-hidden="true">
+                {feedback.tipo === "acerto" ? "✓" : "✕"}
+              </span>
+            )}
           </button>
         ))}
 
