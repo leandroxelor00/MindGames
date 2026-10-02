@@ -1,42 +1,39 @@
 .area {
   min-height: 500px;
   max-width: 1000px;
-  margin: 40px auto;
-  border-radius: 20px;
-
+  margin: 2.5rem auto;
+  border-radius: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
   user-select: none;
-
   transition: background-color 0.15s ease;
 }
 
 .conteudo {
   text-align: center;
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 .mensagem {
   font-size: 1.8rem;
   font-weight: 700;
-  margin: 0 0 16px;
+  margin: 0 0 1rem;
   color: #ffffff;
 }
 
 .tempo {
   font-size: 3rem;
   font-weight: 800;
-  margin: 0 0 20px;
+  margin: 0 0 1.25rem;
   color: #ffffff;
 }
 
 .botao {
-  padding: 14px 32px;
+  padding: 0.875rem 2rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   background: #ffffff;
   color: #1a1d29;
   font-size: 1.1rem;
@@ -54,23 +51,18 @@
 }
 
 /* Estados */
-
 .idle {
   background: #5b4fe8;
 }
-
 .waiting {
   background: #d9463c;
 }
-
 .ready {
   background: #2e7d32;
 }
-
 .tooSoon {
   background: #c62828;
 }
-
 .done {
   background: #1a1d29;
 }
@@ -78,14 +70,30 @@
 @media (max-width: 600px) {
   .area {
     min-height: 320px;
-    margin: 24px 16px;
+    margin: 1.5rem 1rem;
   }
-
   .mensagem {
     font-size: 1.4rem;
   }
-
   .tempo {
     font-size: 2.2rem;
   }
+}
+
+.leitorTela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.area:focus-visible {
+  outline: 4px solid #ffffff;
+  outline-offset: 6px;
+}
+
+.botao:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
 }

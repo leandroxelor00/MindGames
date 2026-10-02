@@ -17,11 +17,15 @@ export function MemoryMatch() {
     jogoFinalizado,
     virarCarta,
     resetGame,
+    mensagemAcessibilidade,
   } = useMemoryMatch();
 
   return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Memory Match</h1>
+      <div aria-live="polite" className={styles.leitorTela}>
+        {mensagemAcessibilidade}
+      </div>
 
       <div className={styles.painel}>
         <ScoreBoard
@@ -54,21 +58,28 @@ export function MemoryMatch() {
           const estaVirada = carta.virada || carta.pareada;
 
           return (
-            <div
+            <button
               key={carta.id}
+              type="button"
               className={`
-                ${styles.cartaContainer}
-                ${estaVirada ? styles.flipped : ""}
-                ${carta.pareada ? styles.pareada : ""}
-              `}
+    ${styles.cartaContainer}
+    ${estaVirada ? styles.flipped : ""}
+    ${carta.pareada ? styles.pareada : ""}
+  `}
               onClick={() => virarCarta(carta.id)}
+              aria-label={
+                carta.pareada
+                  ? `Par encontrado ${carta.valor}`
+                  : estaVirada
+                    ? `Carta revelada ${carta.valor}`
+                    : "Carta escondida"
+              }
             >
               <div className={styles.cartaInner}>
                 <div className={styles.cartaFront}>❔</div>
-
                 <div className={styles.cartaBack}>{carta.valor}</div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

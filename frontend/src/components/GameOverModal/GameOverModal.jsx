@@ -9,7 +9,7 @@ export function GameOverModal({
 }) {
   return (
     <div className={styles.overlay}>
-      <div className={styles.mensagemVitoria} style={customStyle}>
+      <div className={styles.mensagemVitoria} style={customStyle} role="status" aria-live="polite">
         {message}
         <Button textContent={buttonText} onClick={onClick} />
       </div>

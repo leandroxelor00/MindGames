@@ -32,10 +32,17 @@ export function Home() {
             </div>
           ) : (
             <>
-              <Link to="/login" className={styles.navLink}>Entrar</Link>
-              <Link to="/register" className={styles.navButtonPrimary}>Criar conta</Link>
+              <Link to="/login" className={styles.navLink}>
+                Entrar
+              </Link>
+              <Link to="/register" className={styles.navButtonPrimary}>
+                Criar conta
+              </Link>
             </>
           )}
+          <Link to="/settings" className={styles.navLink}>
+            Configurações
+          </Link>
         </div>
       </nav>
 

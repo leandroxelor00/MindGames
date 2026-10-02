@@ -21,15 +21,11 @@ export function criarBaralho() {
 
 export function useMemoryMatch() {
   const [baralho, setBaralho] = useState(criarBaralho());
-
   const [viradasAgora, setViradasAgora] = useState([]);
-
   const [tentativas, setTentativas] = useState(0);
-
   const [segundos, setSegundos] = useState(0);
-
   const [memorizando, setMemorizando] = useState(true);
-
+  const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
   const jogoFinalizado = baralho.every((carta) => carta.pareada);
 
   useEffect(() => {
@@ -42,10 +38,10 @@ export function useMemoryMatch() {
         baralhoAtual.map((carta) => ({
           ...carta,
           virada: false,
-        }))
+        })),
       );
-
       setMemorizando(false);
+      setMensagemAcessibilidade("O jogo começou. Escolha duas cartas.");
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -76,6 +72,7 @@ export function useMemoryMatch() {
 
     setBaralho(novoBaralho);
     setViradasAgora([...viradasAgora, id]);
+    setMensagemAcessibilidade(`Carta revelada ${carta.valor}`);
   }
 
   useEffect(() => {
@@ -97,6 +94,11 @@ export function useMemoryMatch() {
         }
 
         const saoIguais = carta1.valor === carta2.valor;
+        if (saoIguais) {
+          setMensagemAcessibilidade(`Par encontrado: ${carta1.valor}`);
+        } else {
+          setMensagemAcessibilidade("Cartas diferentes");
+        }
 
         return baralhoAtual.map((carta) => {
           if (carta.id === id1 || carta.id === id2) {
@@ -141,9 +143,7 @@ export function useMemoryMatch() {
         baralho.filter((carta) => carta.pareada).length / 2;
 
       const accuracy =
-        tentativas > 0
-          ? Math.min((paresAcertados / tentativas) * 100, 100)
-          : 0;
+        tentativas > 0 ? Math.min((paresAcertados / tentativas) * 100, 100) : 0;
 
       const result = {
         userId: getCurrentUserId(),
@@ -153,6 +153,9 @@ export function useMemoryMatch() {
         avgReactionTime: 0,
         levelReached: 1,
       };
+      setMensagemAcessibilidade(
+        `Você venceu em ${tentativas} tentativas e ${segundos} segundos`,
+      );
 
       try {
         await postScore(result);
@@ -170,6 +173,7 @@ export function useMemoryMatch() {
     setTentativas(0);
     setSegundos(0);
     setMemorizando(true);
+    setMensagemAcessibilidade("Novo jogo iniciado. Memorize as cartas.");
   }
 
   return {
@@ -181,5 +185,6 @@ export function useMemoryMatch() {
     jogoFinalizado,
     virarCarta,
     resetGame,
+    mensagemAcessibilidade,
   };
 }

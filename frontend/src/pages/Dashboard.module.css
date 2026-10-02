@@ -1,14 +1,6 @@
 .container {
-  --cor-fundo: #f7f8fa;
-  --cor-texto: #1a1d29;
-  --cor-texto-suave: #5c6072;
-  --cor-accent: #5b4fe8;
-  --fonte-titulo: "Space Grotesk", sans-serif;
-
   min-height: 100vh;
   padding: 40px;
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
   font-family: -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -60,8 +52,8 @@
 
 .cardJogo {
   padding: 22px;
-  background: #ffffff;
-  border: 1px solid #e5e6ec;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 14px;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
@@ -91,7 +83,7 @@
   align-items: center;
   gap: 16px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--cor-borda-suave);
 }
 
 .estatistica:last-child {
@@ -126,8 +118,8 @@
   justify-content: space-between;
   gap: 20px;
   padding: 16px 20px;
-  background: #ffffff;
-  border: 1px solid #e5e6ec;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 12px;
   transition: border-color 0.15s ease;
 }
@@ -196,8 +188,8 @@
 .semPartidas {
   padding: 40px;
   text-align: center;
-  background: #ffffff;
-  border: 1px dashed #d8dbe3;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 14px;
   color: var(--cor-texto-suave);
   max-width: 900px;

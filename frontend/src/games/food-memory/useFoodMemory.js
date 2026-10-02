@@ -80,30 +80,33 @@ export function useFoodMemory() {
   const [feedback, setFeedback] = useState(null);
   const [transicionando, setTransicionando] = useState(false);
 
-  useEffect(() => {
-    if (!gameOver) return;
+  // useFoodMemory.js
+// Pequeno ajuste de acessibilidade + segurança no envio de score
 
-    async function enviar() {
-      const fasesCompletadas = venceu ? fase : fase - 1;
+useEffect(() => {
+  if (!gameOver) return;
 
-      const result = {
-        userId: getCurrentUserId(),
-        gameId: "food-memory",
-        score: fasesCompletadas,
-        accuracy: venceu ? 100 : 0,
-        avgReactionTime: 0,
-        levelReached: fasesCompletadas,
-      };
+  async function enviar() {
+    const fasesCompletadas = venceu ? fase : fase - 1;
 
-      try {
-        await postScore(result);
-      } catch (error) {
-        console.error("Não foi possível enviar o resultado:", error);
-      }
+    const result = {
+      userId: getCurrentUserId(),
+      gameId: "food-memory",
+      score: fasesCompletadas,
+      accuracy: venceu ? 100 : 0,
+      avgReactionTime: 0,
+      levelReached: fasesCompletadas,
+    };
+
+    try {
+      await postScore(result);
+    } catch (error) {
+      console.error("Não foi possível enviar o resultado:", error);
     }
+  }
 
-    enviar();
-  }, [gameOver]);
+  enviar();
+}, [gameOver]);
 
   function clicarImagem(id) {
     if (gameOver || venceu || feedback || transicionando) return;

@@ -8,17 +8,18 @@ import styles from "./NumberChallenge.module.css";
 
 export function NumberChallenge() {
   const {
-    desafio,
-    score,
-    escolher,
-    segundos,
-    gameOver,
-    startTimer,
-    avgReactionTime,
-    resetGame,
-    nivel,
-    feedback,
-  } = useNumberChallenge();
+  desafio,
+  score,
+  escolher,
+  segundos,
+  gameOver,
+  startTimer,
+  avgReactionTime,
+  resetGame,
+  nivel,
+  feedback,
+  mensagemAcessibilidade,
+} = useNumberChallenge();
 
   function handleEscolher(lado) {
     startTimer();
@@ -37,32 +38,70 @@ export function NumberChallenge() {
     return `${styles.carta} ${styles.erro}`;
   }
 
+  function getAriaFeedback(lado) {
+    if (!feedback || feedback.lado !== lado) {
+      return `Escolha ${lado}: ${desafio[lado].texto}`;
+    }
+
+    if (feedback.resultado === "acerto") {
+      return `Resposta correta: ${desafio[lado].texto}`;
+    }
+
+    return `Resposta incorreta: ${desafio[lado].texto}`;
+  }
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.titulo}>Desafio Numérico</h1>
+      <h1 className={styles.titulo}>
+        Desafio Numérico
+      </h1>
+
+      <div
+        className={styles.leitorTela}
+        aria-live="polite"
+      >
+        {mensagemAcessibilidade}
+      </div>
 
       <div className={styles.painel}>
-        <Timer segundos={segundos} label="Tempo Restante" />
+        <Timer
+          segundos={segundos}
+          label="Tempo Restante"
+        />
 
         <ScoreBoard
           items={[
-            { label: "Pontuação", value: score },
-            { label: "Nível", value: nivel },
+            {
+              label: "Pontuação",
+              value: score,
+            },
+            {
+              label: "Nível",
+              value: nivel,
+            },
           ]}
         />
       </div>
 
       {!gameOver && (
         <>
-          <div className={styles.indicadorNivel}>
-            <span className={styles.labelNivel}>Nível {nivel}</span>
+          <div
+            className={styles.indicadorNivel}
+            aria-label={`Nível atual ${nivel}`}
+          >
+            <span className={styles.labelNivel}>
+              Nível {nivel}
+            </span>
 
             <div className={styles.niveis}>
               {[1, 2, 3].map((numero) => (
                 <span
                   key={numero}
+                  aria-hidden="true"
                   className={`${styles.pontoNivel} ${
-                    numero <= nivel ? styles.pontoNivelAtivo : ""
+                    numero <= nivel
+                      ? styles.pontoNivelAtivo
+                      : ""
                   }`}
                 />
               ))}
@@ -74,7 +113,8 @@ export function NumberChallenge() {
               type="button"
               className={getClasseCarta("esquerda")}
               onClick={() => handleEscolher("esquerda")}
-              disabled={gameOver || feedback !== null}
+              disabled={feedback !== null}
+              aria-label={getAriaFeedback("esquerda")}
             >
               {desafio.esquerda.texto}
             </button>
@@ -83,7 +123,8 @@ export function NumberChallenge() {
               type="button"
               className={getClasseCarta("direita")}
               onClick={() => handleEscolher("direita")}
-              disabled={gameOver || feedback !== null}
+              disabled={feedback !== null}
+              aria-label={getAriaFeedback("direita")}
             >
               {desafio.direita.texto}
             </button>
@@ -92,15 +133,24 @@ export function NumberChallenge() {
       )}
 
       {gameOver && (
-        <div className={styles.mensagemFim}>
-          <h2>⏱️ Fim de jogo!</h2>
+        <div
+          className={styles.mensagemFim}
+          role="alert"
+        >
+          <h2>
+            ⏱️ Fim de jogo!
+          </h2>
 
           <p>
-            Pontuação final: <strong>{score}</strong>
+            Pontuação final:
+            {" "}
+            <strong>{score}</strong>
           </p>
 
           <p>
-            Tempo médio de reação: <strong>{avgReactionTime} ms</strong>
+            Tempo médio de reação:
+            {" "}
+            <strong>{avgReactionTime} ms</strong>
           </p>
 
           <button

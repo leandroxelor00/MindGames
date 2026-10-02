@@ -1,16 +1,6 @@
 .page {
-  --cor-fundo: #f7f8fa;
-  --cor-texto: #1a1d29;
-  --cor-texto-suave: #5c6072;
-  --cor-accent: #5b4fe8;
-  --cor-accent-hover: #4a3fd1;
-  --fonte-titulo: "Space Grotesk", sans-serif;
-  --fonte-corpo: -apple-system, "Segoe UI", sans-serif;
-
   min-height: 100vh;
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
-  font-family: var(--fonte-corpo);
+  font-family: -apple-system, "Segoe UI", sans-serif;
 }
 
 .navbar {
@@ -190,4 +180,27 @@ a:nth-child(even) {
   .cardsContainer {
     grid-template-columns: 1fr;
   }
+}
+
+html[data-alto-contraste="true"] .navButtonPrimary {
+  background: #ffff00;
+  color: #000000 !important;
+  border: 2px solid #ffffff;
+}
+
+html[data-alto-contraste="true"] .navButtonPrimary:hover {
+  background: #ffff66;
+  color: #000000 !important;
+}
+
+html[data-alto-contraste="true"] .navButtonGhost {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .navButtonGhost:hover {
+  background: #111111;
+  color: #ffff00;
+  border-color: #ffff00;
 }

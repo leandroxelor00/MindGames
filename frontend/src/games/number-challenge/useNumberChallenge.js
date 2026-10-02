@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from "react";
+
 import { getCurrentUserId } from "../../services/userId";
+
 import { postScore } from "../../services/scoreService";
+
 import { useAdaptiveDifficulty } from "../../hooks/useAdaptiveDifficulty";
 
 function criarNovoDesafio(nivel) {
@@ -54,86 +57,167 @@ function criarNovoDesafio(nivel) {
     tentativas--;
   }
 
-  const ladoMaior = esquerda.valor > direita.valor ? "esquerda" : "direita";
-
   return {
     esquerda,
     direita,
-    ladoMaior,
+    ladoMaior:
+      esquerda.valor > direita.valor
+        ? "esquerda"
+        : "direita",
   };
 }
 
 export function useNumberChallenge() {
-  const { currentLevel, report, reset } = useAdaptiveDifficulty({
+  const {
+    currentLevel,
+    report,
+    reset,
+  } = useAdaptiveDifficulty({
     windowSize: 3,
     aswToIncreaseLv: 3,
     aswToDecreaseLv: 4,
     levelMax: 3,
   });
 
-  const [desafio, setDesafio] = useState(criarNovoDesafio(1));
+  const [desafio, setDesafio] = useState(
+    criarNovoDesafio(1)
+  );
+
   const [score, setScore] = useState(0);
+
   const [timer, setTimer] = useState(30);
+
   const [isTimerOn, setIsTimerOn] = useState(false);
+
   const [reactionTimes, setReactionTimes] = useState([]);
+
   const [feedback, setFeedback] = useState(null);
+
+  const [mensagemAcessibilidade, setMensagemAcessibilidade] =
+    useState("");
+
   const startTime = useRef(0);
+
   const gameOver = timer === 0;
+
 
   useEffect(() => {
     if (!isTimerOn || gameOver) return;
+
     const interval = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer <= 1) {
           setIsTimerOn(false);
+
+          setMensagemAcessibilidade(
+            `Fim de jogo. Sua pontuação foi ${score}.`
+          );
+
           return 0;
         }
+
         return prevTimer - 1;
       });
     }, 1000);
+
     return () => clearInterval(interval);
-  }, [isTimerOn, gameOver]);
+  }, [isTimerOn, gameOver, score]);
+
 
   function startTimer() {
     if (!isTimerOn && !gameOver) {
       setIsTimerOn(true);
+
       startTime.current = performance.now();
+
+      setMensagemAcessibilidade(
+        "O desafio começou. Escolha a maior operação."
+      );
     }
   }
+
 
   function escolher(lado) {
     if (gameOver || feedback) return;
 
-    const timeSpent = performance.now() - startTime.current;
-    setReactionTimes((prev) => [...prev, timeSpent]);
+    const timeSpent =
+      performance.now() - startTime.current;
 
-    const acertou = lado === desafio.ladoMaior;
-    setFeedback({ lado, resultado: acertou ? "acerto" : "erro" });
+    setReactionTimes((prev) => [
+      ...prev,
+      timeSpent,
+    ]);
+
+    const acertou =
+      lado === desafio.ladoMaior;
+
+    setFeedback({
+      lado,
+      resultado: acertou
+        ? "acerto"
+        : "erro",
+    });
+
 
     if (acertou) {
       setScore((prev) => prev + 1);
+
+      setMensagemAcessibilidade(
+        "Resposta correta. Preparando próximo desafio."
+      );
+    } else {
+      setMensagemAcessibilidade(
+        "Resposta incorreta."
+      );
     }
+
 
     const novoNivel = report(acertou);
 
+    if (novoNivel > currentLevel) {
+      setMensagemAcessibilidade(
+        `Parabéns! Você alcançou o nível ${novoNivel}.`
+      );
+    }
+
+
     setTimeout(() => {
-      setDesafio(criarNovoDesafio(novoNivel));
+      setDesafio(
+        criarNovoDesafio(novoNivel)
+      );
+
       startTime.current = performance.now();
+
       setFeedback(null);
     }, 150);
   }
 
-  const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
+
+  const sumReactionTime =
+    reactionTimes.reduce(
+      (a, b) => a + b,
+      0
+    );
+
   const avg =
-    reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
-  const avgReactionTime = Number(avg.toFixed(2));
+    reactionTimes.length > 0
+      ? sumReactionTime / reactionTimes.length
+      : 0;
+
+
+  const avgReactionTime =
+    Number(avg.toFixed(2));
+
 
   useEffect(() => {
     if (!gameOver) return;
 
     async function enviar() {
       const accuracy =
-        reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
+        reactionTimes.length > 0
+          ? (score / reactionTimes.length) * 100
+          : 0;
+
       const result = {
         userId: getCurrentUserId(),
         gameId: "number-challenge",
@@ -142,25 +226,44 @@ export function useNumberChallenge() {
         avgReactionTime,
         levelReached: currentLevel,
       };
+
       try {
         await postScore(result);
       } catch (error) {
-        console.error("Não foi possível enviar o resultado:", error);
+        console.error(
+          "Não foi possível enviar o resultado:",
+          error
+        );
       }
     }
 
     enviar();
+
   }, [gameOver]);
+
 
   function resetGame() {
     setIsTimerOn(false);
+
     setScore(0);
+
     setReactionTimes([]);
+
     setTimer(30);
+
     reset();
+
     setFeedback(null);
-    setDesafio(criarNovoDesafio(1));
+
+    setDesafio(
+      criarNovoDesafio(1)
+    );
+
+    setMensagemAcessibilidade(
+      "Novo jogo iniciado."
+    );
   }
+
 
   return {
     desafio,
@@ -173,5 +276,6 @@ export function useNumberChallenge() {
     resetGame,
     nivel: currentLevel,
     feedback,
+    mensagemAcessibilidade,
   };
 }
