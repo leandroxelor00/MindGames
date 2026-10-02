@@ -11,6 +11,7 @@ const games = [
   "visual-memory",
   "food-memory",
   "reaction-time",
+  "sound-sequence"
 ];
 
 const summaryCategory = {

@@ -1,0 +1,129 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--cor-texto);
+  text-align: center;
+}
+
+.container h1 {
+  color: var(--cor-texto);
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.container > p {
+  max-width: 650px;
+  margin: 0 0 1rem;
+  color: var(--cor-texto-suave);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.container > p[aria-live="polite"] {
+  width: 100%;
+  max-width: 700px;
+  margin: 1rem 0 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  background: var(--cor-superficie-suave);
+  border: 1px solid var(--cor-borda);
+  color: var(--cor-texto);
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.container button {
+  min-width: 180px;
+  padding: 1rem 1.5rem;
+  border: 2px solid var(--cor-accent);
+  border-radius: 0.75rem;
+  background: var(--cor-accent);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.container button:hover {
+  background: var(--cor-accent-hover);
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.container button:active {
+  transform: translateY(0);
+}
+
+.container button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.container section {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 2px solid var(--cor-sucesso-texto);
+  border-radius: 0.75rem;
+  background: var(--cor-sucesso-fundo);
+  color: var(--cor-sucesso-texto);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.container section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.container section p {
+  margin: 0 0 1.25rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .container h1 {
+    font-size: 2rem;
+  }
+
+  .container > p {
+    font-size: 1rem;
+  }
+
+  .container > p[aria-live="polite"] {
+    font-size: 1rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .container button {
+    width: 100%;
+    max-width: 300px;
+    font-size: 1rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .container section {
+    padding: 1.25rem;
+  }
+
+  .container section h2 {
+    font-size: 1.4rem;
+  }
+}
