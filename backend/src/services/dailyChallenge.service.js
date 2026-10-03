@@ -9,8 +9,6 @@ const availableGames = [
   "reaction-time",
 ];
 
-const date = new Date();
-
 function createDateHash(date, i) {
   const data = new Intl.DateTimeFormat("sv-SE", {
     timeZone: "America/Sao_Paulo",
@@ -25,7 +23,8 @@ function createDateHash(date, i) {
   return digest;
 }
 
-function getDailyChallenge() {
+function dailyChallenge() {
+  const date = new Date();
   const indexArr = new Set();
   let i = 1;
   while (indexArr.size < 3) {
@@ -44,4 +43,4 @@ function indexToGames(arr) {
   return newArr;
 }
 
-module.exports = { getDailyChallenge };
+module.exports = { dailyChallenge };
