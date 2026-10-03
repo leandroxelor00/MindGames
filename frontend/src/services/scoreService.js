@@ -73,3 +73,21 @@ export async function getSummary() {
     throw error;
   }
 }
+
+export async function getStreak() {
+  const token = localStorage.getItem(CHAVE_TOKEN);
+
+  if (token) {
+    const resultado = await apiFetch("/scores/me/streak");
+    return resultado.result;
+  }
+
+  const userId = getUserId();
+  const resultado = await apiFetch(`/scores/${userId}/streak`);
+  return resultado.result;
+}
+
+export async function getDailyChallenge() {
+  const resultado = await apiFetch("/daily-challenge");
+  return resultado.result;
+}

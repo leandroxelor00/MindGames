@@ -3,6 +3,7 @@ require("./db/migrations/001_create_scores");
 require("./db/migrations/002_create_users");
 const { scoreRoutes } = require("./routes/scores.routes");
 const { authRoutes } = require("./routes/auth.routes");
+const { dailyChallengeRoutes } = require("./routes/dailyChallenge.routes");
 
 const tables = db
   .prepare(
@@ -20,6 +21,7 @@ const cors = require("cors");
 app.use(cors());
 
 app.use(express.json());
+app.use("/api", dailyChallengeRoutes);
 app.use("/api", scoreRoutes);
 app.use("/api/auth", authRoutes);
 

@@ -3,6 +3,7 @@ const {
   getScoresByUserId,
   migrateScores,
   summary,
+  getStreak,
 } = require("../services/scores.service");
 
 function createScore(req, res) {
@@ -89,4 +90,23 @@ function getSummary(req, res) {
   }
 }
 
-module.exports = { createScore, getScoresByUser, getSummary, migrate };
+function getStreakController(req, res) {
+  const userId = req.user ? req.user.id : req.params.userId;
+
+  try {
+    const result = getStreak(userId);
+    return res
+      .status(200)
+      .json({ message: "Streak consultado com sucesso", result: result });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+}
+
+module.exports = {
+  createScore,
+  getScoresByUser,
+  getSummary,
+  getStreakController,
+  migrate,
+};

@@ -150,7 +150,9 @@ a:nth-child(even) {
   min-height: 96px;
   display: flex;
   align-items: center;
-  transition: border-color 0.15s ease, transform 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .cardName {
@@ -163,8 +165,6 @@ a:nth-child(even) {
   border-color: var(--cor-accent);
   transform: translateX(2px);
 }
-
-
 
 @media (prefers-reduced-motion: reduce) {
   .card {
@@ -180,6 +180,163 @@ a:nth-child(even) {
   .cardsContainer {
     grid-template-columns: 1fr;
   }
+}
+
+/*  - - - - - - - - streak e daily */
+
+.homeContent {
+  width: min(1000px, calc(100% - 32px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 20px;
+  align-items: start;
+}
+
+.dailyAside {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.streakCard,
+.challengeCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.streakCard {
+  min-height: 90px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.streakIcon {
+  font-size: 25px;
+}
+
+.streakLabel {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 10px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.streakNumber {
+  display: block;
+  font-size: 19px;
+}
+
+.challengeCard {
+  padding: 16px;
+}
+
+.challengeEyebrow {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.1em;
+}
+
+.challengeTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.challengeGames {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.challengeGame {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 12px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.challengeGame:hover {
+  transform: translateY(-1px);
+  border-color: #d1d5db;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.challengeArrow {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+@media (max-width: 800px) {
+  .homeContent {
+    grid-template-columns: 1fr;
+  }
+
+  .dailyAside {
+    flex-direction: row;
+    align-items: start;
+  }
+
+  .streakCard {
+    width: 180px;
+    flex-shrink: 0;
+  }
+
+  .challengeCard {
+    flex: 1;
+  }
+}
+
+@media (max-width: 550px) {
+  .dailyAside {
+    flex-direction: column;
+  }
+
+  .streakCard {
+    width: auto;
+  }
+}
+
+html[data-alto-contraste="true"] .navButtonPrimary {
+  background: #ffff00;
+  color: #000000 !important;
+  border: 2px solid #ffffff;
+}
+
+html[data-alto-contraste="true"] .navButtonPrimary:hover {
+  background: #ffff66;
+  color: #000000 !important;
+}
+
+html[data-alto-contraste="true"] .navButtonGhost {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .navButtonGhost:hover {
+  background: #111111;
+  color: #ffff00;
+  border-color: #ffff00;
 }
 
 html[data-alto-contraste="true"] .navButtonPrimary {

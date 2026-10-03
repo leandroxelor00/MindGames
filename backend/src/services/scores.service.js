@@ -36,7 +36,7 @@ function saveScore(score) {
     score.score,
     score.accuracy,
     score.avgReactionTime,
-    score.levelReached
+    score.levelReached,
   );
 }
 
@@ -59,11 +59,11 @@ function summary(userId) {
   const memoryCategory = filterScoresByCategory(scores, summaryCategory.memory);
   const attentionCategory = filterScoresByCategory(
     scores,
-    summaryCategory.attention
+    summaryCategory.attention,
   );
   const velocityCategory = filterScoresByCategory(
     scores,
-    summaryCategory.velocity
+    summaryCategory.velocity,
   );
   const logicCategory = filterScoresByCategory(scores, summaryCategory.logic);
 
@@ -92,9 +92,62 @@ function avgAccuracyByCategory(category) {
 
 function filterScoresByCategory(scores, list) {
   const scoresByCategory = scores.filter((score) =>
-    list.includes(score.gameId)
+    list.includes(score.gameId),
   );
   return scoresByCategory;
 }
 
-module.exports = { saveScore, getScoresByUserId, migrateScores, summary };
+function getStreak(userId) {
+  const scores = selectByUserId(userId);
+
+  const formatedDates = scores.map((ele) => new Date(ele.playedAt));
+
+  const newFormatedDates = formatedDates.map((ele) =>
+    new Intl.DateTimeFormat("sv-SE", {
+      timeZone: "America/Sao_Paulo",
+    }).format(ele),
+  );
+
+  const date = new Date();
+
+  const today = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "America/Sao_Paulo",
+  }).format(date);
+
+  const day = new Date(`${today}T12:00:00Z`);
+  day.setUTCDate(day.getUTCDate() - 1);
+
+  const yesterday = day.toISOString().slice(0, 10);
+
+  const dates = new Set(newFormatedDates);
+
+  const newArr = [...dates];
+  newArr.sort();
+  let i = newArr.includes(today) ? 0 : newArr.includes(yesterday) ? 1 : null;
+
+  if (i === null) return 0;
+
+  let streak = 0;
+  while (true) {
+    const day = new Date(`${today}T12:00:00Z`);
+    day.setUTCDate(day.getUTCDate() - i);
+    const currentDate = day.toISOString().slice(0, 10);
+
+    if (newArr.includes(currentDate)) {
+      streak++;
+      i++;
+    } else {
+      break;
+    }
+  }
+
+  return streak;
+}
+
+module.exports = {
+  saveScore,
+  getScoresByUserId,
+  migrateScores,
+  summary,
+  getStreak,
+};
