@@ -10,20 +10,20 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #555;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
   background: #dce0e4;
-  padding: 12px 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
 }
 
 .gridContainer {
   display: grid;
-  gap: 10px;
+  gap: 0.625rem;
   background: #dce0e4;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
 }
 
 .cell,
@@ -33,10 +33,23 @@
 .neutralCell {
   width: 100px;
   aspect-ratio: 1 / 1;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   transition:
     background 0.3s ease,
     transform 0.15s ease;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.cell:focus-visible,
+.highlightedCell:focus-visible,
+.correctCell:focus-visible,
+.wrongCell:focus-visible,
+.neutralCell:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
 }
 
 .cell {
@@ -46,7 +59,7 @@
 
 .highlightedCell {
   background-color: #333;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
 }
 
 .correctCell {
@@ -57,9 +70,28 @@
   background-color: #c62828;
 }
 
+.correctCell::after {
+  content: "✓";
+  font-size: 2rem;
+}
+
+.wrongCell::after {
+  content: "✕";
+  font-size: 2rem;
+}
+
 .neutralCell {
   background-color: #ffffff;
   border: 2px solid #eaeaea;
+}
+
+.leitorTela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 @media (max-width: 480px) {

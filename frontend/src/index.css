@@ -1,4 +1,172 @@
+:root {
+  --fonte-escala: 1;
+
+  --cor-fundo: #f7f8fa;
+  --cor-superficie: #ffffff;
+  --cor-superficie-suave: #f8f9fa;
+
+  --cor-texto: #1a1d29;
+  --cor-texto-suave: #5c6072;
+  --cor-texto-secundario: #555555;
+
+  --cor-borda: #e5e6ec;
+  --cor-borda-suave: #eeeeee;
+
+  --cor-accent: #5b4fe8;
+  --cor-accent-hover: #4a3fd1;
+
+  --cor-input: #f7f8fa;
+  --cor-input-focus: #ffffff;
+
+  --cor-erro-fundo: #fdecec;
+  --cor-erro-texto: #c53030;
+
+  --cor-sucesso-fundo: #d4edda;
+  --cor-sucesso-texto: #155724;
+
+  --cor-desativado: #b8b3f2;
+
+  --fonte-titulo: "Space Grotesk", sans-serif;
+}
+
+html {
+  font-size: calc(16px * var(--fonte-escala));
+}
+
+body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+/* Alto contraste */
+html[data-alto-contraste="true"] {
+  --cor-fundo: #000000;
+  --cor-superficie: #000000;
+  --cor-superficie-suave: #111111;
+
+  --cor-texto: #ffffff;
+  --cor-texto-suave: #ffffff;
+  --cor-texto-secundario: #ffffff;
+
+  --cor-borda: #ffffff;
+  --cor-borda-suave: #ffffff;
+
+  --cor-accent: #ffff00;
+  --cor-accent-hover: #ffff66;
+
+  --cor-input: #000000;
+  --cor-input-focus: #111111;
+
+  --cor-erro-fundo: #000000;
+  --cor-erro-texto: #ff6b6b;
+
+  --cor-sucesso-fundo: #000000;
+  --cor-sucesso-texto: #00ff66;
+
+  --cor-desativado: #666666;
+}
+
+html[data-alto-contraste="true"] body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+/* Superfícies */
+html[data-alto-contraste="true"] .card,
+html[data-alto-contraste="true"] [class*="card"],
+html[data-alto-contraste="true"] [class*="painel"],
+html[data-alto-contraste="true"] [class*="gridContainer"] {
+  background: var(--cor-superficie) !important;
+  border-color: var(--cor-borda) !important;
+  color: var(--cor-texto) !important;
+}
+
+/* Textos */
+html[data-alto-contraste="true"] [class*="titulo"],
+html[data-alto-contraste="true"] [class*="title"],
+html[data-alto-contraste="true"] [class*="nome"],
+html[data-alto-contraste="true"] [class*="label"],
+html[data-alto-contraste="true"] [class*="detalhe"],
+html[data-alto-contraste="true"] [class*="descricao"],
+html[data-alto-contraste="true"] [class*="subtitle"],
+html[data-alto-contraste="true"] [class*="footerText"] {
+  color: var(--cor-texto) !important;
+}
+
+/* Inputs */
+html[data-alto-contraste="true"] input,
+html[data-alto-contraste="true"] select,
+html[data-alto-contraste="true"] textarea {
+  background: var(--cor-input) !important;
+  color: var(--cor-texto) !important;
+  border-color: var(--cor-borda) !important;
+}
+
+html[data-alto-contraste="true"] input::placeholder,
+html[data-alto-contraste="true"] textarea::placeholder {
+  color: var(--cor-texto-suave) !important;
+}
+
+/* Links */
+html[data-alto-contraste="true"] a {
+  color: var(--cor-accent) !important;
+}
+
+/* Botões no alto contraste */
+
+html[data-alto-contraste="true"] button {
+  background: #ffff00;
+  color: #000000 !important;
+  border: 2px solid #ffffff;
+}
+
+html[data-alto-contraste="true"] button:hover {
+  background: #ffff66;
+  color: #000000 !important;
+}
+
+html[data-alto-contraste="true"] button:disabled {
+  background: #666666 !important;
+  color: #000000 !important;
+}
+
+html[data-alto-contraste="true"] button:disabled {
+  background: var(--cor-desativado) !important;
+  color: #000000 !important;
+}
+
+/* Erros */
+html[data-alto-contraste="true"] [class*="error"] {
+  background: var(--cor-erro-fundo) !important;
+  color: var(--cor-erro-texto) !important;
+  border: 2px solid var(--cor-erro-texto);
+}
+
+/* Sucesso */
+html[data-alto-contraste="true"] [class*="sucesso"],
+html[data-alto-contraste="true"] [class*="mensagemFim"],
+html[data-alto-contraste="true"] [class*="mensagemVitoria"] {
+  background: var(--cor-sucesso-fundo) !important;
+  color: var(--cor-sucesso-texto) !important;
+  border-color: var(--cor-sucesso-texto) !important;
+}
+
+/* Redução de animações */
+html[data-reduzir-animacoes="true"] *,
+html[data-reduzir-animacoes="true"] *::before,
+html[data-reduzir-animacoes="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
 a {
   text-decoration: none;
   color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
 }

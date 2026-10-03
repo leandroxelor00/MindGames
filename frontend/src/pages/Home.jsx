@@ -62,6 +62,9 @@ export function Home() {
               </Link>
             </>
           )}
+          <Link to="/settings" className={styles.navLink}>
+            Configurações
+          </Link>
         </div>
       </nav>
 

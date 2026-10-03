@@ -1,4 +1,13 @@
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+} from "recharts";
+
+import styles from "./CognitiveRadar.module.css";
 
 export function CognitiveRadar({ summary }) {
   const dados = [
@@ -9,19 +18,28 @@ export function CognitiveRadar({ summary }) {
   ];
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <RadarChart data={dados}>
-        <PolarGrid />
-        <PolarAngleAxis dataKey="categoria" />
-        <PolarRadiusAxis angle={90} domain={[0, 100]} />
-        <Radar
-          name="Desempenho"
-          dataKey="valor"
-          stroke="#5b4fe8"
-          fill="#5b4fe8"
-          fillOpacity={0.4}
-        />
-      </RadarChart>
-    </ResponsiveContainer>
+    <>
+      <ResponsiveContainer width="100%" height={300}>
+        <RadarChart data={dados}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey="categoria" />
+          <PolarRadiusAxis angle={90} domain={[0, 100]} />
+
+          <Radar
+            name="Desempenho"
+            dataKey="valor"
+            stroke="var(--cor-accent, #5b4fe8)"
+            fill="var(--cor-accent, #5b4fe8)"
+            fillOpacity={0.4}
+          />
+        </RadarChart>
+      </ResponsiveContainer>
+
+      <p className={styles.somenteLeitorDeTela}>
+        Resumo cognitivo: Memória {summary.memoria}%, Atenção{" "}
+        {summary.atencao}%, Velocidade {summary.velocidade}%, Lógica{" "}
+        {summary.logica}%.
+      </p>
+    </>
   );
 }

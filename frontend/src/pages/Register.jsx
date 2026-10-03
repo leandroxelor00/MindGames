@@ -55,7 +55,7 @@ export function Register() {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.badge}>
+        <div className={styles.badge} aria-hidden="true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
               d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"
@@ -73,11 +73,19 @@ export function Register() {
           Crie sua conta para acompanhar sua evolução nos jogos.
         </p>
 
-        {error && <div className={styles.error}>{error}</div>}
+        {error && (
+          <div className={styles.error} role="alert">
+            {error}
+          </div>
+        )}
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
-            <span className={styles.inputIcon}>
+            <label className={styles.inputLabel} htmlFor="register-email">
+              Email
+            </label>
+
+            <span className={styles.inputIcon} aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M3 6h18v12H3V6Zm0 0 9 7 9-7"
@@ -90,17 +98,23 @@ export function Register() {
             </span>
 
             <input
+              id="register-email"
               className={styles.input}
               type="email"
-              placeholder="Email"
+              placeholder="Digite seu email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
               required
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <span className={styles.inputIcon}>
+            <label className={styles.inputLabel} htmlFor="register-password">
+              Senha
+            </label>
+
+            <span className={styles.inputIcon} aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <rect
                   x="5"
@@ -121,17 +135,26 @@ export function Register() {
             </span>
 
             <input
+              id="register-password"
               className={styles.input}
               type="password"
-              placeholder="Senha"
+              placeholder="Digite sua senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
               required
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <span className={styles.inputIcon}>
+            <label
+              className={styles.inputLabel}
+              htmlFor="register-confirm-password"
+            >
+              Confirmar senha
+            </label>
+
+            <span className={styles.inputIcon} aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <rect
                   x="5"
@@ -152,11 +175,13 @@ export function Register() {
             </span>
 
             <input
+              id="register-confirm-password"
               className={styles.input}
               type="password"
-              placeholder="Confirmar senha"
+              placeholder="Digite novamente sua senha"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              autoComplete="new-password"
               required
             />
           </div>

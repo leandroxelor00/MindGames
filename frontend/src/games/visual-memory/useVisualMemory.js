@@ -16,6 +16,7 @@ export function useVisualMemory() {
   const [levelDone, setLevelDone] = useState(false);
   const [tries, setTries] = useState(cells);
   const [allLevelsDone, setAllLevelsDone] = useState(false);
+  const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
   const min = 0;
   const max = levels[levelIndex].gridLength - 1;
 
@@ -29,14 +30,23 @@ export function useVisualMemory() {
     const currentCells = levels[levelIndex].cells;
     const showTime = levels[levelIndex].showTime;
     generateHighlightedCells(currentCells);
+
+    setMensagemAcessibilidade(`Memorize o padrão do nível ${levelIndex + 1}`);
+
     const timeout = setTimeout(() => {
       setIsShowingPartern(false);
+
+      setMensagemAcessibilidade(
+        "Agora selecione as células que estavam destacadas.",
+      );
     }, showTime);
     return () => clearTimeout(timeout);
   }
 
   function nextLevel() {
     setLevelIndex((levelIndex) => levelIndex + 1);
+
+    setMensagemAcessibilidade("Próximo nível iniciado.");
   }
 
   useEffect(() => {
@@ -74,6 +84,7 @@ export function useVisualMemory() {
     if (!selectedCells.has(cell)) {
       setTries((tries) => tries - 1);
       setSelectedCells(cellClicked);
+      setMensagemAcessibilidade(`Célula ${cell + 1} selecionada`);
     }
   }
 
@@ -85,7 +96,17 @@ export function useVisualMemory() {
     if (levelIndex === 14) {
       isCorrect ? setAllLevelsDone(true) : setGameOver(true);
     } else {
-      isCorrect ? setLevelDone(true) : setGameOver(true);
+      if (isCorrect) {
+        setLevelDone(true);
+
+        setMensagemAcessibilidade(
+          `Parabéns! Você completou o nível ${levelIndex + 1}`,
+        );
+      } else {
+        setGameOver(true);
+
+        setMensagemAcessibilidade("Resposta incorreta. Você perdeu.");
+      }
     }
   }
 
@@ -165,5 +186,6 @@ export function useVisualMemory() {
     getCellStatus,
     newGame,
     allLevelsDone,
+    mensagemAcessibilidade,
   };
 }
