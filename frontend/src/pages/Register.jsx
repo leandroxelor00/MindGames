@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../services/authService";
 import { useAuth } from "../hooks/useAuth";
-import { getUserId } from "../services/userId";
+import { getUserId, resetUserId } from "../services/userId";
 import { migrateScores } from "../services/scoreService";
 import styles from "./Register.module.css";
 
@@ -40,6 +40,7 @@ export function Register() {
       try {
         const userIdAnonimo = getUserId();
         await migrateScores(userIdAnonimo);
+        resetUserId();
       } catch (err) {
         console.error("Erro ao migrar scores:", err);
       }

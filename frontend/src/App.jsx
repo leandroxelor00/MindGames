@@ -6,8 +6,13 @@ import { Register } from "./pages/Register.jsx";
 import { Routes, Route } from "react-router-dom";
 import { NotFound } from "./pages/NotFound.jsx";
 import { Settings } from "./pages/Settings.jsx";
+import { useEffect } from "react";
+import { reenviarPendentes } from "./services/scoreService";
 
 function App() {
+  useEffect(() => {
+    reenviarPendentes();
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Home />} />
