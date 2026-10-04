@@ -15,7 +15,7 @@ const games = [
 ];
 
 const summaryCategory = {
-  memory: ["memory-match", "food-memory", "visual-memory"],
+  memory: ["memory-match", "food-memory", "visual-memory", "sound-sequence"],
   attention: ["stroop-test"],
   velocity: ["reaction-time"],
   logic: ["number-challenge"],

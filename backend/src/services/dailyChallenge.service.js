@@ -7,6 +7,7 @@ const availableGames = [
   "visual-memory",
   "food-memory",
   "reaction-time",
+  "sound-sequence",
 ];
 
 function createDateHash(date, i) {
