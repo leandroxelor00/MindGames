@@ -11,6 +11,8 @@ export function SoundSequence() {
     feedback,
     iniciarJogo,
     pressionarTecla,
+    narradorAtivo,
+    alternarNarrador,
   } = useSoundSequence();
 
   const classeFeedback =
@@ -30,9 +32,7 @@ export function SoundSequence() {
         Cada seta corresponde a uma cor e a um som diferente.
       </p>
 
-      <p>
-        ↑ Verde · → Vermelho · ← Azul · ↓ Amarelo
-      </p>
+      <p>↑ Verde · → Vermelho · ← Azul · ↓ Amarelo</p>
 
       <div
         className={`${styles.genius} ${classeFeedback}`}
@@ -92,11 +92,7 @@ export function SoundSequence() {
         </div>
       </div>
 
-      {fase > 0 && (
-        <p className={styles.fase}>
-          Fase: {fase}
-        </p>
-      )}
+      {fase > 0 && <p className={styles.fase}>Fase: {fase}</p>}
 
       <p aria-live="polite">
         {fase === 0
@@ -109,6 +105,16 @@ export function SoundSequence() {
                 ? "Erro! Fim de jogo."
                 : "Sua vez! Repita a sequência."}
       </p>
+
+      <button
+        type="button"
+        className={styles.botao}
+        onClick={alternarNarrador}
+        aria-pressed={narradorAtivo}
+        aria-label={narradorAtivo ? "Desativar narrador" : "Ativar narrador"}
+      >
+        {narradorAtivo ? "🔊 Narrador: ligado" : "🔇 Narrador: desligado"}
+      </button>
 
       {!gameOver && (
         <button
@@ -125,15 +131,9 @@ export function SoundSequence() {
         <section aria-live="polite">
           <h2>Fim de jogo!</h2>
 
-          <p>
-            Você alcançou a fase {fase - 1}.
-          </p>
+          <p>Você alcançou a fase {fase - 1}.</p>
 
-          <button
-            type="button"
-            className={styles.botao}
-            onClick={iniciarJogo}
-          >
+          <button type="button" className={styles.botao} onClick={iniciarJogo}>
             Jogar novamente
           </button>
         </section>

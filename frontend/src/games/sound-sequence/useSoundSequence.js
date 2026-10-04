@@ -18,17 +18,10 @@ const CORES = {
   ArrowDown: "amarelo",
 };
 
-const TECLAS = [
-  "ArrowUp",
-  "ArrowRight",
-  "ArrowLeft",
-  "ArrowDown",
-];
+const TECLAS = ["ArrowUp", "ArrowRight", "ArrowLeft", "ArrowDown"];
 
 export function useSoundSequence() {
-  const {
-    vozNarrador,
-  } = useAccessibility();
+  const { vozNarrador } = useAccessibility();
 
   const audioContextRef = useRef(null);
 
@@ -39,12 +32,12 @@ export function useSoundSequence() {
   const [fase, setFase] = useState(0);
   const [corAtiva, setCorAtiva] = useState(null);
   const [feedback, setFeedback] = useState(null);
+  const [narradorAtivo, setNarradorAtivo] = useState(true);
 
   function getAudioContext() {
     if (!audioContextRef.current) {
       const AudioContextClass =
-        window.AudioContext ||
-        window.webkitAudioContext;
+        window.AudioContext || window.webkitAudioContext;
 
       audioContextRef.current = new AudioContextClass();
     }
@@ -55,7 +48,9 @@ export function useSoundSequence() {
   async function tocarSom(tecla) {
     const frequencia = FREQUENCIAS[tecla];
 
-    if (!frequencia) return;
+    if (!frequencia) {
+      return;
+    }
 
     const audioContext = getAudioContext();
 
@@ -73,20 +68,11 @@ export function useSoundSequence() {
 
     const agora = audioContext.currentTime;
 
-    ganho.gain.setValueAtTime(
-      0.0001,
-      agora,
-    );
+    ganho.gain.setValueAtTime(0.0001, agora);
 
-    ganho.gain.exponentialRampToValueAtTime(
-      0.15,
-      agora + 0.02,
-    );
+    ganho.gain.exponentialRampToValueAtTime(0.15, agora + 0.02);
 
-    ganho.gain.exponentialRampToValueAtTime(
-      0.0001,
-      agora + 0.4,
-    );
+    ganho.gain.exponentialRampToValueAtTime(0.0001, agora + 0.4);
 
     oscillator.connect(ganho);
     ganho.connect(audioContext.destination);
@@ -107,9 +93,7 @@ export function useSoundSequence() {
     const vozes = window.speechSynthesis.getVoices();
 
     if (vozNarrador !== "automatica") {
-      const vozSelecionada = vozes.find(
-        (voz) => voz.name === vozNarrador,
-      );
+      const vozSelecionada = vozes.find((voz) => voz.name === vozNarrador);
 
       if (vozSelecionada) {
         return vozSelecionada;
@@ -117,23 +101,14 @@ export function useSoundSequence() {
     }
 
     return (
-      vozes.find(
-        (voz) =>
-          voz.lang.toLowerCase() === "pt-br",
-      ) ||
-      vozes.find(
-        (voz) =>
-          voz.lang
-            .toLowerCase()
-            .startsWith("pt"),
-      ) ||
+      vozes.find((voz) => voz.lang.toLowerCase() === "pt-br") ||
+      vozes.find((voz) => voz.lang.toLowerCase().startsWith("pt")) ||
       null
     );
   }
 
   function criarFala(texto) {
-    const utterance =
-      new SpeechSynthesisUtterance(texto);
+    const utterance = new SpeechSynthesisUtterance(texto);
 
     const voz = obterVozNarrador();
 
@@ -148,6 +123,10 @@ export function useSoundSequence() {
   }
 
   function narrar(texto) {
+    if (!narradorAtivo) {
+      return;
+    }
+
     if (!("speechSynthesis" in window)) {
       return;
     }
@@ -159,20 +138,24 @@ export function useSoundSequence() {
     window.speechSynthesis.speak(utterance);
   }
 
-  function adicionarPassoNaSequencia(
-    seqAtual = sequencia,
-  ) {
-    const indiceAleatorio = Math.floor(
-      Math.random() * TECLAS.length,
-    );
+  function alternarNarrador() {
+    setNarradorAtivo((ativoAtual) => {
+      const novoEstado = !ativoAtual;
 
-    const teclaAleatoria =
-      TECLAS[indiceAleatorio];
+      if (!novoEstado && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
 
-    const novaSequencia = [
-      ...seqAtual,
-      teclaAleatoria,
-    ];
+      return novoEstado;
+    });
+  }
+
+  function adicionarPassoNaSequencia(seqAtual = sequencia) {
+    const indiceAleatorio = Math.floor(Math.random() * TECLAS.length);
+
+    const teclaAleatoria = TECLAS[indiceAleatorio];
+
+    const novaSequencia = [...seqAtual, teclaAleatoria];
 
     setSequencia(novaSequencia);
 
@@ -186,9 +169,7 @@ export function useSoundSequence() {
     for (const tecla of seq) {
       await tocarSom(tecla);
 
-      await new Promise((resolve) =>
-        setTimeout(resolve, 750),
-      );
+      await new Promise((resolve) => setTimeout(resolve, 750));
     }
 
     setReproduzindo(false);
@@ -200,8 +181,7 @@ export function useSoundSequence() {
       return;
     }
 
-    const primeiraSequencia =
-      adicionarPassoNaSequencia([]);
+    const primeiraSequencia = adicionarPassoNaSequencia([]);
 
     setFase(1);
     setPassoAtual(0);
@@ -209,10 +189,8 @@ export function useSoundSequence() {
     setFeedback(null);
     setCorAtiva(null);
 
-    if (!("speechSynthesis" in window)) {
-      reproduzirSequencia(
-        primeiraSequencia,
-      );
+    if (!narradorAtivo || !("speechSynthesis" in window)) {
+      reproduzirSequencia(primeiraSequencia);
 
       return;
     }
@@ -224,22 +202,14 @@ export function useSoundSequence() {
     );
 
     utterance.onend = () => {
-      reproduzirSequencia(
-        primeiraSequencia,
-      );
+      reproduzirSequencia(primeiraSequencia);
     };
 
-    window.speechSynthesis.speak(
-      utterance,
-    );
+    window.speechSynthesis.speak(utterance);
   }
 
   async function receberTecla(tecla) {
-    if (
-      reproduzindo ||
-      gameOver ||
-      sequencia.length === 0
-    ) {
+    if (reproduzindo || gameOver || sequencia.length === 0) {
       return;
     }
 
@@ -247,9 +217,7 @@ export function useSoundSequence() {
       return;
     }
 
-    if (
-      tecla === sequencia[passoAtual]
-    ) {
+    if (tecla === sequencia[passoAtual]) {
       await tocarSom(tecla);
 
       setFeedback("acerto");
@@ -258,32 +226,18 @@ export function useSoundSequence() {
         setFeedback(null);
       }, 300);
 
-      const proximoPasso =
-        passoAtual + 1;
+      const proximoPasso = passoAtual + 1;
 
-      if (
-        proximoPasso ===
-        sequencia.length
-      ) {
-        const novaSequencia =
-          adicionarPassoNaSequencia();
+      if (proximoPasso === sequencia.length) {
+        const novaSequencia = adicionarPassoNaSequencia();
 
-        setFase(
-          (faseAtual) =>
-            faseAtual + 1,
-        );
+        setFase((faseAtual) => faseAtual + 1);
 
-        await new Promise((resolve) =>
-          setTimeout(resolve, 1000),
-        );
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        reproduzirSequencia(
-          novaSequencia,
-        );
+        reproduzirSequencia(novaSequencia);
       } else {
-        setPassoAtual(
-          proximoPasso,
-        );
+        setPassoAtual(proximoPasso);
       }
     } else {
       setCorAtiva(null);
@@ -297,9 +251,7 @@ export function useSoundSequence() {
       return;
     }
 
-    const jogoAindaNaoComecou =
-      sequencia.length === 0 &&
-      !reproduzindo;
+    const jogoAindaNaoComecou = sequencia.length === 0 && !reproduzindo;
 
     if (jogoAindaNaoComecou) {
       tocarSom(tecla);
@@ -311,9 +263,7 @@ export function useSoundSequence() {
       return;
     }
 
-    const jogoAindaNaoComecou =
-      sequencia.length === 0 &&
-      !reproduzindo;
+    const jogoAindaNaoComecou = sequencia.length === 0 && !reproduzindo;
 
     if (jogoAindaNaoComecou) {
       testarTecla(tecla);
@@ -334,23 +284,12 @@ export function useSoundSequence() {
       pressionarTecla(event.key);
     }
 
-    window.addEventListener(
-      "keydown",
-      handleKeyDown,
-    );
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown,
-      );
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    sequencia,
-    passoAtual,
-    reproduzindo,
-    gameOver,
-  ]);
+  }, [sequencia, passoAtual, reproduzindo, gameOver]);
 
   useEffect(() => {
     if (!gameOver) {
@@ -370,15 +309,22 @@ export function useSoundSequence() {
       try {
         await postScore(resultado);
       } catch (error) {
-        console.error(
-          "Não foi possível enviar o resultado:",
-          error,
-        );
+        console.error("Não foi possível enviar o resultado:", error);
       }
     }
 
     enviar();
   }, [gameOver]);
+
+  // Cancela qualquer fala quando o usuário
+  // sair da tela do jogo.
+  useEffect(() => {
+    return () => {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   return {
     tocarSom,
@@ -390,5 +336,7 @@ export function useSoundSequence() {
     gameOver,
     fase,
     iniciarJogo,
+    narradorAtivo,
+    alternarNarrador,
   };
 }
