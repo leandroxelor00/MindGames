@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-
 import { getCurrentUserId } from "../../services/userId";
-
 import { postScore } from "../../services/scoreService";
-
 import { useAdaptiveDifficulty } from "../../hooks/useAdaptiveDifficulty";
 
 function criarNovoDesafio(nivel) {
@@ -98,7 +95,14 @@ export function useNumberChallenge() {
 
   const startTime = useRef(0);
 
+  const scoreRef = useRef(score);
+
   const gameOver = timer === 0;
+
+
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
 
 
   useEffect(() => {
@@ -110,7 +114,7 @@ export function useNumberChallenge() {
           setIsTimerOn(false);
 
           setMensagemAcessibilidade(
-            `Fim de jogo. Sua pontuação foi ${score}.`
+            `Fim de jogo. Sua pontuação foi ${scoreRef.current}.`
           );
 
           return 0;
@@ -121,7 +125,7 @@ export function useNumberChallenge() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isTimerOn, gameOver, score]);
+  }, [isTimerOn, gameOver]);
 
 
   function startTimer() {
