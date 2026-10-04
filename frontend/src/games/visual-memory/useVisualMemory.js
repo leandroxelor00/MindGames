@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-
 import { levels } from "./levels";
-
 import { getCurrentUserId } from "../../services/userId";
-
 import { postScore } from "../../services/scoreService";
 
 export function useVisualMemory() {
@@ -16,17 +13,20 @@ export function useVisualMemory() {
   const [gameOver, setGameOver] = useState(false);
   const [gameStopped, setGameStopped] = useState(false);
   const [levelDone, setLevelDone] = useState(false);
-  const [tries, setTries] = useState(cells);
   const [allLevelsDone, setAllLevelsDone] = useState(false);
   const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
+
   const min = 0;
   const max = levels[levelIndex].gridLength - 1;
 
   function runGame() {
     const currentCells = levels[levelIndex].cells;
     const showTime = levels[levelIndex].showTime;
+
     generateHighlightedCells(currentCells);
+
     setMensagemAcessibilidade(`Memorize o padrão do nível ${levelIndex + 1}`);
+
     const timeout = setTimeout(() => {
       setIsShowingPartern(false);
 
@@ -52,6 +52,7 @@ export function useVisualMemory() {
 
       setGridLength(levels[levelIndex].gridLength);
     }, 400);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [levelIndex]);
 
@@ -77,8 +78,40 @@ export function useVisualMemory() {
     setHighlightedCells(newHighlightedCells);
   }
 
+  function checkCorrectCells(cellsToCheck) {
+    const selectedCellsArr = [...cellsToCheck];
+
+    const isCorrect = selectedCellsArr.every((element) => {
+      return highlightedCells.has(element);
+    });
+
+    if (levelIndex === 14) {
+      if (isCorrect) {
+        setAllLevelsDone(true);
+      } else {
+        setGameOver(true);
+      }
+    } else {
+      if (isCorrect) {
+        setLevelDone(true);
+
+        setMensagemAcessibilidade(
+          `Parabéns! Você completou o nível ${levelIndex + 1}`,
+        );
+      } else {
+        setGameOver(true);
+
+        setMensagemAcessibilidade("Resposta incorreta. Você perdeu.");
+      }
+    }
+  }
+
   function handleCellClick(cell) {
     if (isShowingPartern) {
+      return;
+    }
+
+    if (selectedCells.has(cell)) {
       return;
     }
 
@@ -86,42 +119,15 @@ export function useVisualMemory() {
 
     cellClicked.add(cell);
 
-    if (!selectedCells.has(cell)) {
-      setTries((tries) => tries - 1);
-      setSelectedCells(cellClicked);
-      setMensagemAcessibilidade(`Célula ${cell + 1} selecionada`);
-    }
-  }
+    setSelectedCells(cellClicked);
 
-  function checkCorrectCells() {
-    const selectedCellsArr = [...selectedCells];
-    const isCorrect = selectedCellsArr.every((element) => {
-      return highlightedCells.has(element);
-    });
+    setMensagemAcessibilidade(`Célula ${cell + 1} selecionada`);
 
-    if (levelIndex === 14) {
-      if (isCorrect) setAllLevelsDone(true);
-      else setGameOver(true);
-    } else {
-      if (isCorrect) {
-        setLevelDone(true);
-        setMensagemAcessibilidade(
-          `Parabéns! Você completou o nível ${levelIndex + 1}`,
-        );
-      } else {
-        setGameOver(true);
-        setMensagemAcessibilidade("Resposta incorreta. Você perdeu.");
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (selectedCells.size === cells) {
+    if (cellClicked.size === cells) {
       setGameStopped(true);
-      checkCorrectCells();
+      checkCorrectCells(cellClicked);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tries]);
+  }
 
   function getCellStatus(cell) {
     if (highlightedCells.has(cell)) {
@@ -134,7 +140,6 @@ export function useVisualMemory() {
   }
 
   function resetGame() {
-    const currentCells = levels[levelIndex].cells;
     setTimeout(() => {
       setGameOver(false);
       runGame();
@@ -142,7 +147,6 @@ export function useVisualMemory() {
       setIsShowingPartern(true);
       setSelectedCells(new Set());
       setLevelDone(false);
-      setTries(currentCells);
     }, 400);
   }
 
@@ -173,6 +177,7 @@ export function useVisualMemory() {
     }
 
     enviar();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver, allLevelsDone]);
 
