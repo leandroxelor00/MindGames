@@ -6,8 +6,20 @@ const {
   getStreak,
 } = require("../services/scores.service");
 
+const { isUuid } = require("../validators/validators");
+
 function createScore(req, res) {
-  const score = req.body;
+  let userId = "";
+
+  if (req.user) {
+    userId = String(req.user.id);
+  } else if (isUuid(req.body.userId)) {
+    userId = req.body.userId;
+  } else {
+    return res.status(400).json({ message: "userId anonimo invalido" });
+  }
+
+  const score = { ...req.body, userId };
 
   if (
     typeof score.userId !== "string" ||
@@ -36,7 +48,16 @@ function createScore(req, res) {
 }
 
 function getScoresByUser(req, res) {
-  const userId = req.user ? req.user.id : req.params.userId;
+  let userId = "";
+
+  if (req.user) {
+    userId = String(req.user.id);
+  } else if (isUuid(req.params.userId)) {
+    userId = req.params.userId;
+  } else {
+    return res.status(400).json({ message: "userId anonimo invalido" });
+  }
+
   const result = getScoresByUserId(userId);
 
   if (result.length === 0) {
@@ -54,6 +75,11 @@ function getScoresByUser(req, res) {
 function migrate(req, res) {
   const oldUserId = req.body.oldUserId;
   const newUserId = req.user.id;
+
+  if (!isUuid(oldUserId)) {
+    return res.status(400).json({ message: "oldUserId invalido" });
+  }
+
   try {
     const migrate = migrateScores(oldUserId, newUserId);
     if (migrate > 0) {
@@ -77,7 +103,15 @@ function migrate(req, res) {
 }
 
 function getSummary(req, res) {
-  const userId = req.user ? req.user.id : req.params.userId;
+  let userId = "";
+
+  if (req.user) {
+    userId = String(req.user.id);
+  } else if (isUuid(req.params.userId)) {
+    userId = req.params.userId;
+  } else {
+    return res.status(400).json({ message: "userId anonimo invalido" });
+  }
 
   try {
     const result = summary(userId);
@@ -91,7 +125,15 @@ function getSummary(req, res) {
 }
 
 function getStreakController(req, res) {
-  const userId = req.user ? req.user.id : req.params.userId;
+  let userId = "";
+
+  if (req.user) {
+    userId = String(req.user.id);
+  } else if (isUuid(req.params.userId)) {
+    userId = req.params.userId;
+  } else {
+    return res.status(400).json({ message: "userId anonimo invalido" });
+  }
 
   try {
     const result = getStreak(userId);
