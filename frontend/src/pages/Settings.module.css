@@ -156,6 +156,27 @@
   }
 }
 
+.selectVoz {
+  min-width: 13.75rem;
+  padding: 0.625rem 0.75rem;
+
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.5rem;
+
+  background: var(--cor-input);
+  color: var(--cor-texto);
+
+  font-family: inherit;
+  font-size: 0.875rem;
+
+  cursor: pointer;
+}
+
+.selectVoz:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
 @media (max-width: 480px) {
   .topo {
     align-items: flex-start;

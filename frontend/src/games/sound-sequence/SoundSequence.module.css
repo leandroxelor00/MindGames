@@ -1,0 +1,413 @@
+.container {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--cor-texto);
+}
+
+.container h1 {
+  margin-bottom: 0.75rem;
+  color: var(--cor-texto);
+}
+
+.container p {
+  max-width: 700px;
+  line-height: 1.6;
+  color: var(--cor-texto-secundario);
+}
+
+.genius {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  margin: 2rem auto;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #111111;
+  border: 6px solid #111111;
+  box-shadow:
+    0 0.5rem 1.5rem rgba(0, 0, 0, 0.25),
+    0 0 0 6px var(--cor-superficie);
+}
+
+.setor {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+
+  background-color: transparent;
+
+  color: #ffffff;
+  font-size: 3rem;
+  font-weight: 800;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    filter 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.setor span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+
+  pointer-events: none;
+}
+
+/* =========================
+   CORES DOS SETORES
+   ========================= */
+
+.verde {
+  background: #20b94b;
+  clip-path: polygon(0 0, 100% 0, 50% 50%);
+}
+
+.vermelho {
+  background: #f21f2b;
+  clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+}
+
+.amarelo {
+  background: #ffe600;
+  color: #111111;
+  clip-path: polygon(100% 100%, 0 100%, 50% 50%);
+}
+
+.azul {
+  background: #0ea5d9;
+  clip-path: polygon(0 100%, 0 0, 50% 50%);
+}
+
+/* =========================
+   INTERAÇÃO
+   ========================= */
+
+.setor:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+.setor:active:not(:disabled) {
+  filter: brightness(1.35);
+}
+
+.setor:focus-visible {
+  outline: 4px solid #ffffff;
+  outline-offset: -8px;
+  z-index: 6;
+}
+
+.setor:disabled {
+  cursor: default;
+}
+
+/* =========================
+   SETOR ATIVO
+   ========================= */
+
+.setor.ativo {
+  filter: brightness(1.5);
+  z-index: 2;
+}
+
+.verde.ativo {
+  box-shadow:
+    inset 0 0 50px rgba(255, 255, 255, 0.8),
+    0 0 40px rgba(32, 185, 75, 0.9);
+}
+
+.vermelho.ativo {
+  box-shadow:
+    inset 0 0 50px rgba(255, 255, 255, 0.8),
+    0 0 40px rgba(242, 31, 43, 0.9);
+}
+
+.azul.ativo {
+  box-shadow:
+    inset 0 0 50px rgba(255, 255, 255, 0.8),
+    0 0 40px rgba(14, 165, 217, 0.9);
+}
+
+.amarelo.ativo {
+  box-shadow:
+    inset 0 0 50px rgba(255, 255, 255, 0.8),
+    0 0 40px rgba(255, 230, 0, 0.9);
+}
+
+/* =========================
+   CENTRO
+   ========================= */
+
+.centro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  z-index: 10;
+
+  width: 95px;
+  height: 95px;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--cor-superficie);
+  border: 6px solid #111111;
+
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.35);
+
+  pointer-events: none;
+}
+
+.centro span {
+  font-size: 2rem;
+}
+
+/* =========================
+   FEEDBACK DE ACERTO
+   ========================= */
+
+.feedbackAcerto {
+  border-color: #22c55e;
+
+  box-shadow:
+    0 0 0 6px var(--cor-superficie),
+    0 0 35px rgba(34, 197, 94, 0.75);
+}
+
+/* =========================
+   FEEDBACK DE ERRO
+   ========================= */
+
+.feedbackErro {
+  border-color: #ef4444;
+
+  box-shadow:
+    0 0 0 6px var(--cor-superficie),
+    0 0 35px rgba(239, 68, 68, 0.8);
+
+  animation: erro 0.3s ease;
+}
+
+@keyframes erro {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-8px);
+  }
+
+  50% {
+    transform: translateX(8px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* =========================
+   ALTO CONTRASTE
+   ========================= */
+
+/*
+ * O alto contraste global altera as variáveis do site.
+ * O Genius possui cores próprias, então preservamos
+ * essas cores aqui e usamos versões mais luminosas
+ * para melhorar a distinção visual.
+ */
+
+:global(html[data-alto-contraste="true"]) .genius {
+  background: #000000;
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 0 6px #000000,
+    0 0 0 10px #ffffff;
+}
+
+:global(html[data-alto-contraste="true"]) .genius .verde {
+  background: #00ff55;
+  color: #000000;
+}
+
+:global(html[data-alto-contraste="true"]) .genius .vermelho {
+  background: #ff3333;
+  color: #000000;
+}
+
+:global(html[data-alto-contraste="true"]) .genius .azul {
+  background: #00bfff;
+  color: #000000;
+}
+
+:global(html[data-alto-contraste="true"]) .genius .amarelo {
+  background: #ffff00;
+  color: #000000;
+}
+
+:global(html[data-alto-contraste="true"]) .genius .setor {
+  border: 0;
+}
+
+:global(html[data-alto-contraste="true"]) .genius .setor span {
+  text-shadow: none;
+}
+
+:global(html[data-alto-contraste="true"]) .genius .centro {
+  background: #000000;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+/* Foco ainda mais evidente no alto contraste */
+
+:global(html[data-alto-contraste="true"]) .genius .setor:focus-visible {
+  outline: 5px solid #ffffff;
+  outline-offset: -10px;
+}
+
+/* Feedback no alto contraste */
+
+:global(html[data-alto-contraste="true"]) .feedbackAcerto {
+  border-color: #00ff66;
+
+  box-shadow:
+    0 0 0 6px #000000,
+    0 0 0 10px #00ff66,
+    0 0 35px #00ff66;
+}
+
+:global(html[data-alto-contraste="true"]) .feedbackErro {
+  border-color: #ff3333;
+
+  box-shadow:
+    0 0 0 6px #000000,
+    0 0 0 10px #ff3333,
+    0 0 35px #ff3333;
+}
+
+/* =========================
+   REDUZIR ANIMAÇÕES
+   ========================= */
+
+:global(html[data-reduzir-animacoes="true"]) .genius,
+:global(html[data-reduzir-animacoes="true"]) .setor {
+  transition: none;
+}
+
+:global(html[data-reduzir-animacoes="true"]) .feedbackErro {
+  animation: none;
+}
+
+:global(html[data-reduzir-animacoes="true"]) .setor.ativo {
+  transform: none;
+}
+
+/* =========================
+   BOTÃO COMEÇAR / JOGAR NOVAMENTE
+   ========================= */
+
+.container button.botao {
+  border: none;
+  border-radius: 10px;
+
+  padding: 0.8rem 1.5rem;
+
+  background: var(--cor-accent);
+  color: #ffffff;
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.container button.botao:hover:not(:disabled) {
+  background: var(--cor-accent-hover);
+  transform: translateY(-1px);
+}
+
+.container button.botao:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.container button.botao:disabled {
+  background: var(--cor-desativado);
+  cursor: not-allowed;
+}
+
+.container button.botao:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.container button.botao + button.botao {
+  margin-top: 0.75rem;
+}
+
+/* =========================
+   FASE
+   ========================= */
+
+.fase {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+/* =========================
+   RESPONSIVIDADE
+   ========================= */
+
+@media (max-width: 500px) {
+  .genius {
+    width: 300px;
+    height: 300px;
+  }
+
+  .setor {
+    font-size: 2.5rem;
+  }
+
+  .centro {
+    width: 80px;
+    height: 80px;
+  }
+
+  .centro span {
+    font-size: 1.7rem;
+  }
+}

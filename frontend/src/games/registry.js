@@ -4,6 +4,7 @@ import { NumberChallenge } from "./number-challenge/NumberChallenge";
 import { VisualMemory } from "./visual-memory/VisualMemory";
 import { FoodMemory } from "./food-memory/FoodMemory";
 import { ReactionTime } from "./reaction-time/ReactionTime";
+import { SoundSequence } from "./sound-sequence/SoundSequence";
 export const gamesRegistry = [
   {
     id: "memory-match",
@@ -34,5 +35,10 @@ export const gamesRegistry = [
     id: "reaction-time",
     name: "Reaction Time",
     component: ReactionTime,
+  },
+  {
+    id: "sound-sequence",
+    name: "Sound Sequence",
+    component: SoundSequence,
   },
 ];

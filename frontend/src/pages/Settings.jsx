@@ -1,6 +1,6 @@
-import { useAccessibility } from "../hooks/useAccessibility";
-
 import { Link } from "react-router-dom";
+
+import { useAccessibility } from "../context/AccessibilityContext";
 
 import styles from "./Settings.module.css";
 
@@ -8,41 +8,40 @@ export function Settings() {
   const {
     altoContraste,
     setAltoContraste,
-    fonteEscala,
-    setFonteEscala,
     reduzirAnimacoes,
     setReduzirAnimacoes,
+    fonteEscala,
+    setFonteEscala,
+    vozNarrador,
+    setVozNarrador,
+    vozesDisponiveis,
   } = useAccessibility();
 
   return (
-    <div className={styles.container}>
-      <header className={styles.topo}>
+    <main className={styles.container}>
+      <div className={styles.topo}>
         <h1 className={styles.titulo}>Acessibilidade</h1>
 
         <Link to="/" className={styles.voltarLink}>
-          Voltar para Home
+          Voltar
         </Link>
-      </header>
+      </div>
 
-      <main className={styles.card}>
+      <section className={styles.card}>
         <p className={styles.descricao}>
-          Personalize a experiência do MindGames de acordo com suas
-          necessidades.
+          Personalize a experiência do MindGames de acordo com suas necessidades
+          de acessibilidade.
         </p>
 
         <div className={styles.opcoes}>
           <div className={styles.opcao}>
             <div className={styles.info}>
-              <label
-                htmlFor="alto-contraste"
-                className={styles.nome}
-              >
+              <label htmlFor="alto-contraste" className={styles.nome}>
                 Alto contraste
               </label>
 
               <span className={styles.detalhe}>
-                Aumenta o contraste entre o fundo, textos e elementos da
-                interface.
+                Aumenta o contraste das cores da interface.
               </span>
             </div>
 
@@ -51,21 +50,18 @@ export function Settings() {
               className={styles.checkbox}
               type="checkbox"
               checked={altoContraste}
-              onChange={(e) => setAltoContraste(e.target.checked)}
+              onChange={(event) => setAltoContraste(event.target.checked)}
             />
           </div>
 
           <div className={styles.opcao}>
             <div className={styles.info}>
-              <label
-                htmlFor="reduzir-animacoes"
-                className={styles.nome}
-              >
+              <label htmlFor="reduzir-animacoes" className={styles.nome}>
                 Reduzir animações
               </label>
 
               <span className={styles.detalhe}>
-                Reduz transições e animações da interface.
+                Diminui transições e animações da interface.
               </span>
             </div>
 
@@ -74,21 +70,18 @@ export function Settings() {
               className={styles.checkbox}
               type="checkbox"
               checked={reduzirAnimacoes}
-              onChange={(e) => setReduzirAnimacoes(e.target.checked)}
+              onChange={(event) => setReduzirAnimacoes(event.target.checked)}
             />
           </div>
 
           <div className={styles.opcao}>
             <div className={styles.info}>
-              <label
-                htmlFor="tamanho-fonte"
-                className={styles.nome}
-              >
+              <label htmlFor="tamanho-fonte" className={styles.nome}>
                 Tamanho da fonte
               </label>
 
               <span className={styles.detalhe}>
-                Ajuste o tamanho dos textos da aplicação.
+                Ajuste o tamanho dos textos da interface.
               </span>
             </div>
 
@@ -97,13 +90,11 @@ export function Settings() {
                 id="tamanho-fonte"
                 className={styles.slider}
                 type="range"
-                min={1}
-                max={1.5}
-                step={0.1}
+                min="1"
+                max="1.5"
+                step="0.1"
                 value={fonteEscala}
-                onChange={(e) =>
-                  setFonteEscala(Number(e.target.value))
-                }
+                onChange={(event) => setFonteEscala(Number(event.target.value))}
                 aria-label="Tamanho da fonte"
               />
 
@@ -112,8 +103,35 @@ export function Settings() {
               </span>
             </div>
           </div>
+
+          <div className={styles.opcao}>
+            <div className={styles.info}>
+              <label htmlFor="voz-narrador" className={styles.nome}>
+                Voz do narrador
+              </label>
+
+              <span className={styles.detalhe}>
+                Escolha a voz utilizada pelos jogos com narração.
+              </span>
+            </div>
+
+            <select
+              id="voz-narrador"
+              className={styles.selectVoz}
+              value={vozNarrador}
+              onChange={(event) => setVozNarrador(event.target.value)}
+            >
+              <option value="automatica">Automática</option>
+
+              {vozesDisponiveis.map((voz) => (
+                <option key={`${voz.name}-${voz.lang}`} value={voz.name}>
+                  {voz.name} ({voz.lang})
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
