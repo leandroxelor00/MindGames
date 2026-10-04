@@ -16,6 +16,13 @@
   padding: 1.25rem;
 }
 
+.tentativa {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  color: #ffffff;
+}
+
 .mensagem {
   font-size: 1.8rem;
   font-weight: 700;
@@ -28,6 +35,31 @@
   font-weight: 800;
   margin: 0 0 1.25rem;
   color: #ffffff;
+}
+
+.resumo {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: -0.75rem 0 1.25rem;
+  color: #ffffff;
+}
+
+.resultados {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+}
+
+.resultados span {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .botao {
@@ -51,18 +83,27 @@
 }
 
 /* Estados */
+
 .idle {
   background: #5b4fe8;
 }
+
 .waiting {
   background: #d9463c;
 }
+
 .ready {
   background: #2e7d32;
 }
+
+.result {
+  background: #2563eb;
+}
+
 .tooSoon {
   background: #c62828;
 }
+
 .done {
   background: #1a1d29;
 }
@@ -72,11 +113,17 @@
     min-height: 320px;
     margin: 1.5rem 1rem;
   }
+
   .mensagem {
     font-size: 1.4rem;
   }
+
   .tempo {
     font-size: 2.2rem;
+  }
+
+  .resultados {
+    max-width: 300px;
   }
 }
 
