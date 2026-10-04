@@ -11,7 +11,7 @@ const games = [
   "visual-memory",
   "food-memory",
   "reaction-time",
-  "sound-sequence"
+  "sound-sequence",
 ];
 
 const summaryCategory = {
@@ -101,7 +101,9 @@ function filterScoresByCategory(scores, list) {
 function getStreak(userId) {
   const scores = selectByUserId(userId);
 
-  const formatedDates = scores.map((ele) => new Date(ele.playedAt));
+  const formatedDates = scores.map(
+    (ele) => new Date(ele.playedAt.replace(" ", "T") + "Z"),
+  );
 
   const newFormatedDates = formatedDates.map((ele) =>
     new Intl.DateTimeFormat("sv-SE", {
