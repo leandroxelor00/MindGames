@@ -1,14 +1,30 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { insertUser, selectByUserEmail } = require("../models/user.model");
+const {
+  insertUser,
+  selectByUserEmail,
+  selectByUsername,
+} = require("../models/user.model");
+const { isValidUsername } = require("../validators/validators");
 
-async function registerUser(email, plainPassword) {
-  if (plainPassword.length < 8) {
-    throw new Error("A senha precisa ter mais que 8 caracteres");
+async function registerUser(email, plainPassword, username) {
+  if (typeof username !== "string" || !isValidUsername(username.trim())) {
+    throw new Error("Username inválido. Use 3 a 16 letras, números ou _");
   }
 
+  const trimUsername = username.trim();
+
+  if (plainPassword.length < 8) {
+    throw new Error("A senha precisa ter pelo menos 8 caracteres");
+  }
+
+  const existingUsername = selectByUsername(trimUsername);
   const existingUser = selectByUserEmail(email);
+
+  if (existingUsername) {
+    throw new Error("Esse username já está em uso");
+  }
 
   if (existingUser) {
     throw new Error("Esse email já existe");
@@ -16,7 +32,7 @@ async function registerUser(email, plainPassword) {
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(plainPassword, saltRounds);
-  insertUser(email, passwordHash);
+  insertUser(email, passwordHash, trimUsername);
 
   const user = selectByUserEmail(email);
 

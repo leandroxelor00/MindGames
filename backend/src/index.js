@@ -1,6 +1,7 @@
 const { db } = require("./db/connection");
 require("./db/migrations/001_create_scores");
 require("./db/migrations/002_create_users");
+require("./db/migrations/003_add_username_to_users");
 const { scoreRoutes } = require("./routes/scores.routes");
 const { authRoutes } = require("./routes/auth.routes");
 const { dailyChallengeRoutes } = require("./routes/dailyChallenge.routes");

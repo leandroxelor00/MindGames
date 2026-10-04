@@ -6,12 +6,20 @@ function selectByUserEmail(email) {
   return user;
 }
 
-function insertUser(email, passwordHash) {
-  const insert = db.prepare(
-    `INSERT INTO users (email, passwordHash) VALUES (?, ?)`,
+function selectByUsername(username) {
+  const select = db.prepare(
+    " SELECT * FROM users WHERE username = ? COLLATE NOCASE",
   );
-  const user = insert.run(email, passwordHash);
+  const user = select.get(username);
   return user;
 }
 
-module.exports = { selectByUserEmail, insertUser };
+function insertUser(email, passwordHash, username) {
+  const insert = db.prepare(
+    `INSERT INTO users (email, passwordHash) VALUES (?, ?, ?)`,
+  );
+  const user = insert.run(email, passwordHash, username);
+  return user;
+}
+
+module.exports = { selectByUserEmail, selectByUsername, insertUser };
