@@ -40,3 +40,9 @@ export function getCurrentUserId() {
     return getUserId();
   }
 }
+
+export function resetUserId() {
+  const novoId = crypto.randomUUID();
+  localStorage.setItem(CHAVE_USER_ID, novoId);
+  return novoId;
+}

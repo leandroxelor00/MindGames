@@ -1,5 +1,5 @@
 import { apiFetch, CHAVE_TOKEN } from "./api";
-import { salvarPendente } from "./pendingScores";
+import { salvarPendente ,getPendentes, salvarListaPendentes } from "./pendingScores";
 import { getCurrentUserId, getUserId } from "./userId";
 
 export async function postScore(result) {
@@ -90,4 +90,28 @@ export async function getStreak() {
 export async function getDailyChallenge() {
   const resultado = await apiFetch("/daily-challenge");
   return resultado.result;
+}
+
+export async function reenviarPendentes() {
+  const pendentes = getPendentes();
+
+  if (pendentes.length === 0) {
+    return;
+  }
+
+  const aindaFalharam = [];
+
+  for (const resultado of pendentes) {
+    try {
+      await apiFetch("/scores", {
+        method: "POST",
+        body: JSON.stringify(resultado),
+      });
+    // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      aindaFalharam.push(resultado);
+    }
+  }
+
+  salvarListaPendentes(aindaFalharam);
 }

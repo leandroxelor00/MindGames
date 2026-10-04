@@ -16,11 +16,17 @@ export function Home() {
 
   useEffect(() => {
     async function loadHomeData() {
-      const streakResult = await getStreak();
-      const challengeResult = await getDailyChallenge();
+      try {
+        const [streakResult, challengeResult] = await Promise.all([
+          getStreak(),
+          getDailyChallenge(),
+        ]);
 
-      setStreak(streakResult);
-      setDailyChallenge(challengeResult);
+        setStreak(streakResult);
+        setDailyChallenge(challengeResult);
+      } catch (error) {
+        console.error("Não foi possível carregar dados da Home:", error);
+      }
     }
 
     loadHomeData();
