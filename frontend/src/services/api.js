@@ -21,6 +21,12 @@ export async function apiFetch(path, options = {}) {
   });
 
   if (!response.ok) {
+    if (response.status === 401 && token) {
+      localStorage.removeItem(CHAVE_TOKEN);
+      localStorage.removeItem(CHAVE_USER);
+      window.dispatchEvent(new CustomEvent("auth:expired"));
+    }
+
     let errorMessage = `Erro na API: ${response.status}`;
     const errorText = await response.text();
 
