@@ -13,10 +13,10 @@ function createScore(req, res) {
 
   if (req.user) {
     userId = String(req.user.id);
-  } else if (isUuid(req.body.userId)) {
-    userId = req.body.userId;
+  } else if (isUuid(req.body?.userId)) {
+    userId = req.body?.userId;
   } else {
-    return res.status(400).json({ message: "userId anonimo invalido" });
+    return res.status(400).json({ message: "userId anônimo inválido" });
   }
 
   const score = { ...req.body, userId };
@@ -55,7 +55,7 @@ function getScoresByUser(req, res) {
   } else if (isUuid(req.params.userId)) {
     userId = req.params.userId;
   } else {
-    return res.status(400).json({ message: "userId anonimo invalido" });
+    return res.status(400).json({ message: "userId anônimo inválido" });
   }
 
   const result = getScoresByUserId(userId);
@@ -73,11 +73,11 @@ function getScoresByUser(req, res) {
 }
 
 function migrate(req, res) {
-  const oldUserId = req.body.oldUserId;
+  const oldUserId = req.body?.oldUserId;
   const newUserId = req.user.id;
 
   if (!isUuid(oldUserId)) {
-    return res.status(400).json({ message: "oldUserId invalido" });
+    return res.status(400).json({ message: "oldUserId inválido" });
   }
 
   try {
@@ -110,7 +110,7 @@ function getSummary(req, res) {
   } else if (isUuid(req.params.userId)) {
     userId = req.params.userId;
   } else {
-    return res.status(400).json({ message: "userId anonimo invalido" });
+    return res.status(400).json({ message: "userId anônimo inválido" });
   }
 
   try {
@@ -132,7 +132,7 @@ function getStreakController(req, res) {
   } else if (isUuid(req.params.userId)) {
     userId = req.params.userId;
   } else {
-    return res.status(400).json({ message: "userId anonimo invalido" });
+    return res.status(400).json({ message: "userId anônimo inválido" });
   }
 
   try {
