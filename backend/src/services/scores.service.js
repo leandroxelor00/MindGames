@@ -29,7 +29,9 @@ function saveScore(score) {
     score.avgReactionTime < 0 ||
     score.levelReached < 0
   ) {
-    throw new TypeError("Valores inválidos");
+    const error = new TypeError("Valores inválidos");
+    error.status = 400;
+    throw error;
   }
   return insertScore(
     score.userId,
@@ -37,7 +39,7 @@ function saveScore(score) {
     score.score,
     score.accuracy,
     score.avgReactionTime,
-    score.levelReached,
+    score.levelReached
   );
 }
 
@@ -47,7 +49,11 @@ function getScoresByUserId(userId) {
 
 function migrateScores(oldUserId, newUserId) {
   if (!oldUserId || !newUserId) {
-    throw new TypeError("É obrigatório ter o Id antigo e novo do usuário");
+    const error = new TypeError(
+      "É obrigatório ter o Id antigo e novo do usuário"
+    );
+    error.status = 400;
+    throw error;
   }
 
   const changes = updateUserIdInScores(oldUserId, newUserId);
@@ -60,11 +66,11 @@ function summary(userId) {
   const memoryCategory = filterScoresByCategory(scores, summaryCategory.memory);
   const attentionCategory = filterScoresByCategory(
     scores,
-    summaryCategory.attention,
+    summaryCategory.attention
   );
   const velocityCategory = filterScoresByCategory(
     scores,
-    summaryCategory.velocity,
+    summaryCategory.velocity
   );
   const logicCategory = filterScoresByCategory(scores, summaryCategory.logic);
 
@@ -93,7 +99,7 @@ function avgAccuracyByCategory(category) {
 
 function filterScoresByCategory(scores, list) {
   const scoresByCategory = scores.filter((score) =>
-    list.includes(score.gameId),
+    list.includes(score.gameId)
   );
   return scoresByCategory;
 }
@@ -102,13 +108,13 @@ function getStreak(userId) {
   const scores = selectByUserId(userId);
 
   const formatedDates = scores.map(
-    (ele) => new Date(ele.playedAt.replace(" ", "T") + "Z"),
+    (ele) => new Date(ele.playedAt.replace(" ", "T") + "Z")
   );
 
   const newFormatedDates = formatedDates.map((ele) =>
     new Intl.DateTimeFormat("sv-SE", {
       timeZone: "America/Sao_Paulo",
-    }).format(ele),
+    }).format(ele)
   );
 
   const date = new Date();
