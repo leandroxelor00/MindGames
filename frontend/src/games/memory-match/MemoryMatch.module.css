@@ -55,6 +55,8 @@
 /* Container responsável por dar a perspectiva 3D */
 
 .cartaContainer {
+  min-width: 44px;
+  min-height: 44px;
   aspect-ratio: 1 / 1;
   width: 100%;
   perspective: 1000px;

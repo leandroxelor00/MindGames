@@ -336,24 +336,21 @@
    BOTÃO COMEÇAR / JOGAR NOVAMENTE
    ========================= */
 
-.container button.botao {
-  border: none;
-  border-radius: 10px;
-
-  padding: 0.8rem 1.5rem;
-
-  background: var(--cor-accent);
-  color: #ffffff;
-
-  font-size: 1rem;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.15s ease,
-    transform 0.15s ease;
-}
+   .container button.botao {
+    min-width: 44px;
+    min-height: 44px;
+    border: none;
+    border-radius: 10px;
+  
+    padding: 0.8rem 1.5rem;
+  
+    background: var(--cor-accent);
+    color: #ffffff;
+  
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
 
 .container button.botao:hover:not(:disabled) {
   background: var(--cor-accent-hover);
