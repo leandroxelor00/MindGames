@@ -1,4 +1,4 @@
-import { use, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export function useAdaptiveDifficulty({
   windowSize = 5,

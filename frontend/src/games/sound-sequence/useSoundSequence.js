@@ -1,4 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
@@ -18,7 +23,12 @@ const CORES = {
   ArrowDown: "amarelo",
 };
 
-const TECLAS = ["ArrowUp", "ArrowRight", "ArrowLeft", "ArrowDown"];
+const TECLAS = [
+  "ArrowUp",
+  "ArrowRight",
+  "ArrowLeft",
+  "ArrowDown",
+];
 
 export function useSoundSequence() {
   const { vozNarrador } = useAccessibility();
@@ -45,7 +55,7 @@ export function useSoundSequence() {
     return audioContextRef.current;
   }
 
-  async function tocarSom(tecla) {
+  const tocarSom = useCallback(async (tecla) => {
     const frequencia = FREQUENCIAS[tecla];
 
     if (!frequencia) {
@@ -69,10 +79,14 @@ export function useSoundSequence() {
     const agora = audioContext.currentTime;
 
     ganho.gain.setValueAtTime(0.0001, agora);
-
-    ganho.gain.exponentialRampToValueAtTime(0.15, agora + 0.02);
-
-    ganho.gain.exponentialRampToValueAtTime(0.0001, agora + 0.4);
+    ganho.gain.exponentialRampToValueAtTime(
+      0.15,
+      agora + 0.02
+    );
+    ganho.gain.exponentialRampToValueAtTime(
+      0.0001,
+      agora + 0.4
+    );
 
     oscillator.connect(ganho);
     ganho.connect(audioContext.destination);
@@ -83,105 +97,135 @@ export function useSoundSequence() {
     setTimeout(() => {
       setCorAtiva(null);
     }, 400);
-  }
+  }, []);
 
-  function obterVozNarrador() {
+  const obterVozNarrador = useCallback(() => {
     if (!("speechSynthesis" in window)) {
       return null;
     }
-
+  
     const vozes = window.speechSynthesis.getVoices();
-
+  
     if (vozNarrador !== "automatica") {
-      const vozSelecionada = vozes.find((voz) => voz.name === vozNarrador);
-
+      const vozSelecionada = vozes.find(
+        (voz) => voz.name === vozNarrador
+      );
+  
       if (vozSelecionada) {
         return vozSelecionada;
       }
     }
-
+  
     return (
-      vozes.find((voz) => voz.lang.toLowerCase() === "pt-br") ||
-      vozes.find((voz) => voz.lang.toLowerCase().startsWith("pt")) ||
+      vozes.find(
+        (voz) => voz.lang.toLowerCase() === "pt-br"
+      ) ||
+      vozes.find(
+        (voz) => voz.lang.toLowerCase().startsWith("pt")
+      ) ||
       null
     );
-  }
+  }, [vozNarrador]);
 
-  function criarFala(texto) {
-    const utterance = new SpeechSynthesisUtterance(texto);
+  const criarFala = useCallback(
+    (texto) => {
+      const utterance =
+        new SpeechSynthesisUtterance(texto);
+  
+      const voz = obterVozNarrador();
+  
+      if (voz) {
+        utterance.voice = voz;
+        utterance.lang = voz.lang;
+      } else {
+        utterance.lang = "pt-BR";
+      }
+  
+      return utterance;
+    },
+    [obterVozNarrador]
+  );
 
-    const voz = obterVozNarrador();
+  const narrar = useCallback(
+    (texto) => {
+      if (!narradorAtivo) {
+        return;
+      }
+  
+      if (!("speechSynthesis" in window)) {
+        return;
+      }
+  
+      window.speechSynthesis.cancel();
+  
+      const utterance = criarFala(texto);
+  
+      window.speechSynthesis.speak(utterance);
+    },
+    [narradorAtivo, criarFala]
+  );
 
-    if (voz) {
-      utterance.voice = voz;
-      utterance.lang = voz.lang;
-    } else {
-      utterance.lang = "pt-BR";
-    }
-
-    return utterance;
-  }
-
-  function narrar(texto) {
-    if (!narradorAtivo) {
-      return;
-    }
-
-    if (!("speechSynthesis" in window)) {
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    const utterance = criarFala(texto);
-
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function alternarNarrador() {
+  const alternarNarrador = useCallback(() => {
     setNarradorAtivo((ativoAtual) => {
       const novoEstado = !ativoAtual;
 
-      if (!novoEstado && "speechSynthesis" in window) {
+      if (
+        !novoEstado &&
+        "speechSynthesis" in window
+      ) {
         window.speechSynthesis.cancel();
       }
 
       return novoEstado;
     });
-  }
+  }, []);
 
-  function adicionarPassoNaSequencia(seqAtual = sequencia) {
-    const indiceAleatorio = Math.floor(Math.random() * TECLAS.length);
+  const adicionarPassoNaSequencia = useCallback(
+    (seqAtual = sequencia) => {
+      const indiceAleatorio = Math.floor(
+        Math.random() * TECLAS.length
+      );
 
-    const teclaAleatoria = TECLAS[indiceAleatorio];
+      const teclaAleatoria = TECLAS[indiceAleatorio];
 
-    const novaSequencia = [...seqAtual, teclaAleatoria];
+      const novaSequencia = [
+        ...seqAtual,
+        teclaAleatoria,
+      ];
 
-    setSequencia(novaSequencia);
+      setSequencia(novaSequencia);
 
-    return novaSequencia;
-  }
+      return novaSequencia;
+    },
+    [sequencia]
+  );
 
-  async function reproduzirSequencia(seq) {
-    setReproduzindo(true);
-    setPassoAtual(0);
+  const reproduzirSequencia = useCallback(
+    async (seq) => {
+      setReproduzindo(true);
+      setPassoAtual(0);
 
-    for (const tecla of seq) {
-      await tocarSom(tecla);
+      for (const tecla of seq) {
+        await tocarSom(tecla);
 
-      await new Promise((resolve) => setTimeout(resolve, 750));
-    }
+        await new Promise((resolve) =>
+          setTimeout(resolve, 750)
+        );
+      }
 
-    setReproduzindo(false);
-    setPassoAtual(0);
-  }
+      setReproduzindo(false);
+      setPassoAtual(0);
+    },
+    [tocarSom]
+  );
 
-  function iniciarJogo() {
+  const iniciarJogo = useCallback(() => {
     if (fase > 0 && !gameOver) {
       return;
     }
 
-    const primeiraSequencia = adicionarPassoNaSequencia([]);
+    const primeiraSequencia =
+      adicionarPassoNaSequencia([]);
 
     setFase(1);
     setPassoAtual(0);
@@ -189,16 +233,18 @@ export function useSoundSequence() {
     setFeedback(null);
     setCorAtiva(null);
 
-    if (!narradorAtivo || !("speechSynthesis" in window)) {
+    if (
+      !narradorAtivo ||
+      !("speechSynthesis" in window)
+    ) {
       reproduzirSequencia(primeiraSequencia);
-
       return;
     }
 
     window.speechSynthesis.cancel();
 
     const utterance = criarFala(
-      "Use as setas do teclado. Seta para cima é o som verde mais agudo, seta para baixo é o som amarelo mais grave. Ouça a sequência e repita.",
+      "Use as setas do teclado. Seta para cima é o som verde mais agudo, seta para baixo é o som amarelo mais grave. Ouça a sequência e repita."
     );
 
     utterance.onend = () => {
@@ -206,72 +252,112 @@ export function useSoundSequence() {
     };
 
     window.speechSynthesis.speak(utterance);
-  }
+  }, [
+    fase,
+    gameOver,
+    adicionarPassoNaSequencia,
+    narradorAtivo,
+    reproduzirSequencia,
+    criarFala,
+  ]);
 
-  async function receberTecla(tecla) {
-    if (reproduzindo || gameOver || sequencia.length === 0) {
-      return;
-    }
-
-    if (!FREQUENCIAS[tecla]) {
-      return;
-    }
-
-    if (tecla === sequencia[passoAtual]) {
-      await tocarSom(tecla);
-
-      setFeedback("acerto");
-
-      setTimeout(() => {
-        setFeedback(null);
-      }, 300);
-
-      const proximoPasso = passoAtual + 1;
-
-      if (proximoPasso === sequencia.length) {
-        const novaSequencia = adicionarPassoNaSequencia();
-
-        setFase((faseAtual) => faseAtual + 1);
-
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        reproduzirSequencia(novaSequencia);
-      } else {
-        setPassoAtual(proximoPasso);
+  const receberTecla = useCallback(
+    async (tecla) => {
+      if (
+        reproduzindo ||
+        gameOver ||
+        sequencia.length === 0
+      ) {
+        return;
       }
-    } else {
-      setCorAtiva(null);
-      setFeedback("erro");
-      setGameOver(true);
-    }
-  }
 
-  function testarTecla(tecla) {
-    if (!TECLAS.includes(tecla)) {
-      return;
-    }
+      if (!FREQUENCIAS[tecla]) {
+        return;
+      }
 
-    const jogoAindaNaoComecou = sequencia.length === 0 && !reproduzindo;
+      if (tecla === sequencia[passoAtual]) {
+        await tocarSom(tecla);
 
-    if (jogoAindaNaoComecou) {
-      tocarSom(tecla);
-    }
-  }
+        setFeedback("acerto");
 
-  function pressionarTecla(tecla) {
-    if (!TECLAS.includes(tecla)) {
-      return;
-    }
+        setTimeout(() => {
+          setFeedback(null);
+        }, 300);
 
-    const jogoAindaNaoComecou = sequencia.length === 0 && !reproduzindo;
+        const proximoPasso = passoAtual + 1;
 
-    if (jogoAindaNaoComecou) {
-      testarTecla(tecla);
-      return;
-    }
+        if (proximoPasso === sequencia.length) {
+          const novaSequencia =
+            adicionarPassoNaSequencia();
 
-    receberTecla(tecla);
-  }
+          setFase(
+            (faseAtual) => faseAtual + 1
+          );
+
+          await new Promise((resolve) =>
+            setTimeout(resolve, 1000)
+          );
+
+          reproduzirSequencia(novaSequencia);
+        } else {
+          setPassoAtual(proximoPasso);
+        }
+      } else {
+        setCorAtiva(null);
+        setFeedback("erro");
+        setGameOver(true);
+      }
+    },
+    [
+      reproduzindo,
+      gameOver,
+      sequencia,
+      passoAtual,
+      tocarSom,
+      adicionarPassoNaSequencia,
+      reproduzirSequencia,
+    ]
+  );
+
+  const testarTecla = useCallback(
+    (tecla) => {
+      if (!TECLAS.includes(tecla)) {
+        return;
+      }
+
+      const jogoAindaNaoComecou =
+        sequencia.length === 0 && !reproduzindo;
+
+      if (jogoAindaNaoComecou) {
+        tocarSom(tecla);
+      }
+    },
+    [sequencia, reproduzindo, tocarSom]
+  );
+
+  const pressionarTecla = useCallback(
+    (tecla) => {
+      if (!TECLAS.includes(tecla)) {
+        return;
+      }
+
+      const jogoAindaNaoComecou =
+        sequencia.length === 0 && !reproduzindo;
+
+      if (jogoAindaNaoComecou) {
+        testarTecla(tecla);
+        return;
+      }
+
+      receberTecla(tecla);
+    },
+    [
+      sequencia,
+      reproduzindo,
+      testarTecla,
+      receberTecla,
+    ]
+  );
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -284,12 +370,18 @@ export function useSoundSequence() {
       pressionarTecla(event.key);
     }
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
-  }, [sequencia, passoAtual, reproduzindo, gameOver]);
+  }, [pressionarTecla]);
 
   useEffect(() => {
     if (!gameOver) {
@@ -309,12 +401,15 @@ export function useSoundSequence() {
       try {
         await postScore(resultado);
       } catch (error) {
-        console.error("Não foi possível enviar o resultado:", error);
+        console.error(
+          "Não foi possível enviar o resultado:",
+          error
+        );
       }
     }
 
     enviar();
-  }, [gameOver]);
+  }, [gameOver, fase]);
 
   // Cancela qualquer fala quando o usuário
   // sair da tela do jogo.

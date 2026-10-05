@@ -46,7 +46,6 @@ export function AccessibilityProvider({ children }) {
 
   useEffect(() => {
     if (!("speechSynthesis" in window)) {
-      setVozesDisponiveis([]);
       return;
     }
 
@@ -107,6 +106,7 @@ export function AccessibilityProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAccessibility() {
   return useContext(AccessibilityContext);
 }

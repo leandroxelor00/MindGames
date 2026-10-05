@@ -7,28 +7,22 @@ export function useVisualMemory() {
   const [levelIndex, setLevelIndex] = useState(0);
   const [gridLength, setGridLength] = useState(levels[levelIndex].gridLength);
   const [cells, setCells] = useState(levels[levelIndex].cells);
-  const [showTime, setShowTime] = useState(levels[levelIndex].showTime);
   const [highlightedCells, setHighlightedCells] = useState(new Set());
   const [selectedCells, setSelectedCells] = useState(new Set());
   const [isShowingPartern, setIsShowingPartern] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [gameStopped, setGameStopped] = useState(false);
   const [levelDone, setLevelDone] = useState(false);
-  const [tries, setTries] = useState(cells);
   const [allLevelsDone, setAllLevelsDone] = useState(false);
   const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
+
   const min = 0;
   const max = levels[levelIndex].gridLength - 1;
-
-  useEffect(() => {
-    if (!isShowingPartern) {
-      setGameStopped(false);
-    }
-  }, [isShowingPartern]);
 
   function runGame() {
     const currentCells = levels[levelIndex].cells;
     const showTime = levels[levelIndex].showTime;
+
     generateHighlightedCells(currentCells);
 
     setMensagemAcessibilidade(`Memorize o padrão do nível ${levelIndex + 1}`);
@@ -40,6 +34,7 @@ export function useVisualMemory() {
         "Agora selecione as células que estavam destacadas.",
       );
     }, showTime);
+
     return () => clearTimeout(timeout);
   }
 
@@ -51,11 +46,14 @@ export function useVisualMemory() {
 
   useEffect(() => {
     resetGame();
+
     setTimeout(() => {
       setCells(levels[levelIndex].cells);
+
       setGridLength(levels[levelIndex].gridLength);
-      setShowTime(levels[levelIndex].showTime);
     }, 400);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [levelIndex]);
 
   function gridTemplate() {
@@ -65,36 +63,34 @@ export function useVisualMemory() {
   function generateGrid() {
     return Array.from({ length: gridLength }, (_, i) => i);
   }
+
   function randomPos(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
+
   function generateHighlightedCells(currentCells) {
     const newHighlightedCells = new Set();
+
     while (newHighlightedCells.size < currentCells) {
       newHighlightedCells.add(randomPos(min, max));
     }
+
     setHighlightedCells(newHighlightedCells);
   }
-  function handleCellClick(cell) {
-    if (isShowingPartern) {
-      return;
-    }
-    const cellClicked = new Set(selectedCells);
-    cellClicked.add(cell);
-    if (!selectedCells.has(cell)) {
-      setTries((tries) => tries - 1);
-      setSelectedCells(cellClicked);
-      setMensagemAcessibilidade(`Célula ${cell + 1} selecionada`);
-    }
-  }
 
-  function checkCorrectCells(cell) {
-    const selectedCellsArr = [...selectedCells];
+  function checkCorrectCells(cellsToCheck) {
+    const selectedCellsArr = [...cellsToCheck];
+
     const isCorrect = selectedCellsArr.every((element) => {
       return highlightedCells.has(element);
     });
+
     if (levelIndex === 14) {
-      isCorrect ? setAllLevelsDone(true) : setGameOver(true);
+      if (isCorrect) {
+        setAllLevelsDone(true);
+      } else {
+        setGameOver(true);
+      }
     } else {
       if (isCorrect) {
         setLevelDone(true);
@@ -110,13 +106,28 @@ export function useVisualMemory() {
     }
   }
 
-  useEffect(() => {
-    if (selectedCells.size === cells) {
-      console.log("tentativas acabaram");
-      setGameStopped(true);
-      checkCorrectCells();
+  function handleCellClick(cell) {
+    if (isShowingPartern) {
+      return;
     }
-  }, [tries]);
+
+    if (selectedCells.has(cell)) {
+      return;
+    }
+
+    const cellClicked = new Set(selectedCells);
+
+    cellClicked.add(cell);
+
+    setSelectedCells(cellClicked);
+
+    setMensagemAcessibilidade(`Célula ${cell + 1} selecionada`);
+
+    if (cellClicked.size === cells) {
+      setGameStopped(true);
+      checkCorrectCells(cellClicked);
+    }
+  }
 
   function getCellStatus(cell) {
     if (highlightedCells.has(cell)) {
@@ -129,7 +140,6 @@ export function useVisualMemory() {
   }
 
   function resetGame() {
-    const currentCells = levels[levelIndex].cells;
     setTimeout(() => {
       setGameOver(false);
       runGame();
@@ -137,7 +147,6 @@ export function useVisualMemory() {
       setIsShowingPartern(true);
       setSelectedCells(new Set());
       setLevelDone(false);
-      setTries(currentCells);
     }, 400);
   }
 
@@ -168,6 +177,8 @@ export function useVisualMemory() {
     }
 
     enviar();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver, allLevelsDone]);
 
   return {
