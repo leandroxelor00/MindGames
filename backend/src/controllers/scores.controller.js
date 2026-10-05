@@ -8,7 +8,7 @@ const {
 
 const { isUuid } = require("../validators/validators");
 
-function createScore(req, res) {
+function createScore(req, res, next) {
   let userId = "";
 
   if (req.user) {
@@ -39,11 +39,7 @@ function createScore(req, res) {
       result: result,
     });
   } catch (e) {
-    if (e instanceof TypeError) {
-      return res.status(400).json({ message: e.message });
-    } else {
-      return res.status(500).json({ message: e.message });
-    }
+    next(e);
   }
 }
 
@@ -72,7 +68,7 @@ function getScoresByUser(req, res) {
   });
 }
 
-function migrate(req, res) {
+function migrate(req, res, next) {
   const oldUserId = req.body?.oldUserId;
   const newUserId = req.user.id;
 
@@ -94,15 +90,11 @@ function migrate(req, res) {
       });
     }
   } catch (e) {
-    if (e instanceof TypeError) {
-      return res.status(400).json({ message: e.message });
-    } else {
-      return res.status(500).json({ message: e.message });
-    }
+    next(e);
   }
 }
 
-function getSummary(req, res) {
+function getSummary(req, res, next) {
   let userId = "";
 
   if (req.user) {
@@ -120,11 +112,11 @@ function getSummary(req, res) {
       result: result,
     });
   } catch (e) {
-    return res.status(500).json({ message: e.message });
+    next(e);
   }
 }
 
-function getStreakController(req, res) {
+function getStreakController(req, res, next) {
   let userId = "";
 
   if (req.user) {
@@ -141,7 +133,7 @@ function getStreakController(req, res) {
       .status(200)
       .json({ message: "Streak consultado com sucesso", result: result });
   } catch (e) {
-    return res.status(500).json({ message: e.message });
+    next(e);
   }
 }
 

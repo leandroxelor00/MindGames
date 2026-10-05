@@ -1,6 +1,6 @@
 const { registerUser, loginUser } = require("../services/auth.service");
 
-async function register(req, res) {
+async function register(req, res, next) {
   const { email, plainPassword } = req.body;
 
   try {
@@ -13,11 +13,11 @@ async function register(req, res) {
       token,
     });
   } catch (e) {
-    res.status(400).json({ message: e.message });
+    next(e);
   }
 }
 
-async function login(req, res) {
+async function login(req, res, next) {
   const { email, plainPassword } = req.body;
 
   try {
@@ -30,7 +30,7 @@ async function login(req, res) {
       token,
     });
   } catch (e) {
-    return res.status(401).json({ message: e.message });
+    next(e);
   }
 }
 
