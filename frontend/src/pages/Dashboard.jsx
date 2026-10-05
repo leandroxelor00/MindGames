@@ -3,6 +3,7 @@ import { getHistory, getSummary } from "../services/scoreService";
 import styles from "./Dashboard.module.css";
 import { Link } from "react-router-dom";
 import { CognitiveRadar } from "../components/CognitiveRadar/CognitiveRadar";
+import { gamesRegistry } from "../games/registry";
 
 function calcularMediasPorJogo(partidas) {
   const gameIds = [...new Set(partidas.map((partida) => partida.gameId))];
@@ -11,19 +12,19 @@ function calcularMediasPorJogo(partidas) {
 
   gameIds.forEach((gameId) => {
     const partidasDoJogo = partidas.filter(
-      (partida) => partida.gameId === gameId
+      (partida) => partida.gameId === gameId,
     );
 
     const totalPartidas = partidasDoJogo.length;
 
     const somaScore = partidasDoJogo.reduce(
       (total, partida) => total + partida.score,
-      0
+      0,
     );
 
     const somaAccuracy = partidasDoJogo.reduce(
       (total, partida) => total + partida.accuracy,
-      0
+      0,
     );
 
     const mediaScore = somaScore / totalPartidas;
@@ -37,6 +38,32 @@ function calcularMediasPorJogo(partidas) {
   });
 
   return medias;
+}
+
+function formatarNomeJogo(gameId) {
+  const jogo = gamesRegistry.find((game) => game.id === gameId);
+
+  return jogo?.name || gameId;
+}
+
+function formatarScore(gameId, score) {
+  const valor = Number(score).toFixed(2);
+
+  if (gameId === "reaction-time") {
+    return `${valor} ms`;
+  }
+
+  return valor;
+}
+
+function formatarMediaScore(gameId, score) {
+  const valor = Number(score).toFixed(1);
+
+  if (gameId === "reaction-time") {
+    return `${valor} ms`;
+  }
+
+  return valor;
 }
 
 function formatarData(playedAt) {
@@ -125,18 +152,22 @@ export function Dashboard() {
           <div className={styles.resumoGrid}>
             {Object.entries(mediasPorJogo).map(([gameId, media]) => (
               <article className={styles.cardJogo} key={gameId}>
-                <h3 className={styles.nomeJogo}>{gameId}</h3>
+                <h3 className={styles.nomeJogo}>
+                  {formatarNomeJogo(gameId)}
+                </h3>
 
                 <div className={styles.estatisticas}>
                   <div className={styles.estatistica}>
                     <span className={styles.label}>Total de partidas</span>
-                    <span className={styles.valor}>{media.totalPartidas}</span>
+                    <span className={styles.valor}>
+                      {media.totalPartidas}
+                    </span>
                   </div>
 
                   <div className={styles.estatistica}>
                     <span className={styles.label}>Score médio</span>
                     <span className={styles.valor}>
-                      {media.mediaScore.toFixed(1)}
+                      {formatarMediaScore(gameId, media.mediaScore)}
                     </span>
                   </div>
 
@@ -165,7 +196,9 @@ export function Dashboard() {
             {partidas.map((partida) => (
               <article className={styles.partida} key={partida.id}>
                 <div className={styles.infoPartida}>
-                  <p className={styles.jogo}>{partida.gameId}</p>
+                  <p className={styles.jogo}>
+                    {formatarNomeJogo(partida.gameId)}
+                  </p>
 
                   <p className={styles.data}>
                     {formatarData(partida.playedAt)}
@@ -177,7 +210,7 @@ export function Dashboard() {
                     <span className={styles.resultadoLabel}>Score</span>
 
                     <span className={styles.resultadoValor}>
-                      {Number(partida.score).toFixed(2)}
+                      {formatarScore(partida.gameId, partida.score)}
                     </span>
                   </div>
 
