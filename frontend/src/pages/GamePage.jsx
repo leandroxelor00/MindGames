@@ -1,11 +1,11 @@
 import { gamesRegistry } from "../games/registry";
+import { gameComponents } from "../games/gameComponents";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "../components/Button/Button";
 import styles from "./GamePage.module.css";
 
 export function GamePage() {
   const { id } = useParams();
-
   const selectedGame = gamesRegistry.find((registry) => id === registry.id);
 
   if (!selectedGame) {
@@ -20,7 +20,7 @@ export function GamePage() {
     );
   }
 
-  const GameComponent = selectedGame.component;
+  const GameComponent = gameComponents[id];
 
   return (
     <div className={styles.container}>
