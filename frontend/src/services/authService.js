@@ -1,9 +1,9 @@
 import { apiFetch, CHAVE_TOKEN, CHAVE_USER } from "./api";
 
-export async function register(email, plainPassword) {
+export async function register(email, plainPassword, username) {
   const data = await apiFetch("/auth/register", {
     method: "POST",
-    body: JSON.stringify({ email, plainPassword }),
+    body: JSON.stringify({ email, plainPassword, username }),
   });
 
   localStorage.setItem(CHAVE_TOKEN, data.token);

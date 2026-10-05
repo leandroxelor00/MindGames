@@ -16,7 +16,7 @@ function selectByUsername(username) {
 
 function insertUser(email, passwordHash, username) {
   const insert = db.prepare(
-    `INSERT INTO users (email, passwordHash) VALUES (?, ?, ?)`,
+    `INSERT INTO users (email, passwordHash, username) VALUES (?, ?, ?)`,
   );
   const user = insert.run(email, passwordHash, username);
   return user;
