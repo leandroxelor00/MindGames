@@ -63,6 +63,8 @@
 }
 
 .botao {
+  min-width: 44px;
+  min-height: 44px;
   padding: 0.875rem 2rem;
   border: none;
   border-radius: 0.625rem;
@@ -71,7 +73,6 @@
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.1s ease;
 }
 
 .botao:hover {

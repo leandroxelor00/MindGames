@@ -7,9 +7,9 @@ const words = ["AZUL", "AMARELO", "VERMELHO", "VERDE"];
 
 const colorMap = {
   AZUL: "#0000FF",
-  AMARELO: "#EBE134",
-  VERMELHO: "#FF0000",
-  VERDE: "#00FF00",
+  AMARELO: "#B8860B",
+  VERMELHO: "#CC0000",
+  VERDE: "#008000",
 };
 
 export function useStroopTest() {

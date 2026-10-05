@@ -12,7 +12,15 @@ export function AccessibilityProvider({ children }) {
   });
 
   const [reduzirAnimacoes, setReduzirAnimacoes] = useState(() => {
-    return localStorage.getItem("reduzirAnimacoes") === "true";
+    const valorSalvo = localStorage.getItem("reduzirAnimacoes");
+
+    if (valorSalvo !== null) {
+      return valorSalvo === "true";
+    }
+
+    return (
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false
+    );
   });
 
   const [vozNarrador, setVozNarrador] = useState(() => {
@@ -28,10 +36,9 @@ export function AccessibilityProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem("fonteEscala", fonteEscala);
-
     document.documentElement.style.setProperty(
       "--fonte-escala",
-      fonteEscala,
+      fonteEscala
     );
   }, [fonteEscala]);
 
@@ -57,13 +64,10 @@ export function AccessibilityProvider({ children }) {
       setVozesDisponiveis(vozes);
 
       const vozSelecionadaExiste = vozes.some(
-        (voz) => voz.name === vozNarrador,
+        (voz) => voz.name === vozNarrador
       );
 
-      if (
-        vozNarrador !== "automatica" &&
-        !vozSelecionadaExiste
-      ) {
+      if (vozNarrador !== "automatica" && !vozSelecionadaExiste) {
         setVozNarrador("automatica");
       }
     }
@@ -72,13 +76,13 @@ export function AccessibilityProvider({ children }) {
 
     window.speechSynthesis.addEventListener(
       "voiceschanged",
-      carregarVozes,
+      carregarVozes
     );
 
     return () => {
       window.speechSynthesis.removeEventListener(
         "voiceschanged",
-        carregarVozes,
+        carregarVozes
       );
     };
   }, [vozNarrador]);
@@ -88,16 +92,12 @@ export function AccessibilityProvider({ children }) {
       value={{
         altoContraste,
         setAltoContraste,
-
         fonteEscala,
         setFonteEscala,
-
         reduzirAnimacoes,
         setReduzirAnimacoes,
-
         vozNarrador,
         setVozNarrador,
-
         vozesDisponiveis,
       }}
     >

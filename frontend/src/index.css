@@ -113,7 +113,6 @@ html[data-alto-contraste="true"] a {
 }
 
 /* Botões no alto contraste */
-
 html[data-alto-contraste="true"] button {
   background: #ffff00;
   color: #000000 !important;
@@ -122,11 +121,6 @@ html[data-alto-contraste="true"] button {
 
 html[data-alto-contraste="true"] button:hover {
   background: #ffff66;
-  color: #000000 !important;
-}
-
-html[data-alto-contraste="true"] button:disabled {
-  background: #666666 !important;
   color: #000000 !important;
 }
 
@@ -151,7 +145,7 @@ html[data-alto-contraste="true"] [class*="mensagemVitoria"] {
   border-color: var(--cor-sucesso-texto) !important;
 }
 
-/* Redução de animações */
+/* Redução de animações configurada no MindGames */
 html[data-reduzir-animacoes="true"] *,
 html[data-reduzir-animacoes="true"] *::before,
 html[data-reduzir-animacoes="true"] *::after {
@@ -159,6 +153,18 @@ html[data-reduzir-animacoes="true"] *::after {
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
+}
+
+/* Respeita a preferência de redução de movimento do sistema */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 a {

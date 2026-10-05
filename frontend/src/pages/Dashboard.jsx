@@ -11,19 +11,19 @@ function calcularMediasPorJogo(partidas) {
 
   gameIds.forEach((gameId) => {
     const partidasDoJogo = partidas.filter(
-      (partida) => partida.gameId === gameId,
+      (partida) => partida.gameId === gameId
     );
 
     const totalPartidas = partidasDoJogo.length;
 
     const somaScore = partidasDoJogo.reduce(
       (total, partida) => total + partida.score,
-      0,
+      0
     );
 
     const somaAccuracy = partidasDoJogo.reduce(
       (total, partida) => total + partida.accuracy,
-      0,
+      0
     );
 
     const mediaScore = somaScore / totalPartidas;
@@ -109,7 +109,7 @@ export function Dashboard() {
       <div
         className={styles.grafico}
         role="img"
-        aria-label="Gráfico radar mostrando desempenho nas categorias memória, atenção, velocidade e lógica"
+        aria-label={`Gráfico radar de desempenho cognitivo. Memória: ${summary.memoria} pontos. Atenção: ${summary.atencao} pontos. Velocidade: ${summary.velocidade} pontos. Lógica: ${summary.logica} pontos.`}
       >
         <CognitiveRadar summary={summary} />
       </div>

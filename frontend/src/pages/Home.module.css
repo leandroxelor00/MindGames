@@ -339,25 +339,66 @@ html[data-alto-contraste="true"] .navButtonGhost:hover {
   border-color: #ffff00;
 }
 
-html[data-alto-contraste="true"] .navButtonPrimary {
-  background: #ffff00;
-  color: #000000 !important;
-  border: 2px solid #ffffff;
+/* Streak */
+html[data-alto-contraste="true"] .streakCard {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: none;
 }
 
-html[data-alto-contraste="true"] .navButtonPrimary:hover {
-  background: #ffff66;
-  color: #000000 !important;
+html[data-alto-contraste="true"] .streakLabel {
+  color: #ffffff;
 }
 
-html[data-alto-contraste="true"] .navButtonGhost {
+html[data-alto-contraste="true"] .streakNumber {
+  color: #ffff00;
+}
+
+/* Desafio do dia */
+html[data-alto-contraste="true"] .challengeCard {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: none;
+}
+
+html[data-alto-contraste="true"] .challengeEyebrow {
+  color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .challengeTitle {
+  color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .challengeGame {
   background: #000000;
   color: #ffffff;
   border-color: #ffffff;
 }
 
-html[data-alto-contraste="true"] .navButtonGhost:hover {
+html[data-alto-contraste="true"] .challengeGame:hover {
   background: #111111;
-  color: #ffff00;
   border-color: #ffff00;
+  box-shadow: none;
+}
+
+html[data-alto-contraste="true"] .challengeArrow {
+  color: #ffff00;
+}
+
+/* Cards dos jogos */
+html[data-alto-contraste="true"] .card {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+html[data-alto-contraste="true"] .cardName {
+  color: #ffffff !important;
+}
+
+html[data-alto-contraste="true"] .card:hover {
+  background: #111111 !important;
+  border-color: #ffff00 !important;
 }
