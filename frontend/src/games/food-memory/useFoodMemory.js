@@ -106,7 +106,7 @@ useEffect(() => {
   }
 
   enviar();
-}, [gameOver]);
+}, [gameOver, fase, venceu]);
 
   function clicarImagem(id) {
     if (gameOver || venceu || feedback || transicionando) return;

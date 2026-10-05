@@ -28,11 +28,9 @@ export function useStroopTest() {
 
   const gameOver = timer === 0;
 
-
   useEffect(() => {
     startTime.current = performance.now();
   }, []);
-
 
   useEffect(() => {
     if (!isTimerOn || gameOver) {
@@ -50,12 +48,8 @@ export function useStroopTest() {
       });
     }, 1000);
 
-
     return () => clearInterval(interval);
-
-  }, [isTimerOn, gameOver]);
-
-
+  }, [gameOver, isTimerOn]);
 
   function startTimer() {
     if (!isTimerOn && !gameOver) {
@@ -67,19 +61,12 @@ export function useStroopTest() {
     }
   }
 
-
-
   function changeWord() {
     if (gameOver) return;
 
+    const randomWord = words[Math.floor(Math.random() * words.length)];
 
-    const randomWord =
-      words[Math.floor(Math.random() * words.length)];
-
-
-    const randomColorKey =
-      words[Math.floor(Math.random() * words.length)];
-
+    const randomColorKey = words[Math.floor(Math.random() * words.length)];
 
     setCurrentWord(randomWord);
 
@@ -88,127 +75,66 @@ export function useStroopTest() {
     startTime.current = performance.now();
   }
 
-
-
   function colorCorrect(selectedColorName) {
-
     if (gameOver) return;
 
+    const timeSpent = performance.now() - startTime.current;
 
-    const timeSpent =
-      performance.now() - startTime.current;
+    setReactionTimes((prev) => [...prev, timeSpent]);
 
-
-    setReactionTimes((prev) => [
-      ...prev,
-      timeSpent,
-    ]);
-
-
-    const correctColorName =
-      Object.keys(colorMap).find(
-        (key) =>
-          colorMap[key] === currentColor,
-      );
-
-
+    const correctColorName = Object.keys(colorMap).find(
+      (key) => colorMap[key] === currentColor
+    );
 
     if (correctColorName === selectedColorName) {
-
       setScore((prev) => prev + 1);
 
       setMensagemAcessibilidade(
         `Resposta correta. A cor era ${correctColorName}`
       );
-
     } else {
-
       setMensagemAcessibilidade(
         `Resposta errada. A cor correta era ${correctColorName}`
       );
-
     }
   }
 
-
-
-  const sumReactionTime =
-    reactionTimes.reduce(
-      (a, b) => a + b,
-      0
-    );
-
+  const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
 
   const avg =
-    reactionTimes.length > 0
-      ? sumReactionTime / reactionTimes.length
-      : 0;
+    reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
 
-
-  const avgReactionTime =
-    Number(avg.toFixed(2));
-
-
+  const avgReactionTime = Number(avg.toFixed(2));
 
   useEffect(() => {
-
     if (!gameOver) {
       return;
     }
 
-
     async function enviar() {
-
       const accuracy =
-        reactionTimes.length > 0
-          ? (score / reactionTimes.length) * 100
-          : 0;
-
-
+        reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
 
       const result = {
-
         userId: getCurrentUserId(),
-
         gameId: "stroop-test",
-
         score,
-
         accuracy,
-
         avgReactionTime,
-
         levelReached: 1,
-
       };
 
-
-
       try {
-
         await postScore(result);
-
       } catch (error) {
-
-        console.error(
-          "Não foi possível enviar o resultado:",
-          error
-        );
-
+        console.error("Não foi possível enviar o resultado:", error);
       }
-
     }
 
-
     enviar();
-
-  }, [gameOver]);
-
-
-
+  }, [gameOver, reactionTimes.length, score, avgReactionTime]);
 
   function resetGame() {
-
     setIsTimerOn(false);
 
     setScore(0);
@@ -219,17 +145,10 @@ export function useStroopTest() {
 
     startTime.current = performance.now();
 
-
-    setMensagemAcessibilidade(
-      "Novo jogo iniciado."
-    );
-
+    setMensagemAcessibilidade("Novo jogo iniciado.");
   }
 
-
-
   return {
-
     segundos: timer,
 
     score,
@@ -251,7 +170,5 @@ export function useStroopTest() {
     resetGame,
 
     mensagemAcessibilidade,
-
   };
-
 }
