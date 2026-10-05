@@ -1,10 +1,10 @@
 const { registerUser, loginUser } = require("../services/auth.service");
 
 async function register(req, res, next) {
-  const { email, plainPassword } = req.body;
+  const { email, plainPassword, username } = req.body;
 
   try {
-    const result = await registerUser(email, plainPassword);
+    const result = await registerUser(email, plainPassword, username);
     const { user, token } = result;
     const { passwordHash, ...safeUser } = user;
     return res.status(201).json({
