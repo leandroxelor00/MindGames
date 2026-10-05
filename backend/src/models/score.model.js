@@ -6,13 +6,27 @@ function selectByUserId(userId) {
   return rows;
 }
 
+function selectScoresWithUsername() {
+  const select = db
+    .prepare(
+      `
+    SELECT scores.*, users.username
+    FROM scores
+    JOIN users ON CAST(users.id AS TEXT) = scores.userId
+    WHERE users.username IS NOT NULL
+    `,
+    )
+    .all();
+  return select;
+}
+
 function insertScore(
   userId,
   gameId,
   score,
   accuracy,
   avgReactionTime,
-  levelReached
+  levelReached,
 ) {
   const insert = db.prepare(`
     INSERT INTO scores (userId, gameId, score, accuracy, avgReactionTime, levelReached)
@@ -25,7 +39,7 @@ function insertScore(
     score,
     accuracy,
     avgReactionTime,
-    levelReached
+    levelReached,
   );
 
   return rows;
@@ -37,4 +51,9 @@ function updateUserIdInScores(oldUserId, newUserId) {
   return result.changes;
 }
 
-module.exports = { selectByUserId, insertScore, updateUserIdInScores };
+module.exports = {
+  selectByUserId,
+  selectScoresWithUsername,
+  insertScore,
+  updateUserIdInScores,
+};

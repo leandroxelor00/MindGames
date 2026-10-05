@@ -5,6 +5,7 @@ require("./db/migrations/003_add_username_to_users");
 const { scoreRoutes } = require("./routes/scores.routes");
 const { authRoutes } = require("./routes/auth.routes");
 const { dailyChallengeRoutes } = require("./routes/dailyChallenge.routes");
+const { rankingRoutes } = require("./routes/ranking.routes");
 
 const tables = db
   .prepare(
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use("/api", dailyChallengeRoutes);
 app.use("/api", scoreRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/ranking", rankingRoutes);
 
 app.listen(3001, () => {
   console.log("Servidor rodando na porta 3001");
