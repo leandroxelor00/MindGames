@@ -32,11 +32,18 @@ export function Home() {
 
   useEffect(() => {
     async function loadHomeData() {
-      const streakResult = await getStreak();
-      const challengeResult = await getDailyChallenge();
+      const [streakResult, challengeResult] = await Promise.allSettled([
+        getStreak(),
+        getDailyChallenge(),
+      ]);
 
-      setStreak(streakResult);
-      setDailyChallenge(challengeResult);
+      if (streakResult.status === "fulfilled") {
+        setStreak(streakResult.value);
+      }
+
+      if (challengeResult.status === "fulfilled") {
+        setDailyChallenge(challengeResult.value);
+      }
     }
 
     loadHomeData();

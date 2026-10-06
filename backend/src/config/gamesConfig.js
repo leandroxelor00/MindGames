@@ -7,6 +7,14 @@ const REACTION_WORST_MS = 500;
 const MIN_RANKING_MATCHES = 3; // mínimo de partidas para aparecer no ranking por jogo
 const TOP_RANKING_SCORES = 3; // quantas melhores partidas entram na média do ranking
 
+// Limites máximos aceitos no POST /scores (barram valores absurdos)
+const SCORE_LIMITS = {
+  score: 100000,
+  accuracy: 100,
+  avgReactionTime: 60000, // ms
+  levelReached: 1000,
+};
+
 // rule: como a partida vira pontos (0-100)
 //  "accuracy" -> usa a accuracy
 //  "level"    -> levelReached / MAX_LEVEL
@@ -32,4 +40,5 @@ module.exports = {
   REACTION_WORST_MS,
   MIN_RANKING_MATCHES,
   TOP_RANKING_SCORES,
+  SCORE_LIMITS,
 };

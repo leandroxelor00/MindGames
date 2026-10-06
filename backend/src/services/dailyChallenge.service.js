@@ -1,14 +1,6 @@
 const crypto = require("crypto");
 
-const availableGames = [
-  "memory-match",
-  "stroop-test",
-  "number-challenge",
-  "visual-memory",
-  "food-memory",
-  "reaction-time",
-  "sound-sequence",
-];
+const { GAME_IDS: availableGames } = require("../config/gamesConfig");
 
 function createDateHash(date, i) {
   const data = new Intl.DateTimeFormat("sv-SE", {
