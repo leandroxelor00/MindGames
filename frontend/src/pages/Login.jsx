@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import { login } from "../services/authService";
 import { useAuth } from "../hooks/useAuth";
 import { getUserId, resetUserId } from "../services/userId";
 import { migrateScores } from "../services/scoreService";
+
+import { Speakable } from "../components/Speakable/Speakable";
+
 import styles from "./Login.module.css";
 
 export function Login() {
@@ -45,7 +49,12 @@ export function Login() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.badge} aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
             <path
               d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"
               stroke="currentColor"
@@ -56,26 +65,65 @@ export function Login() {
           </svg>
         </div>
 
-        <h2 className={styles.title}>Entrar no MindGames</h2>
+        <Speakable
+          as="h2"
+          text="Entrar no MindGames"
+        >
+          <h2 className={styles.title}>
+            Entrar no MindGames
+          </h2>
+        </Speakable>
 
-        <p className={styles.subtitle}>
-          Acesse sua conta para acompanhar sua evolução nos jogos.
-        </p>
+        <Speakable
+          as="p"
+          text="Acesse sua conta para acompanhar sua evolução nos jogos."
+        >
+          <p className={styles.subtitle}>
+            Acesse sua conta para acompanhar sua evolução nos jogos.
+          </p>
+        </Speakable>
 
         {error && (
-          <div className={styles.error} role="alert">
-            {error}
-          </div>
+          <Speakable
+            as="div"
+            text={`Erro ao entrar: ${error}`}
+          >
+            <div
+              className={styles.error}
+              role="alert"
+            >
+              {error}
+            </div>
+          </Speakable>
         )}
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form
+          className={styles.form}
+          onSubmit={handleSubmit}
+        >
           <div className={styles.inputGroup}>
-            <label className={styles.inputLabel} htmlFor="login-email">
-              Email
-            </label>
+            <Speakable
+              as="span"
+              text="Campo de email. Digite seu email."
+            >
+              <label
+                className={styles.inputLabel}
+                htmlFor="login-email"
+              >
+                Email
+              </label>
+            </Speakable>
 
-            <span className={styles.inputIcon} aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <span
+              className={styles.inputIcon}
+              aria-hidden="true"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
                 <path
                   d="M3 6h18v12H3V6Zm0 0 9 7 9-7"
                   stroke="currentColor"
@@ -86,25 +134,46 @@ export function Login() {
               </svg>
             </span>
 
-            <input
-              id="login-email"
-              className={styles.input}
-              type="email"
-              placeholder="Digite seu email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
+            <Speakable
+              as="span"
+              text="Campo de email. Digite seu endereço de email."
+            >
+              <input
+                id="login-email"
+                className={styles.input}
+                type="email"
+                placeholder="Digite seu email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+              />
+            </Speakable>
           </div>
 
           <div className={styles.inputGroup}>
-            <label className={styles.inputLabel} htmlFor="login-password">
-              Senha
-            </label>
+            <Speakable
+              as="span"
+              text="Campo de senha. Digite sua senha."
+            >
+              <label
+                className={styles.inputLabel}
+                htmlFor="login-password"
+              >
+                Senha
+              </label>
+            </Speakable>
 
-            <span className={styles.inputIcon} aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <span
+              className={styles.inputIcon}
+              aria-hidden="true"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
                 <rect
                   x="5"
                   y="11"
@@ -123,33 +192,60 @@ export function Login() {
               </svg>
             </span>
 
-            <input
-              id="login-password"
-              className={styles.input}
-              type="password"
-              placeholder="Digite sua senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
+            <Speakable
+              as="span"
+              text="Campo de senha. Digite sua senha."
+            >
+              <input
+                id="login-password"
+                className={styles.input}
+                type="password"
+                placeholder="Digite sua senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+            </Speakable>
           </div>
 
-          <button
-            className={styles.submitButton}
-            type="submit"
-            disabled={loading}
+          <Speakable
+            as="span"
+            text={
+              loading
+                ? "Entrando. Aguarde."
+                : "Botão Entrar. Pressione para acessar sua conta."
+            }
           >
-            {loading ? "Entrando..." : "Entrar"}
-          </button>
+            <button
+              className={styles.submitButton}
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Entrando..." : "Entrar"}
+            </button>
+          </Speakable>
         </form>
 
-        <p className={styles.footerText}>
-          Ainda não tem conta?{" "}
-          <Link className={styles.footerLink} to="/register">
-            Criar conta
-          </Link>
-        </p>
+        <Speakable
+          as="p"
+          text="Ainda não tem conta?"
+        >
+          <p className={styles.footerText}>
+            Ainda não tem conta?{" "}
+            <Speakable
+              as="span"
+              text="Criar conta. Link para cadastro."
+            >
+              <Link
+                className={styles.footerLink}
+                to="/register"
+              >
+                Criar conta
+              </Link>
+            </Speakable>
+          </p>
+        </Speakable>
       </div>
     </div>
   );

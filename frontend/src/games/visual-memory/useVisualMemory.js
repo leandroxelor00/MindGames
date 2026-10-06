@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { levels } from "./levels";
-import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
 import { useNotification } from "../../context/NotificationContext";
 

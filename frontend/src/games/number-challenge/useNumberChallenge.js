@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
 import { useAdaptiveDifficulty } from "../../hooks/useAdaptiveDifficulty";
 import { useNotification } from "../../context/NotificationContext";
