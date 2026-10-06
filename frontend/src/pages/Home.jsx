@@ -1,27 +1,34 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { gamesRegistry } from "../games/registry";
 import { useAuth } from "../hooks/useAuth";
-import { getDailyChallenge, getStreak } from "../services/scoreService";
+import {
+  getDailyChallenge,
+  getStreak,
+} from "../services/scoreService";
 import { logout } from "../services/authService";
 import { getGlobalRanking } from "../services/rankingService";
 import { RankingList } from "../components/RankingList/RankingList";
 import { RankingModal } from "../components/RankingModal/RankingModal";
+import { Speakable } from "../components/Speakable/Speakable";
+import { useAccessibility } from "../context/AccessibilityContext";
 
 import styles from "./Home.module.css";
 
 export function Home() {
   const { user, setUser } = useAuth();
 
+  const {
+    vozNarrador,
+    alternarNarrador,
+  } = useAccessibility();
+
   const [streak, setStreak] = useState(0);
   const [dailyChallenge, setDailyChallenge] = useState([]);
   const [topRanking, setTopRanking] = useState(null);
   const [rankingError, setRankingError] = useState(false);
   const [rankingAberto, setRankingAberto] = useState(false);
-  const [acessibilidadeAberta, setAcessibilidadeAberta] = useState(false);
-
-  const accessibilityPanelRef = useRef(null);
 
   useEffect(() => {
     async function loadHomeData() {
@@ -41,318 +48,368 @@ export function Home() {
       .catch(() => setRankingError(true));
   }, []);
 
-  useEffect(() => {
-    if (!acessibilidadeAberta) {
-      window.speechSynthesis?.cancel();
-      return;
-    }
-
-    accessibilityPanelRef.current?.focus();
-
-    if (!("speechSynthesis" in window)) {
-      return;
-    }
-
-    const textoAcessibilidade =
-      "Use um leitor de tela. " +
-      "O MindGames é compatível com leitores de tela. " +
-      "No Windows, você pode usar o Narrador para ouvir os textos, botões, links e informações da página. " +
-      "Para ativar ou desativar o Narrador do Windows, pressione Windows, Ctrl e Enter.";
-
-    const utterance = new SpeechSynthesisUtterance(
-      textoAcessibilidade,
-    );
-
-    utterance.lang = "pt-BR";
-    utterance.rate = 1;
-    utterance.pitch = 1;
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, [acessibilidadeAberta]);
-
   function handleLogout() {
     logout();
     setUser(null);
   }
 
-  function abrirAcessibilidade() {
-    setAcessibilidadeAberta((aberta) => !aberta);
-  }
-
-  function fecharAcessibilidade() {
-    setAcessibilidadeAberta(false);
+  function handleNarrador() {
+    alternarNarrador();
   }
 
   return (
     <div className={styles.page}>
       <nav className={styles.navbar}>
-        <span className={styles.brand}>MindGames</span>
+        <Speakable
+          as="span"
+          text="MindGames"
+        >
+          <span className={styles.brand}>
+            MindGames
+          </span>
+        </Speakable>
 
         <div className={styles.navActions}>
-          <Link to="/dashboard" className={styles.navLink}>
-            Ver meu histórico
-          </Link>
-
-          <button
-            type="button"
-            className={styles.accessibilityButton}
-            onClick={abrirAcessibilidade}
-            aria-expanded={acessibilidadeAberta}
-            aria-controls="painel-acessibilidade"
-            aria-label="Abrir opções de acessibilidade"
-            title="Opções de acessibilidade"
+          <Speakable
+            as="span"
+            text="Ver meu histórico"
           >
-            <span aria-hidden="true">♿</span>
-            <span>Acessibilidade</span>
-          </button>
+            <Link
+              to="/dashboard"
+              className={styles.navLink}
+            >
+              Ver meu histórico
+            </Link>
+          </Speakable>
+
+          <Speakable
+            as="span"
+            text={
+              vozNarrador
+                ? "Narrador ativado. Botão para desativar o narrador."
+                : "Narrador desativado. Botão para ativar o narrador."
+            }
+          >
+            <button
+              type="button"
+              className={styles.accessibilityButton}
+              onClick={handleNarrador}
+              aria-pressed={vozNarrador}
+              aria-label={
+                vozNarrador
+                  ? "Desativar narrador"
+                  : "Ativar narrador"
+              }
+              title={
+                vozNarrador
+                  ? "Desativar narrador"
+                  : "Ativar narrador"
+              }
+            >
+              <span aria-hidden="true">
+                ♿
+              </span>
+
+              <span>
+                {vozNarrador
+                  ? "Narrador ativado"
+                  : "Ativar narrador"}
+              </span>
+            </button>
+          </Speakable>
 
           {user ? (
             <div className={styles.navUser}>
-              <span className={styles.navEmail}>
-                Olá, <strong>{user.username ?? user.email}</strong>
-              </span>
-
-              <button
-                type="button"
-                className={styles.navButtonGhost}
-                onClick={handleLogout}
+              <Speakable
+                as="span"
+                text={`Olá, ${user.username ?? user.email}`}
               >
-                Sair
-              </button>
+                <span className={styles.navEmail}>
+                  Olá,{" "}
+                  <strong>
+                    {user.username ?? user.email}
+                  </strong>
+                </span>
+              </Speakable>
+
+              <Speakable
+                as="span"
+                text="Sair"
+              >
+                <button
+                  type="button"
+                  className={styles.navButtonGhost}
+                  onClick={handleLogout}
+                >
+                  Sair
+                </button>
+              </Speakable>
             </div>
           ) : (
             <>
-              <Link to="/login" className={styles.navLink}>
-                Entrar
-              </Link>
-
-              <Link
-                to="/register"
-                className={styles.navButtonPrimary}
+              <Speakable
+                as="span"
+                text="Entrar"
               >
-                Criar conta
-              </Link>
+                <Link
+                  to="/login"
+                  className={styles.navLink}
+                >
+                  Entrar
+                </Link>
+              </Speakable>
+
+              <Speakable
+                as="span"
+                text="Criar conta"
+              >
+                <Link
+                  to="/register"
+                  className={styles.navButtonPrimary}
+                >
+                  Criar conta
+                </Link>
+              </Speakable>
             </>
           )}
 
-          <Link to="/settings" className={styles.navLink}>
-            Configurações
-          </Link>
+          <Speakable
+            as="span"
+            text="Configurações"
+          >
+            <Link
+              to="/settings"
+              className={styles.navLink}
+            >
+              Configurações
+            </Link>
+          </Speakable>
         </div>
       </nav>
 
-      {acessibilidadeAberta && (
-        <section
-          id="painel-acessibilidade"
-          className={styles.accessibilityPanel}
-          aria-labelledby="titulo-acessibilidade"
-          tabIndex="-1"
-          ref={accessibilityPanelRef}
-        >
-          <div className={styles.accessibilityPanelHeader}>
-            <div>
-              <span className={styles.accessibilityPanelEyebrow}>
-                ACESSIBILIDADE
-              </span>
-
-              <h2
-                id="titulo-acessibilidade"
-                className={styles.accessibilityPanelTitle}
-              >
-                Use um leitor de tela
-              </h2>
-            </div>
-
-            <button
-              type="button"
-              className={styles.accessibilityClose}
-              onClick={fecharAcessibilidade}
-              aria-label="Fechar opções de acessibilidade"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-
-          <p className={styles.accessibilityPanelText}>
-            O MindGames é compatível com leitores de tela. No
-            Windows, você pode usar o Narrador para ouvir os textos,
-            botões, links e informações da página.
-          </p>
-
-          <div className={styles.accessibilityShortcut}>
-            <span className={styles.shortcutLabel}>
-              Ativar ou desativar o Narrador do Windows
-            </span>
-
-            <kbd>Windows</kbd>
-
-            <span aria-hidden="true">+</span>
-
-            <kbd>Ctrl</kbd>
-
-            <span aria-hidden="true">+</span>
-
-            <kbd>Enter</kbd>
-          </div>
-
-          <div className={styles.accessibilityPanelActions}>
-            <Link
-              to="/settings"
-              className={styles.accessibilitySettingsLink}
-              onClick={fecharAcessibilidade}
-            >
-              Configurações de acessibilidade
-            </Link>
-
-            <button
-              type="button"
-              className={styles.accessibilityCloseButton}
-              onClick={fecharAcessibilidade}
-            >
-              Fechar
-            </button>
-          </div>
-        </section>
-      )}
-
       <header className={styles.hero}>
-        <h1 className={styles.headline}>
-          Treine sua mente com ciência.
-        </h1>
+        <Speakable
+          as="span"
+          text="Treine sua mente com ciência."
+        >
+          <h1 className={styles.headline}>
+            Treine sua mente com ciência.
+          </h1>
+        </Speakable>
 
-        <p className={styles.subtitle}>
-          Jogos curtos que medem atenção, memória e tempo de reação —
-          acompanhe sua evolução partida após partida.
-        </p>
+        <Speakable
+          as="span"
+          text="Jogos curtos que medem atenção, memória e tempo de reação. Acompanhe sua evolução partida após partida."
+        >
+          <p className={styles.subtitle}>
+            Jogos curtos que medem atenção, memória e
+            tempo de reação — acompanhe sua evolução
+            partida após partida.
+          </p>
+        </Speakable>
       </header>
 
       <div className={styles.homeContent}>
         <main>
-          {/* Escolha um jogo */}
           <section>
-            <h2 className={styles.sectionLabel}>
-              Escolha um jogo
-            </h2>
+            <Speakable
+              as="span"
+              text="Escolha um jogo"
+            >
+              <h2 className={styles.sectionLabel}>
+                Escolha um jogo
+              </h2>
+            </Speakable>
 
             <div className={styles.cardsContainer}>
               {gamesRegistry.map((registry) => (
-                <Link
-                  className={styles.link}
+                <Speakable
                   key={registry.id}
-                  to={`/game/${registry.id}`}
+                  as="span"
+                  text={`${registry.name}. Jogo disponível no MindGames.`}
                 >
-                  <div className={styles.card}>
-                    <span className={styles.cardName}>
-                      {registry.name}
-                    </span>
-                  </div>
-                </Link>
+                  <Link
+                    className={styles.link}
+                    to={`/game/${registry.id}`}
+                  >
+                    <div className={styles.card}>
+                      <span className={styles.cardName}>
+                        {registry.name}
+                      </span>
+                    </div>
+                  </Link>
+                </Speakable>
               ))}
             </div>
           </section>
         </main>
 
-        {/* Streak e daily challenge */}
         <aside className={styles.dailyAside}>
-          <div className={styles.streakCard}>
-            <span className={styles.streakIcon} aria-hidden="true">
-              🔥
-            </span>
-
-            <div>
-              <span className={styles.streakLabel}>
-                Seu streak
+          <Speakable
+            as="span"
+            text={`Seu streak: ${streak} dias`}
+          >
+            <div className={styles.streakCard}>
+              <span
+                className={styles.streakIcon}
+                aria-hidden="true"
+              >
+                🔥
               </span>
 
-              <strong className={styles.streakNumber}>
-                {streak} dias
-              </strong>
+              <div>
+                <span className={styles.streakLabel}>
+                  Seu streak
+                </span>
+
+                <strong className={styles.streakNumber}>
+                  {streak} dias
+                </strong>
+              </div>
             </div>
-          </div>
+          </Speakable>
 
           <section className={styles.challengeCard}>
-            <span className={styles.challengeEyebrow}>
-              DESAFIO DO DIA
-            </span>
+            <Speakable
+              as="span"
+              text="Desafio do dia. Sua seleção de hoje."
+            >
+              <div>
+                <span className={styles.challengeEyebrow}>
+                  DESAFIO DO DIA
+                </span>
 
-            <h2 className={styles.challengeTitle}>
-              Sua seleção de hoje
-            </h2>
+                <h2 className={styles.challengeTitle}>
+                  Sua seleção de hoje
+                </h2>
+              </div>
+            </Speakable>
 
             <div className={styles.challengeGames}>
               {dailyChallenge.map((gameId) => {
                 const game = gamesRegistry.find(
-                  (registry) => registry.id === gameId,
+                  (registry) =>
+                    registry.id === gameId,
                 );
 
                 return (
-                  <Link
+                  <Speakable
                     key={gameId}
-                    to={`/game/${gameId}`}
-                    className={styles.challengeGame}
+                    as="span"
+                    text={`${game?.name ?? gameId}. Desafio do dia.`}
                   >
-                    <span>{game?.name ?? gameId}</span>
-
-                    <span
-                      className={styles.challengeArrow}
-                      aria-hidden="true"
+                    <Link
+                      to={`/game/${gameId}`}
+                      className={styles.challengeGame}
                     >
-                      →
-                    </span>
-                  </Link>
+                      <span>
+                        {game?.name ?? gameId}
+                      </span>
+
+                      <span
+                        className={
+                          styles.challengeArrow
+                        }
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    </Link>
+                  </Speakable>
                 );
               })}
             </div>
           </section>
 
           <section className={styles.rankingCard}>
-            <span className={styles.challengeEyebrow}>
-              RANKING
-            </span>
+            <Speakable
+              as="span"
+              text="Ranking. Top jogadores."
+            >
+              <div>
+                <span
+                  className={
+                    styles.challengeEyebrow
+                  }
+                >
+                  RANKING
+                </span>
 
-            <h2 className={styles.challengeTitle}>
-              Top jogadores
-            </h2>
+                <h2
+                  className={
+                    styles.challengeTitle
+                  }
+                >
+                  Top jogadores
+                </h2>
+              </div>
+            </Speakable>
 
             {rankingError && (
-              <p className={styles.rankingMessage}>
-                Não foi possível carregar o ranking.
-              </p>
+              <Speakable
+                as="span"
+                text="Não foi possível carregar o ranking."
+              >
+                <p
+                  className={
+                    styles.rankingMessage
+                  }
+                >
+                  Não foi possível carregar o
+                  ranking.
+                </p>
+              </Speakable>
             )}
 
-            {!rankingError && topRanking === null && (
-              <p className={styles.rankingMessage}>
-                Carregando...
-              </p>
-            )}
+            {!rankingError &&
+              topRanking === null && (
+                <Speakable
+                  as="span"
+                  text="Carregando ranking."
+                >
+                  <p
+                    className={
+                      styles.rankingMessage
+                    }
+                  >
+                    Carregando...
+                  </p>
+                </Speakable>
+              )}
 
             {topRanking && (
               <RankingList
                 items={topRanking}
-                usernameAtual={user?.username ?? null}
+                usernameAtual={
+                  user?.username ?? null
+                }
                 mostrarPartidas={false}
               />
             )}
 
-            <button
-              type="button"
-              className={styles.rankingButton}
-              onClick={() => setRankingAberto(true)}
+            <Speakable
+              as="span"
+              text="Ver ranking completo"
             >
-              Ver ranking completo
-            </button>
+              <button
+                type="button"
+                className={styles.rankingButton}
+                onClick={() =>
+                  setRankingAberto(true)
+                }
+              >
+                Ver ranking completo
+              </button>
+            </Speakable>
           </section>
         </aside>
       </div>
 
       <RankingModal
         aberto={rankingAberto}
-        onFechar={() => setRankingAberto(false)}
+        onFechar={() =>
+          setRankingAberto(false)
+        }
       />
     </div>
   );
