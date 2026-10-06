@@ -1,10 +1,12 @@
 const CHAVE_USER_ID = "mindgames_user_id";
 const CHAVE_TOKEN = "mindgames_auth_token";
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function getUserId() {
   const userId = localStorage.getItem(CHAVE_USER_ID);
 
-  if (userId) {
+  if (UUID_REGEX.test(String(userId))) {
     return userId;
   }
 
