@@ -331,14 +331,9 @@ export function useSoundSequence() {
     }
 
     async function enviar() {
-      const resultado = {
-        userId: getCurrentUserId(),
-        gameId: "sound-sequence",
-        score: fase - 1,
-        accuracy: 0,
-        avgReactionTime: 0,
-        levelReached: fase - 1,
-      };
+      const resultado = buildScorePayload("sound-sequence", {
+        levelReached: Math.max(fase - 1, 0),
+      });
 
       try {
         await postScore(resultado);
