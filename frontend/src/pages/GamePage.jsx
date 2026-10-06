@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { gamesRegistry } from "../games/registry";
 import { gameComponents } from "../games/gameComponents";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "../components/Button/Button";
+import { GameIntroduction } from "../components/GameIntroduction/GameIntroduction";
 import styles from "./GamePage.module.css";
 
 export function GamePage() {
   const { id } = useParams();
+  const [jogoIniciado, setJogoIniciado] = useState(false);
   const selectedGame = gamesRegistry.find((registry) => id === registry.id);
 
   if (!selectedGame) {
@@ -27,7 +30,15 @@ export function GamePage() {
       <Link className={styles.voltarLink} to="/">
         <Button textContent="Voltar" />
       </Link>
-      <GameComponent />
+
+      {!jogoIniciado ? (
+        <GameIntroduction
+          game={selectedGame}
+          onStart={() => setJogoIniciado(true)}
+        />
+      ) : (
+        <GameComponent />
+      )}
     </div>
   );
 }
