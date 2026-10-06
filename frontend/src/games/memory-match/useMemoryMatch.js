@@ -1,20 +1,10 @@
 import { useState, useEffect } from "react";
-
 import { getCurrentUserId } from "../../services/userId";
-
 import { postScore } from "../../services/scoreService";
+import { useNotification } from "../../context/NotificationContext";
 
 export function criarBaralho() {
-  const valores = [
-    "🍎",
-    "🍌",
-    "🍇",
-    "🍒",
-    "🍉",
-    "🍓",
-    "🍍",
-    "🥝",
-  ];
+  const valores = ["🍎", "🍌", "🍇", "🍒", "🍉", "🍓", "🍍", "🥝"];
 
   const cartas = [...valores, ...valores];
 
@@ -34,12 +24,11 @@ export function useMemoryMatch() {
   const [tentativas, setTentativas] = useState(0);
   const [segundos, setSegundos] = useState(0);
   const [memorizando, setMemorizando] = useState(true);
-  const [mensagemAcessibilidade, setMensagemAcessibilidade] =
-    useState("");
+  const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
 
-  const jogoFinalizado = baralho.every(
-    (carta) => carta.pareada
-  );
+  const { notificar } = useNotification();
+
+  const jogoFinalizado = baralho.every((carta) => carta.pareada);
 
   useEffect(() => {
     if (!memorizando) {
@@ -56,9 +45,7 @@ export function useMemoryMatch() {
 
       setMemorizando(false);
 
-      setMensagemAcessibilidade(
-        "O jogo começou. Escolha duas cartas."
-      );
+      setMensagemAcessibilidade("O jogo começou. Escolha duas cartas.");
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -73,9 +60,7 @@ export function useMemoryMatch() {
       return;
     }
 
-    const carta = baralho.find(
-      (carta) => carta.id === id
-    );
+    const carta = baralho.find((carta) => carta.id === id);
 
     if (!carta || carta.virada || carta.pareada) {
       return;
@@ -96,9 +81,7 @@ export function useMemoryMatch() {
 
     setViradasAgora([...viradasAgora, id]);
 
-    setMensagemAcessibilidade(
-      `Carta revelada ${carta.valor}`
-    );
+    setMensagemAcessibilidade(`Carta revelada ${carta.valor}`);
   }
 
   useEffect(() => {
@@ -109,41 +92,27 @@ export function useMemoryMatch() {
     const [id1, id2] = viradasAgora;
 
     const timer = setTimeout(() => {
-      setTentativas(
-        (tentativasAtuais) => tentativasAtuais + 1
-      );
+      setTentativas((tentativasAtuais) => tentativasAtuais + 1);
 
       setBaralho((baralhoAtual) => {
-        const carta1 = baralhoAtual.find(
-          (carta) => carta.id === id1
-        );
+        const carta1 = baralhoAtual.find((carta) => carta.id === id1);
 
-        const carta2 = baralhoAtual.find(
-          (carta) => carta.id === id2
-        );
+        const carta2 = baralhoAtual.find((carta) => carta.id === id2);
 
         if (!carta1 || !carta2) {
           return baralhoAtual;
         }
 
-        const saoIguais =
-          carta1.valor === carta2.valor;
+        const saoIguais = carta1.valor === carta2.valor;
 
         if (saoIguais) {
-          setMensagemAcessibilidade(
-            `Par encontrado: ${carta1.valor}`
-          );
+          setMensagemAcessibilidade(`Par encontrado: ${carta1.valor}`);
         } else {
-          setMensagemAcessibilidade(
-            "Cartas diferentes"
-          );
+          setMensagemAcessibilidade("Cartas diferentes");
         }
 
         return baralhoAtual.map((carta) => {
-          if (
-            carta.id === id1 ||
-            carta.id === id2
-          ) {
+          if (carta.id === id1 || carta.id === id2) {
             if (saoIguais) {
               return {
                 ...carta,
@@ -174,9 +143,7 @@ export function useMemoryMatch() {
     }
 
     const intervalo = setInterval(() => {
-      setSegundos(
-        (segundosAtuais) => segundosAtuais + 1
-      );
+      setSegundos((segundosAtuais) => segundosAtuais + 1);
     }, 1000);
 
     return () => {
@@ -192,17 +159,10 @@ export function useMemoryMatch() {
 
     async function enviar() {
       const paresAcertados =
-        baralho.filter(
-          (carta) => carta.pareada
-        ).length / 2;
+        baralho.filter((carta) => carta.pareada).length / 2;
 
       const accuracy =
-        tentativas > 0
-          ? Math.min(
-              (paresAcertados / tentativas) * 100,
-              100
-            )
-          : 0;
+        tentativas > 0 ? Math.min((paresAcertados / tentativas) * 100, 100) : 0;
 
       const result = {
         userId: getCurrentUserId(),
@@ -220,21 +180,16 @@ export function useMemoryMatch() {
       try {
         await postScore(result);
       } catch (error) {
-        console.error(
-          "Não foi possível enviar o resultado:",
-          error
+        console.error("Não foi possível enviar o resultado:", error);
+
+        notificar(
+          "Não foi possível salvar sua pontuação. Verifique sua conexão."
         );
       }
     }
 
     enviar();
-  }, [
-    jogoFinalizado,
-    memorizando,
-    baralho,
-    tentativas,
-    segundos,
-  ]);
+  }, [jogoFinalizado, memorizando, baralho, tentativas, segundos, notificar]);
 
   function resetGame() {
     setBaralho(criarBaralho());
@@ -242,9 +197,7 @@ export function useMemoryMatch() {
     setTentativas(0);
     setSegundos(0);
     setMemorizando(true);
-    setMensagemAcessibilidade(
-      "Novo jogo iniciado. Memorize as cartas."
-    );
+    setMensagemAcessibilidade("Novo jogo iniciado. Memorize as cartas.");
   }
 
   return {

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
+import { useNotification } from "../../context/NotificationContext";
 
 const TOTAL_TENTATIVAS = 5;
 
@@ -8,8 +9,9 @@ export function useReactionTime() {
   const [status, setStatus] = useState("idle");
   const [reactionTime, setReactionTime] = useState(null);
   const [tempos, setTempos] = useState([]);
-  const [mensagemAcessibilidade, setMensagemAcessibilidade] =
-    useState("");
+  const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
+
+  const { notificar } = useNotification();
 
   const startTime = useRef(0);
   const timeoutId = useRef(null);
@@ -17,16 +19,19 @@ export function useReactionTime() {
   function iniciar() {
     setStatus("waiting");
     setMensagemAcessibilidade(
-      `Tentativa ${tempos.length + 1} de ${TOTAL_TENTATIVAS}. Jogo iniciado. Aguarde a mudança de cor.`,
+      `Tentativa ${
+        tempos.length + 1
+      } de ${TOTAL_TENTATIVAS}. Jogo iniciado. Aguarde a mudança de cor.`
     );
 
-    const tempo =
-      Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
+    const tempo = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
 
     timeoutId.current = setTimeout(() => {
       setStatus("ready");
       setMensagemAcessibilidade(
-        `Tentativa ${tempos.length + 1} de ${TOTAL_TENTATIVAS}. A cor mudou. Clique agora.`,
+        `Tentativa ${
+          tempos.length + 1
+        } de ${TOTAL_TENTATIVAS}. A cor mudou. Clique agora.`
       );
 
       startTime.current = performance.now();
@@ -40,15 +45,14 @@ export function useReactionTime() {
       setStatus("tooSoon");
 
       setMensagemAcessibilidade(
-        "Você clicou cedo demais. Essa tentativa não foi contabilizada. Tente novamente.",
+        "Você clicou cedo demais. Essa tentativa não foi contabilizada. Tente novamente."
       );
 
       return;
     }
 
     if (status === "ready") {
-      const tempo =
-        performance.now() - startTime.current;
+      const tempo = performance.now() - startTime.current;
 
       const novosTempos = [...tempos, tempo];
 
@@ -56,10 +60,7 @@ export function useReactionTime() {
       setReactionTime(tempo);
 
       if (novosTempos.length === TOTAL_TENTATIVAS) {
-        const soma = novosTempos.reduce(
-          (total, valor) => total + valor,
-          0,
-        );
+        const soma = novosTempos.reduce((total, valor) => total + valor, 0);
 
         const media = soma / TOTAL_TENTATIVAS;
 
@@ -68,8 +69,8 @@ export function useReactionTime() {
 
         setMensagemAcessibilidade(
           `Teste finalizado. Sua média de tempo de reação foi ${media.toFixed(
-            0,
-          )} milissegundos.`,
+            0
+          )} milissegundos.`
         );
 
         return;
@@ -78,9 +79,7 @@ export function useReactionTime() {
       setStatus("result");
 
       setMensagemAcessibilidade(
-        `Tempo de reação: ${tempo.toFixed(
-          0,
-        )} milissegundos. Próxima tentativa.`,
+        `Tempo de reação: ${tempo.toFixed(0)} milissegundos. Próxima tentativa.`
       );
     }
   }
@@ -95,9 +94,7 @@ export function useReactionTime() {
     setStatus("idle");
     setReactionTime(null);
     setTempos([]);
-    setMensagemAcessibilidade(
-      "Clique para começar novamente.",
-    );
+    setMensagemAcessibilidade("Clique para começar novamente.");
   }
 
   useEffect(() => {
@@ -118,15 +115,16 @@ export function useReactionTime() {
       try {
         await postScore(resultado);
       } catch (error) {
-        console.error(
-          "Não foi possível enviar o resultado:",
-          error,
+        console.error("Não foi possível enviar o resultado:", error);
+
+        notificar(
+          "Não foi possível salvar sua pontuação. Verifique sua conexão."
         );
       }
     }
 
     enviar();
-  }, [status, reactionTime]);
+  }, [status, reactionTime, notificar]);
 
   useEffect(() => {
     return () => {

@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
-
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
+import { useNotification } from "../../context/NotificationContext";
 
 const words = ["AZUL", "AMARELO", "VERMELHO", "VERDE"];
 
@@ -16,16 +16,12 @@ export function useStroopTest() {
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(30);
   const [isTimerOn, setIsTimerOn] = useState(false);
-
   const startTime = useRef(0);
-
   const [currentWord, setCurrentWord] = useState(words[0]);
   const [currentColor, setCurrentColor] = useState(colorMap[words[0]]);
-
   const [reactionTimes, setReactionTimes] = useState([]);
-
   const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
-
+  const { notificar } = useNotification();
   const gameOver = timer === 0;
 
   useEffect(() => {
@@ -128,47 +124,36 @@ export function useStroopTest() {
         await postScore(result);
       } catch (error) {
         console.error("Não foi possível enviar o resultado:", error);
+
+        notificar(
+          "Não foi possível salvar sua pontuação. Verifique sua conexão."
+        );
       }
     }
 
     enviar();
-  }, [gameOver, reactionTimes.length, score, avgReactionTime]);
+  }, [gameOver, reactionTimes.length, score, avgReactionTime, notificar]);
 
   function resetGame() {
     setIsTimerOn(false);
-
     setScore(0);
-
     setReactionTimes([]);
-
     setTimer(30);
-
     startTime.current = performance.now();
-
     setMensagemAcessibilidade("Novo jogo iniciado.");
   }
 
   return {
     segundos: timer,
-
     score,
-
     startTimer,
-
     currentWord,
-
     currentColor,
-
     changeWord,
-
     colorCorrect,
-
     avgReactionTime,
-
     gameOver,
-
     resetGame,
-
     mensagemAcessibilidade,
   };
 }

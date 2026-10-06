@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
+import { useNotification } from "../../context/NotificationContext";
 
 const emojis = [
   "🍔",
@@ -24,14 +25,21 @@ export function gerarPosicao(posisoesExistentes) {
   const tentativasMaximas = 50;
   const distanciaMinima = 20;
 
-  for (let tentativas = 0; tentativas < tentativasMaximas; tentativas++) {
+  for (
+    let tentativas = 0;
+    tentativas < tentativasMaximas;
+    tentativas++
+  ) {
     const x = Math.floor(Math.random() * 81) + 10;
     const y = Math.floor(Math.random() * 81) + 10;
 
     let muitoPerto = false;
 
     for (const posicao of posisoesExistentes) {
-      const distancia = Math.hypot(x - posicao.x, y - posicao.y);
+      const distancia = Math.hypot(
+        x - posicao.x,
+        y - posicao.y
+      );
 
       if (distancia < distanciaMinima) {
         muitoPerto = true;
@@ -62,7 +70,7 @@ export function gerarFase(numeroFase) {
 
     imagensGeradas.push({
       id: index,
-      emoji: emoji,
+      emoji,
       x: novaPosicao.x,
       y: novaPosicao.y,
     });
@@ -80,36 +88,49 @@ export function useFoodMemory() {
   const [feedback, setFeedback] = useState(null);
   const [transicionando, setTransicionando] = useState(false);
 
-  // useFoodMemory.js
-// Pequeno ajuste de acessibilidade + segurança no envio de score
+  const { notificar } = useNotification();
 
-useEffect(() => {
-  if (!gameOver) return;
+  useEffect(() => {
+    if (!gameOver) return;
 
-  async function enviar() {
-    const fasesCompletadas = venceu ? fase : fase - 1;
+    async function enviar() {
+      const fasesCompletadas = venceu ? fase : fase - 1;
 
-    const result = {
-      userId: getCurrentUserId(),
-      gameId: "food-memory",
-      score: fasesCompletadas,
-      accuracy: venceu ? 100 : 0,
-      avgReactionTime: 0,
-      levelReached: fasesCompletadas,
-    };
+      const result = {
+        userId: getCurrentUserId(),
+        gameId: "food-memory",
+        score: fasesCompletadas,
+        accuracy: venceu ? 100 : 0,
+        avgReactionTime: 0,
+        levelReached: fasesCompletadas,
+      };
 
-    try {
-      await postScore(result);
-    } catch (error) {
-      console.error("Não foi possível enviar o resultado:", error);
+      try {
+        await postScore(result);
+      } catch (error) {
+        console.error(
+          "Não foi possível enviar o resultado:",
+          error
+        );
+
+        notificar(
+          "Não foi possível salvar sua pontuação. Verifique sua conexão."
+        );
+      }
     }
-  }
 
-  enviar();
-}, [gameOver, fase, venceu]);
+    enviar();
+  }, [gameOver, fase, venceu, notificar]);
 
   function clicarImagem(id) {
-    if (gameOver || venceu || feedback || transicionando) return;
+    if (
+      gameOver ||
+      venceu ||
+      feedback ||
+      transicionando
+    ) {
+      return;
+    }
 
     const idNovoEmoji = fase - 1;
 
