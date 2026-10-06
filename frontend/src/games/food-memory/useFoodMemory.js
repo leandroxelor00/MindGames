@@ -25,21 +25,14 @@ export function gerarPosicao(posisoesExistentes) {
   const tentativasMaximas = 50;
   const distanciaMinima = 20;
 
-  for (
-    let tentativas = 0;
-    tentativas < tentativasMaximas;
-    tentativas++
-  ) {
+  for (let tentativas = 0; tentativas < tentativasMaximas; tentativas++) {
     const x = Math.floor(Math.random() * 81) + 10;
     const y = Math.floor(Math.random() * 81) + 10;
 
     let muitoPerto = false;
 
     for (const posicao of posisoesExistentes) {
-      const distancia = Math.hypot(
-        x - posicao.x,
-        y - posicao.y
-      );
+      const distancia = Math.hypot(x - posicao.x, y - posicao.y);
 
       if (distancia < distanciaMinima) {
         muitoPerto = true;
@@ -96,22 +89,14 @@ export function useFoodMemory() {
     async function enviar() {
       const fasesCompletadas = venceu ? fase : fase - 1;
 
-      const result = {
-        userId: getCurrentUserId(),
-        gameId: "food-memory",
-        score: fasesCompletadas,
-        accuracy: venceu ? 100 : 0,
-        avgReactionTime: 0,
+      const result = buildScorePayload("food-memory", {
         levelReached: fasesCompletadas,
-      };
+      });
 
       try {
         await postScore(result);
       } catch (error) {
-        console.error(
-          "Não foi possível enviar o resultado:",
-          error
-        );
+        console.error("Não foi possível enviar o resultado:", error);
 
         notificar(
           "Não foi possível salvar sua pontuação. Verifique sua conexão."
@@ -123,12 +108,7 @@ export function useFoodMemory() {
   }, [gameOver, fase, venceu, notificar]);
 
   function clicarImagem(id) {
-    if (
-      gameOver ||
-      venceu ||
-      feedback ||
-      transicionando
-    ) {
+    if (gameOver || venceu || feedback || transicionando) {
       return;
     }
 

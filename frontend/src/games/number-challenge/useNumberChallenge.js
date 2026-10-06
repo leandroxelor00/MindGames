@@ -116,9 +116,7 @@ export function useNumberChallenge() {
 
       startTime.current = performance.now();
 
-      setMensagemAcessibilidade(
-        "O desafio começou. Escolha a maior operação."
-      );
+      setMensagemAcessibilidade("O desafio começou. Escolha a maior operação.");
     }
   }
 
@@ -163,15 +161,10 @@ export function useNumberChallenge() {
     }, 150);
   }
 
-  const sumReactionTime = reactionTimes.reduce(
-    (a, b) => a + b,
-    0
-  );
+  const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
 
   const avg =
-    reactionTimes.length > 0
-      ? sumReactionTime / reactionTimes.length
-      : 0;
+    reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
 
   const avgReactionTime = Number(avg.toFixed(2));
 
@@ -180,26 +173,19 @@ export function useNumberChallenge() {
 
     async function enviar() {
       const accuracy =
-        reactionTimes.length > 0
-          ? (score / reactionTimes.length) * 100
-          : 0;
+        reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
 
-      const result = {
-        userId: getCurrentUserId(),
-        gameId: "number-challenge",
+      const result = buildScorePayload("number-challenge", {
         score,
         accuracy,
         avgReactionTime,
         levelReached: currentLevel,
-      };
+      });
 
       try {
         await postScore(result);
       } catch (error) {
-        console.error(
-          "Não foi possível enviar o resultado:",
-          error
-        );
+        console.error("Não foi possível enviar o resultado:", error);
 
         notificar(
           "Não foi possível salvar sua pontuação. Verifique sua conexão."

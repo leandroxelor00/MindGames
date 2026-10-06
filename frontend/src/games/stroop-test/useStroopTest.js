@@ -111,14 +111,11 @@ export function useStroopTest() {
       const accuracy =
         reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
 
-      const result = {
-        userId: getCurrentUserId(),
-        gameId: "stroop-test",
+      const result = buildScorePayload("stroop-test", {
         score,
         accuracy,
         avgReactionTime,
-        levelReached: 1,
-      };
+      });
 
       try {
         await postScore(result);

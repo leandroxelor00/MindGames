@@ -4,36 +4,62 @@ import styles from "./Dashboard.module.css";
 import { Link } from "react-router-dom";
 import { CognitiveRadar } from "../components/CognitiveRadar/CognitiveRadar";
 import { gamesRegistry } from "../games/registry";
+import { games } from "../config/gamesConfig";
+
+function metricaPrincipal(gameId) {
+  const rule = games[gameId]?.rule ?? "accuracy";
+
+  if (rule === "level") {
+    return {
+      key: "levelReached",
+      label: "Nível médio",
+      partidaLabel: "Nível",
+      format: (v) => String(Math.round(Number(v) || 0)),
+    };
+  }
+
+  if (rule === "reaction") {
+    return {
+      key: "avgReactionTime",
+      label: "Tempo médio",
+      partidaLabel: "Tempo",
+      format: (v) => `${Number(v).toFixed(0)} ms`,
+    };
+  }
+
+  return {
+    key: "accuracy",
+    label: "Precisão média",
+    partidaLabel: "Precisão",
+    format: (v) => `${Number(v).toFixed(1)}%`,
+  };
+}
 
 function calcularMediasPorJogo(partidas) {
   const gameIds = [...new Set(partidas.map((partida) => partida.gameId))];
-
   const medias = {};
 
   gameIds.forEach((gameId) => {
     const partidasDoJogo = partidas.filter(
-      (partida) => partida.gameId === gameId,
+      (partida) => partida.gameId === gameId
     );
-
     const totalPartidas = partidasDoJogo.length;
+    const metrica = metricaPrincipal(gameId);
 
     const somaScore = partidasDoJogo.reduce(
       (total, partida) => total + partida.score,
-      0,
+      0
     );
-
-    const somaAccuracy = partidasDoJogo.reduce(
-      (total, partida) => total + partida.accuracy,
-      0,
+    const somaMetrica = partidasDoJogo.reduce(
+      (total, partida) => total + (Number(partida[metrica.key]) || 0),
+      0
     );
-
-    const mediaScore = somaScore / totalPartidas;
-    const mediaAccuracy = somaAccuracy / totalPartidas;
 
     medias[gameId] = {
       totalPartidas,
-      mediaScore,
-      mediaAccuracy,
+      mediaScore: somaScore / totalPartidas,
+      metrica,
+      mediaMetrica: somaMetrica / totalPartidas,
     };
   });
 
@@ -42,34 +68,24 @@ function calcularMediasPorJogo(partidas) {
 
 function formatarNomeJogo(gameId) {
   const jogo = gamesRegistry.find((game) => game.id === gameId);
-
   return jogo?.name || gameId;
 }
 
 function formatarScore(gameId, score) {
   const valor = Number(score).toFixed(2);
-
-  if (gameId === "reaction-time") {
-    return `${valor} ms`;
-  }
-
+  if (gameId === "reaction-time") return `${valor} ms`;
   return valor;
 }
 
 function formatarMediaScore(gameId, score) {
   const valor = Number(score).toFixed(1);
-
-  if (gameId === "reaction-time") {
-    return `${valor} ms`;
-  }
-
+  if (gameId === "reaction-time") return `${valor} ms`;
   return valor;
 }
 
 function formatarData(playedAt) {
   const dataCorrigida = playedAt.replace(" ", "T") + "Z";
   const data = new Date(dataCorrigida);
-
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -83,7 +99,6 @@ function formatarData(playedAt) {
 export function Dashboard() {
   const [partidas, setPartidas] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [summary, setSummary] = useState({
     memoria: 0,
     atencao: 0,
@@ -98,7 +113,6 @@ export function Dashboard() {
           getHistory(),
           getSummary(),
         ]);
-
         setPartidas(historico);
         setSummary(resumo);
       } catch (error) {
@@ -107,7 +121,6 @@ export function Dashboard() {
         setLoading(false);
       }
     }
-
     carregarHistorico();
   }, []);
 
@@ -127,7 +140,6 @@ export function Dashboard() {
     <main className={styles.container}>
       <div className={styles.topo}>
         <h1 className={styles.titulo}>Dashboard</h1>
-
         <Link to="/" className={styles.voltarLink}>
           ← Voltar
         </Link>
@@ -143,7 +155,6 @@ export function Dashboard() {
 
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Resumo por jogo</h2>
-
         {Object.keys(mediasPorJogo).length === 0 ? (
           <div className={styles.semPartidas}>
             <p>Você ainda não possui partidas registradas.</p>
@@ -152,29 +163,22 @@ export function Dashboard() {
           <div className={styles.resumoGrid}>
             {Object.entries(mediasPorJogo).map(([gameId, media]) => (
               <article className={styles.cardJogo} key={gameId}>
-                <h3 className={styles.nomeJogo}>
-                  {formatarNomeJogo(gameId)}
-                </h3>
-
+                <h3 className={styles.nomeJogo}>{formatarNomeJogo(gameId)}</h3>
                 <div className={styles.estatisticas}>
                   <div className={styles.estatistica}>
                     <span className={styles.label}>Total de partidas</span>
-                    <span className={styles.valor}>
-                      {media.totalPartidas}
-                    </span>
+                    <span className={styles.valor}>{media.totalPartidas}</span>
                   </div>
-
                   <div className={styles.estatistica}>
                     <span className={styles.label}>Score médio</span>
                     <span className={styles.valor}>
                       {formatarMediaScore(gameId, media.mediaScore)}
                     </span>
                   </div>
-
                   <div className={styles.estatistica}>
-                    <span className={styles.label}>Precisão média</span>
+                    <span className={styles.label}>{media.metrica.label}</span>
                     <span className={styles.valor}>
-                      {media.mediaAccuracy.toFixed(1)}%
+                      {media.metrica.format(media.mediaMetrica)}
                     </span>
                   </div>
                 </div>
@@ -186,44 +190,43 @@ export function Dashboard() {
 
       <section className={styles.secao}>
         <h2 className={styles.subtitulo}>Histórico de partidas</h2>
-
         {partidas.length === 0 ? (
           <div className={styles.semPartidas}>
             <p>Nenhuma partida encontrada.</p>
           </div>
         ) : (
           <div className={styles.historico}>
-            {partidas.map((partida) => (
-              <article className={styles.partida} key={partida.id}>
-                <div className={styles.infoPartida}>
-                  <p className={styles.jogo}>
-                    {formatarNomeJogo(partida.gameId)}
-                  </p>
-
-                  <p className={styles.data}>
-                    {formatarData(partida.playedAt)}
-                  </p>
-                </div>
-
-                <div className={styles.resultado}>
-                  <div className={styles.resultadoItem}>
-                    <span className={styles.resultadoLabel}>Score</span>
-
-                    <span className={styles.resultadoValor}>
-                      {formatarScore(partida.gameId, partida.score)}
-                    </span>
+            {partidas.map((partida) => {
+              const metrica = metricaPrincipal(partida.gameId);
+              return (
+                <article className={styles.partida} key={partida.id}>
+                  <div className={styles.infoPartida}>
+                    <p className={styles.jogo}>
+                      {formatarNomeJogo(partida.gameId)}
+                    </p>
+                    <p className={styles.data}>
+                      {formatarData(partida.playedAt)}
+                    </p>
                   </div>
-
-                  <div className={styles.resultadoItem}>
-                    <span className={styles.resultadoLabel}>Precisão</span>
-
-                    <span className={styles.resultadoValor}>
-                      {partida.accuracy.toFixed(2)}%
-                    </span>
+                  <div className={styles.resultado}>
+                    <div className={styles.resultadoItem}>
+                      <span className={styles.resultadoLabel}>Score</span>
+                      <span className={styles.resultadoValor}>
+                        {formatarScore(partida.gameId, partida.score)}
+                      </span>
+                    </div>
+                    <div className={styles.resultadoItem}>
+                      <span className={styles.resultadoLabel}>
+                        {metrica.partidaLabel}
+                      </span>
+                      <span className={styles.resultadoValor}>
+                        {metrica.format(partida[metrica.key])}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
       </section>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
 import { useNotification } from "../../context/NotificationContext";
+import { buildScorePayload } from "../../services/scorePayload";
 
 export function criarBaralho() {
   const valores = ["🍎", "🍌", "🍇", "🍒", "🍉", "🍓", "🍍", "🥝"];
@@ -164,14 +165,10 @@ export function useMemoryMatch() {
       const accuracy =
         tentativas > 0 ? Math.min((paresAcertados / tentativas) * 100, 100) : 0;
 
-      const result = {
-        userId: getCurrentUserId(),
-        gameId: "memory-match",
+      const result = buildScorePayload("memory-match", {
         score: paresAcertados,
         accuracy,
-        avgReactionTime: 0,
-        levelReached: 1,
-      };
+      });
 
       setMensagemAcessibilidade(
         `Você venceu em ${tentativas} tentativas e ${segundos} segundos`

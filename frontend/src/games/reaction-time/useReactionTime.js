@@ -103,14 +103,9 @@ export function useReactionTime() {
     }
 
     async function enviar() {
-      const resultado = {
-        userId: getCurrentUserId(),
-        gameId: "reaction-time",
-        score: reactionTime,
-        accuracy: 100,
+      const resultado = buildScorePayload("reaction-time", {
         avgReactionTime: reactionTime,
-        levelReached: 1,
-      };
+      });
 
       try {
         await postScore(resultado);
