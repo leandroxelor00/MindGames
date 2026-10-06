@@ -19,6 +19,7 @@ const games = {
   "stroop-test": { category: "attention", rule: "target", target: 25 },
   "number-challenge": { category: "logic", rule: "target", target: 20 },
   "reaction-time": { category: "velocity", rule: "reaction" },
+  "sound-sequence": { category: "memory", rule: "level" },
 };
 
 const GAME_IDS = Object.keys(games);
