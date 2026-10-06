@@ -4,25 +4,12 @@ const {
   updateUserIdInScores,
 } = require("../models/score.model");
 
-const games = [
-  "memory-match",
-  "stroop-test",
-  "number-challenge",
-  "visual-memory",
-  "food-memory",
-  "reaction-time",
-  "sound-sequence",
-];
+const { points } = require("./points.service");
+const { games, GAME_IDS } = require("../config/gamesConfig");
 
-const summaryCategory = {
-  memory: ["memory-match", "food-memory", "visual-memory", "sound-sequence"],
-  attention: ["stroop-test"],
-  velocity: ["reaction-time"],
-  logic: ["number-challenge"],
-};
 function saveScore(score) {
   if (
-    !games.includes(score.gameId) ||
+    !GAME_IDS.includes(score.gameId) ||
     score.score < 0 ||
     score.accuracy < 0 ||
     score.accuracy > 100 ||
@@ -61,47 +48,28 @@ function migrateScores(oldUserId, newUserId) {
   return changes;
 }
 
-function summary(userId) {
-  const scores = selectByUserId(userId);
-  const memoryCategory = filterScoresByCategory(scores, summaryCategory.memory);
-  const attentionCategory = filterScoresByCategory(
-    scores,
-    summaryCategory.attention
-  );
-  const velocityCategory = filterScoresByCategory(
-    scores,
-    summaryCategory.velocity
-  );
-  const logicCategory = filterScoresByCategory(scores, summaryCategory.logic);
+function avg(nums) {
+  if (nums.length === 0) return 0;
+  return nums.reduce((a, b) => a + b, 0) / nums.length;
+}
 
-  const avgMemoryAccuracy = avgAccuracyByCategory(memoryCategory);
-  const avgAttentionAccuracy = avgAccuracyByCategory(attentionCategory);
-  const avgVelocityAccuracy = avgAccuracyByCategory(velocityCategory);
-  const avgLogicAccuracy = avgAccuracyByCategory(logicCategory);
+function summary(userId) {
+  const buckets = { memory: [], attention: [], velocity: [], logic: [] };
+
+  for (const score of selectByUserId(userId)) {
+    const game = games[score.gameId];
+    if (!game) continue;
+    try {
+      buckets[game.category].push(points(score));
+    } catch {}
+  }
 
   return {
-    memoria: avgMemoryAccuracy,
-    atencao: avgAttentionAccuracy,
-    velocidade: avgVelocityAccuracy,
-    logica: avgLogicAccuracy,
+    memoria: avg(buckets.memory),
+    atencao: avg(buckets.attention),
+    velocidade: avg(buckets.velocity),
+    logica: avg(buckets.logic),
   };
-}
-
-function avgAccuracyByCategory(category) {
-  if (category.length === 0) {
-    return 0;
-  } else {
-    return (
-      category.reduce((acc, cur) => acc + cur.accuracy, 0) / category.length
-    );
-  }
-}
-
-function filterScoresByCategory(scores, list) {
-  const scoresByCategory = scores.filter((score) =>
-    list.includes(score.gameId)
-  );
-  return scoresByCategory;
 }
 
 function getStreak(userId) {
