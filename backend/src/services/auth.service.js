@@ -35,19 +35,19 @@ async function registerUser(rawEmail, plainPassword, username) {
     throw badRequest("A senha precisa ter pelo menos 8 caracteres");
   }
 
-  if (selectByUsername(trimUsername)) {
+  if (await selectByUsername(trimUsername)) {
     throw badRequest("Esse username já está em uso", 409);
   }
 
-  if (selectByUserEmail(email)) {
+  if (await selectByUserEmail(email)) {
     throw badRequest("Esse email já existe", 409);
   }
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(plainPassword, saltRounds);
-  insertUser(email, passwordHash, trimUsername);
+  await insertUser(email, passwordHash, trimUsername);
 
-  const user = selectByUserEmail(email);
+  const user = await selectByUserEmail(email);
 
   const token = generateToken(user);
 
@@ -69,7 +69,7 @@ async function loginUser(rawEmail, plainPassword) {
     throw badRequest("Email e senha são obrigatórios");
   }
 
-  const user = selectByUserEmail(email);
+  const user = await selectByUserEmail(email);
 
   if (!user) {
     throw badRequest("Email ou senha inválido");

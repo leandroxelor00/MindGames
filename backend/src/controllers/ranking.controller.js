@@ -10,9 +10,12 @@ function parseLimit(value) {
   return Math.min(limit, 50);
 }
 
-function globalRanking(req, res, next) {
+async function globalRanking(req, res, next) {
   try {
-    const result = getGlobalRanking(parseLimit(req.query.limit), req.user?.id);
+    const result = await getGlobalRanking(
+      parseLimit(req.query.limit),
+      req.user?.id,
+    );
     return res
       .status(200)
       .json({ message: "Ranking calculado com sucesso", result });
@@ -21,7 +24,7 @@ function globalRanking(req, res, next) {
   }
 }
 
-function gameRanking(req, res, next) {
+async function gameRanking(req, res, next) {
   const { gameId } = req.params;
 
   if (!GAME_IDS.includes(gameId)) {
@@ -29,7 +32,7 @@ function gameRanking(req, res, next) {
   }
 
   try {
-    const result = getGameRanking(
+    const result = await getGameRanking(
       gameId,
       parseLimit(req.query.limit),
       req.user?.id,

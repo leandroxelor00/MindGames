@@ -5,10 +5,7 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
-require("./db/connection");
-require("./db/migrations/001_create_scores");
-require("./db/migrations/002_create_users");
-require("./db/migrations/003_add_username_to_users");
+const { runMigrations } = require("./db/migrate");
 
 const express = require("express");
 const cors = require("cors");
@@ -37,6 +34,14 @@ app.use("/api/ranking", rankingRoutes);
 app.use(healthRoutes);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+// As migrations rodam antes de aceitar requisições
+runMigrations()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Falha ao preparar o banco de dados:", error);
+    process.exit(1);
+  });

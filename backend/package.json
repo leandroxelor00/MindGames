@@ -11,8 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "API do MindGames (Express + node:sqlite)",
+  "description": "API do MindGames (Express + SQLite/Turso via libSQL)",
   "dependencies": {
+    "@libsql/client": "^0.18.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -20,6 +21,6 @@
     "jsonwebtoken": "^9.0.3"
   },
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=20"
   }
 }

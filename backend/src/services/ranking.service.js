@@ -111,15 +111,15 @@ function buildResponse(base, numbered, limit, myUserId) {
   };
 }
 
-function getGlobalRanking(limit = 10, myUserId = null) {
-  const pointRows = toPointRows(selectScoresWithUsername());
+async function getGlobalRanking(limit = 10, myUserId = null) {
+  const pointRows = toPointRows(await selectScoresWithUsername());
   const entries = buildGlobalEntries(pointRows);
   const numbered = sortAndNumber(entries);
   return buildResponse({ tipo: "global" }, numbered, limit, myUserId);
 }
 
-function getGameRanking(gameId, limit = 10, myUserId = null) {
-  const pointRows = toPointRows(selectScoresWithUsername());
+async function getGameRanking(gameId, limit = 10, myUserId = null) {
+  const pointRows = toPointRows(await selectScoresWithUsername());
   const entries = buildGameEntries(pointRows, gameId);
   const numbered = sortAndNumber(entries);
   return buildResponse({ tipo: "jogo", gameId }, numbered, limit, myUserId);

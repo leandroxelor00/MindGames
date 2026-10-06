@@ -11,7 +11,7 @@ function isInRange(value, max) {
   return Number.isFinite(value) && value >= 0 && value <= max;
 }
 
-function saveScore(score) {
+async function saveScore(score) {
   if (
     !GAME_IDS.includes(score.gameId) ||
     !isInRange(score.score, SCORE_LIMITS.score) ||
@@ -23,7 +23,7 @@ function saveScore(score) {
     error.status = 400;
     throw error;
   }
-  return insertScore(
+  return await insertScore(
     score.userId,
     score.gameId,
     score.score,
@@ -33,11 +33,11 @@ function saveScore(score) {
   );
 }
 
-function getScoresByUserId(userId) {
-  return selectByUserId(userId);
+async function getScoresByUserId(userId) {
+  return await selectByUserId(userId);
 }
 
-function migrateScores(oldUserId, newUserId) {
+async function migrateScores(oldUserId, newUserId) {
   if (!oldUserId || !newUserId) {
     const error = new TypeError(
       "É obrigatório ter o Id antigo e novo do usuário"
@@ -46,7 +46,7 @@ function migrateScores(oldUserId, newUserId) {
     throw error;
   }
 
-  const changes = updateUserIdInScores(oldUserId, newUserId);
+  const changes = await updateUserIdInScores(oldUserId, newUserId);
 
   return changes;
 }
@@ -56,10 +56,10 @@ function avg(nums) {
   return nums.reduce((a, b) => a + b, 0) / nums.length;
 }
 
-function summary(userId) {
+async function summary(userId) {
   const buckets = { memory: [], attention: [], velocity: [], logic: [] };
 
-  for (const score of selectByUserId(userId)) {
+  for (const score of await selectByUserId(userId)) {
     const game = games[score.gameId];
     if (!game) continue;
     try {
@@ -75,8 +75,8 @@ function summary(userId) {
   };
 }
 
-function getStreak(userId) {
-  const scores = selectByUserId(userId);
+async function getStreak(userId) {
+  const scores = await selectByUserId(userId);
 
   const formatedDates = scores.map(
     (ele) => new Date(ele.playedAt.replace(" ", "T") + "Z")

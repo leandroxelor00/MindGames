@@ -1,27 +1,26 @@
-const { db } = require("../db/connection");
+const { query, run } = require("../db/connection");
 
-function selectByUserEmail(email) {
-  const select = db.prepare(
+async function selectByUserEmail(email) {
+  const rows = await query(
     "SELECT * FROM users WHERE email = ? COLLATE NOCASE",
+    [email],
   );
-  const user = select.get(email);
-  return user;
+  return rows[0];
 }
 
-function selectByUsername(username) {
-  const select = db.prepare(
-    " SELECT * FROM users WHERE username = ? COLLATE NOCASE",
+async function selectByUsername(username) {
+  const rows = await query(
+    "SELECT * FROM users WHERE username = ? COLLATE NOCASE",
+    [username],
   );
-  const user = select.get(username);
-  return user;
+  return rows[0];
 }
 
-function insertUser(email, passwordHash, username) {
-  const insert = db.prepare(
-    `INSERT INTO users (email, passwordHash, username) VALUES (?, ?, ?)`,
+async function insertUser(email, passwordHash, username) {
+  return run(
+    "INSERT INTO users (email, passwordHash, username) VALUES (?, ?, ?)",
+    [email, passwordHash, username],
   );
-  const user = insert.run(email, passwordHash, username);
-  return user;
 }
 
 module.exports = { selectByUserEmail, selectByUsername, insertUser };
