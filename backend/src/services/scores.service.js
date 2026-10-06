@@ -5,16 +5,19 @@ const {
 } = require("../models/score.model");
 
 const { points } = require("./points.service");
-const { games, GAME_IDS } = require("../config/gamesConfig");
+const { games, GAME_IDS, SCORE_LIMITS } = require("../config/gamesConfig");
+
+function isInRange(value, max) {
+  return Number.isFinite(value) && value >= 0 && value <= max;
+}
 
 function saveScore(score) {
   if (
     !GAME_IDS.includes(score.gameId) ||
-    score.score < 0 ||
-    score.accuracy < 0 ||
-    score.accuracy > 100 ||
-    score.avgReactionTime < 0 ||
-    score.levelReached < 0
+    !isInRange(score.score, SCORE_LIMITS.score) ||
+    !isInRange(score.accuracy, SCORE_LIMITS.accuracy) ||
+    !isInRange(score.avgReactionTime, SCORE_LIMITS.avgReactionTime) ||
+    !isInRange(score.levelReached, SCORE_LIMITS.levelReached)
   ) {
     const error = new TypeError("Valores inválidos");
     error.status = 400;
