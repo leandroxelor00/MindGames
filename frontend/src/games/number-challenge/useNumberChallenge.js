@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
 import { useAdaptiveDifficulty } from "../../hooks/useAdaptiveDifficulty";
+import { useNotification } from "../../context/NotificationContext";
 
 function criarNovoDesafio(nivel) {
   const sortearNumero = (min, max) =>
@@ -81,6 +82,8 @@ export function useNumberChallenge() {
   const scoreRef = useRef(score);
   const gameOver = timer === 0;
 
+  const { notificar } = useNotification();
+
   useEffect(() => {
     scoreRef.current = score;
   }, [score]);
@@ -113,7 +116,9 @@ export function useNumberChallenge() {
 
       startTime.current = performance.now();
 
-      setMensagemAcessibilidade("O desafio começou. Escolha a maior operação.");
+      setMensagemAcessibilidade(
+        "O desafio começou. Escolha a maior operação."
+      );
     }
   }
 
@@ -158,10 +163,15 @@ export function useNumberChallenge() {
     }, 150);
   }
 
-  const sumReactionTime = reactionTimes.reduce((a, b) => a + b, 0);
+  const sumReactionTime = reactionTimes.reduce(
+    (a, b) => a + b,
+    0
+  );
 
   const avg =
-    reactionTimes.length > 0 ? sumReactionTime / reactionTimes.length : 0;
+    reactionTimes.length > 0
+      ? sumReactionTime / reactionTimes.length
+      : 0;
 
   const avgReactionTime = Number(avg.toFixed(2));
 
@@ -170,7 +180,9 @@ export function useNumberChallenge() {
 
     async function enviar() {
       const accuracy =
-        reactionTimes.length > 0 ? (score / reactionTimes.length) * 100 : 0;
+        reactionTimes.length > 0
+          ? (score / reactionTimes.length) * 100
+          : 0;
 
       const result = {
         userId: getCurrentUserId(),
@@ -184,12 +196,26 @@ export function useNumberChallenge() {
       try {
         await postScore(result);
       } catch (error) {
-        console.error("Não foi possível enviar o resultado:", error);
+        console.error(
+          "Não foi possível enviar o resultado:",
+          error
+        );
+
+        notificar(
+          "Não foi possível salvar sua pontuação. Verifique sua conexão."
+        );
       }
     }
 
     enviar();
-  }, [gameOver, score, avgReactionTime, currentLevel, reactionTimes.length]);
+  }, [
+    gameOver,
+    score,
+    avgReactionTime,
+    currentLevel,
+    reactionTimes.length,
+    notificar,
+  ]);
 
   function resetGame() {
     setIsTimerOn(false);

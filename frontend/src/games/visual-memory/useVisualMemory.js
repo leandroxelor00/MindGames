@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { levels } from "./levels";
 import { getCurrentUserId } from "../../services/userId";
 import { postScore } from "../../services/scoreService";
+import { useNotification } from "../../context/NotificationContext";
 
 export function useVisualMemory() {
   const [levelIndex, setLevelIndex] = useState(0);
-  const [gridLength, setGridLength] = useState(levels[levelIndex].gridLength);
+  const [gridLength, setGridLength] = useState(
+    levels[levelIndex].gridLength,
+  );
   const [cells, setCells] = useState(levels[levelIndex].cells);
   const [highlightedCells, setHighlightedCells] = useState(new Set());
   const [selectedCells, setSelectedCells] = useState(new Set());
@@ -16,6 +19,8 @@ export function useVisualMemory() {
   const [allLevelsDone, setAllLevelsDone] = useState(false);
   const [mensagemAcessibilidade, setMensagemAcessibilidade] = useState("");
 
+  const { notificar } = useNotification();
+
   const min = 0;
   const max = levels[levelIndex].gridLength - 1;
 
@@ -25,7 +30,9 @@ export function useVisualMemory() {
 
     generateHighlightedCells(currentCells);
 
-    setMensagemAcessibilidade(`Memorize o padrão do nível ${levelIndex + 1}`);
+    setMensagemAcessibilidade(
+      `Memorize o padrão do nível ${levelIndex + 1}`,
+    );
 
     const timeout = setTimeout(() => {
       setIsShowingPartern(false);
@@ -49,7 +56,6 @@ export function useVisualMemory() {
 
     setTimeout(() => {
       setCells(levels[levelIndex].cells);
-
       setGridLength(levels[levelIndex].gridLength);
     }, 400);
 
@@ -173,13 +179,16 @@ export function useVisualMemory() {
         await postScore(result);
       } catch (error) {
         console.error("Não foi possível enviar o resultado:", error);
+        notificar(
+          "Não foi possível salvar sua pontuação. Verifique sua conexão.",
+        );
       }
     }
 
     enviar();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameOver, allLevelsDone]);
+  }, [gameOver, allLevelsDone, notificar]);
 
   return {
     generateGrid,
