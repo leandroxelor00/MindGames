@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getHistory, getSummary } from "../services/scoreService";
 import { CognitiveRadar } from "../components/CognitiveRadar/CognitiveRadar";
 import { Speakable } from "../components/Speakable/Speakable";
+import { useNotification } from "../context/NotificationContext";
 
 import styles from "./Dashboard.module.css";
 
@@ -119,6 +120,7 @@ function formatarData(playedAt) {
 }
 
 export function Dashboard() {
+  const { notificar } = useNotification();
   const [partidas, setPartidas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -140,17 +142,15 @@ export function Dashboard() {
         setPartidas(historico);
         setSummary(resumo);
       } catch (error) {
-        console.error(
-          "Erro ao carregar dashboard:",
-          error,
-        );
+        console.error("Erro ao carregar dashboard:", error);
+        notificar("Não foi possível carregar seu histórico. Tente novamente.");
       } finally {
         setLoading(false);
       }
     }
 
     carregarHistorico();
-  }, []);
+  }, [notificar]);
 
   const mediasPorJogo = calcularMediasPorJogo(partidas);
 

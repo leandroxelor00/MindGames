@@ -1,7 +1,9 @@
 const { db } = require("../db/connection");
 
 function selectByUserEmail(email) {
-  const select = db.prepare("SELECT * FROM users WHERE email = ?");
+  const select = db.prepare(
+    "SELECT * FROM users WHERE email = ? COLLATE NOCASE",
+  );
   const user = select.get(email);
   return user;
 }

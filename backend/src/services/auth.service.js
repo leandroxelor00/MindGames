@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {
@@ -8,30 +8,39 @@ const {
 } = require("../models/user.model");
 const { isValidUsername } = require("../validators/validators");
 
-async function registerUser(email, plainPassword, username) {
+function badRequest(message, status = 400) {
+  const error = new Error(message);
+  error.status = status;
+  return error;
+}
+
+function normalizeEmail(email) {
+  return typeof email === "string" ? email.trim().toLowerCase() : "";
+}
+
+async function registerUser(rawEmail, plainPassword, username) {
+  const email = normalizeEmail(rawEmail);
+
+  if (!email) {
+    throw badRequest("Email é obrigatório");
+  }
+
   if (typeof username !== "string" || !isValidUsername(username.trim())) {
-    throw new Error("Username inválido. Use 3 a 16 letras, números ou _");
+    throw badRequest("Username inválido. Use 3 a 16 letras, números ou _");
   }
 
   const trimUsername = username.trim();
 
-  if (plainPassword.length < 8) {
-    const error = new Error("A senha precisa ter pelo menos 8 caracteres");
-    error.status = 400;
-    throw error;
+  if (typeof plainPassword !== "string" || plainPassword.length < 8) {
+    throw badRequest("A senha precisa ter pelo menos 8 caracteres");
   }
 
-  const existingUsername = selectByUsername(trimUsername);
-  const existingUser = selectByUserEmail(email);
-
-  if (existingUsername) {
-    throw new Error("Esse username já está em uso");
+  if (selectByUsername(trimUsername)) {
+    throw badRequest("Esse username já está em uso", 409);
   }
 
-  if (existingUser) {
-    const error = new Error("Esse email já existe");
-    error.status = 409;
-    throw error;
+  if (selectByUserEmail(email)) {
+    throw badRequest("Esse email já existe", 409);
   }
 
   const saltRounds = 10;
@@ -53,13 +62,17 @@ function generateToken(user) {
   return token;
 }
 
-async function loginUser(email, plainPassword) {
+async function loginUser(rawEmail, plainPassword) {
+  const email = normalizeEmail(rawEmail);
+
+  if (!email || typeof plainPassword !== "string" || !plainPassword) {
+    throw badRequest("Email e senha são obrigatórios");
+  }
+
   const user = selectByUserEmail(email);
 
   if (!user) {
-    const error = new Error("Email ou senha inválido");
-    error.status = 400;
-    throw error;
+    throw badRequest("Email ou senha inválido");
   }
 
   const passwordCorrect = await bcrypt.compare(
@@ -68,9 +81,7 @@ async function loginUser(email, plainPassword) {
   );
 
   if (!passwordCorrect) {
-    const error = new Error("Email ou senha inválido");
-    error.status = 400;
-    throw error;
+    throw badRequest("Email ou senha inválido");
   }
 
   const token = generateToken(user);
