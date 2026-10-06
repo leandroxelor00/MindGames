@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { postScore } from "../../services/scoreService";
 import { useNotification } from "../../context/NotificationContext";
+import { buildScorePayload } from "../../services/scorePayload";
 
 const emojis = [
   "🍔",

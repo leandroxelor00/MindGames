@@ -4,7 +4,7 @@ import {
   useState,
   useCallback,
 } from "react";
-
+import { buildScorePayload } from "../../services/scorePayload";
 import { postScore } from "../../services/scoreService";
 import { useAccessibility } from "../../context/AccessibilityContext";
 import { useNotification } from "../../context/NotificationContext";

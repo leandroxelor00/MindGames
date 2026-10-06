@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { levels } from "./levels";
 import { postScore } from "../../services/scoreService";
 import { useNotification } from "../../context/NotificationContext";
+import { buildScorePayload } from "../../services/scorePayload";
 
 export function useVisualMemory() {
   const [levelIndex, setLevelIndex] = useState(0);

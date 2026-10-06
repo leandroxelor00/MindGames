@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { postScore } from "../../services/scoreService";
 import { useAdaptiveDifficulty } from "../../hooks/useAdaptiveDifficulty";
 import { useNotification } from "../../context/NotificationContext";
+import { buildScorePayload } from "../../services/scorePayload";
 
 function criarNovoDesafio(nivel) {
   const sortearNumero = (min, max) =>

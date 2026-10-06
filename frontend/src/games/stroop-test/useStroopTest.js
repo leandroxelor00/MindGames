@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { postScore } from "../../services/scoreService";
 import { useNotification } from "../../context/NotificationContext";
-
+import { buildScorePayload } from "../../services/scorePayload";
 const words = ["AZUL", "AMARELO", "VERMELHO", "VERDE"];
 
 const colorMap = {
