@@ -84,6 +84,9 @@
   }
 
   .painel {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
     font-size: 1rem;
   }
 

@@ -20,7 +20,7 @@ export function CognitiveRadar({ summary }) {
   return (
     <>
       <ResponsiveContainer width="100%" height={300}>
-        <RadarChart data={dados}>
+        <RadarChart data={dados} outerRadius="70%">
           <PolarGrid />
           <PolarAngleAxis dataKey="categoria" />
           <PolarRadiusAxis angle={90} domain={[0, 100]} />
