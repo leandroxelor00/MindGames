@@ -81,6 +81,171 @@
   color: var(--cor-accent);
 }
 
+.accessibilityButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid #e5e6ec;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--cor-texto);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.accessibilityButton:hover {
+  border-color: var(--cor-accent);
+  color: var(--cor-accent);
+}
+
+.accessibilityButton[aria-expanded="true"] {
+  background: var(--cor-accent);
+  border-color: var(--cor-accent);
+  color: #fff;
+}
+
+.accessibilityButton:focus-visible,
+.accessibilityClose:focus-visible,
+.accessibilityCloseButton:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.accessibilityPanel {
+  width: min(900px, calc(100% - 32px));
+  margin: 16px auto 0;
+  padding: 20px;
+  border: 1px solid #e5e6ec;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.accessibilityPanelHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.accessibilityPanelEyebrow {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--cor-accent);
+  letter-spacing: 0.1em;
+}
+
+.accessibilityPanelTitle {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.accessibilityClose {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e6ec;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--cor-texto);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.accessibilityClose:hover {
+  border-color: var(--cor-accent);
+  color: var(--cor-accent);
+}
+
+.accessibilityPanelText {
+  max-width: 720px;
+  margin: 14px 0;
+  color: var(--cor-texto-suave);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.accessibilityShortcut {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #f7f8fa;
+  color: var(--cor-texto);
+  font-size: 13px;
+}
+
+.shortcutLabel {
+  margin-right: 6px;
+  font-weight: 600;
+}
+
+.accessibilityShortcut kbd {
+  min-width: 32px;
+  padding: 5px 8px;
+  border: 1px solid #d5d7df;
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.accessibilityPanelActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.accessibilitySettingsLink,
+.accessibilityCloseButton {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.accessibilitySettingsLink {
+  background: var(--cor-accent);
+  color: #fff;
+}
+
+.accessibilitySettingsLink:hover {
+  background: var(--cor-accent-hover);
+}
+
+.accessibilityCloseButton {
+  border: 1px solid #e5e6ec;
+  background: #fff;
+  color: var(--cor-texto);
+}
+
+.accessibilityCloseButton:hover {
+  border-color: var(--cor-accent);
+  color: var(--cor-accent);
+}
+
 .hero {
   max-width: 640px;
   margin: 0 auto;
@@ -182,7 +347,7 @@ a:nth-child(even) {
   }
 }
 
-/*  - - - - - - - - streak e daily */
+/* Streak e daily */
 
 .homeContent {
   width: min(1000px, calc(100% - 32px));
@@ -344,28 +509,7 @@ a:nth-child(even) {
   }
 }
 
-html[data-alto-contraste="true"] .navButtonPrimary {
-  background: #ffff00;
-  color: #000000 !important;
-  border: 2px solid #ffffff;
-}
-
-html[data-alto-contraste="true"] .navButtonPrimary:hover {
-  background: #ffff66;
-  color: #000000 !important;
-}
-
-html[data-alto-contraste="true"] .navButtonGhost {
-  background: #000000;
-  color: #ffffff;
-  border-color: #ffffff;
-}
-
-html[data-alto-contraste="true"] .navButtonGhost:hover {
-  background: #111111;
-  color: #ffff00;
-  border-color: #ffff00;
-}
+/* Alto contraste */
 
 html[data-alto-contraste="true"] .navButtonPrimary {
   background: #ffff00;
@@ -388,4 +532,60 @@ html[data-alto-contraste="true"] .navButtonGhost:hover {
   background: #111111;
   color: #ffff00;
   border-color: #ffff00;
+}
+
+html[data-alto-contraste="true"] .accessibilityButton {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .accessibilityButton[aria-expanded="true"] {
+  background: #ffff00;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .accessibilityButton:hover {
+  color: #ffff00;
+  border-color: #ffff00;
+}
+
+html[data-alto-contraste="true"] .accessibilityPanel {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .accessibilityPanelText,
+html[data-alto-contraste="true"] .accessibilityPanelTitle {
+  color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .accessibilityPanelEyebrow {
+  color: #ffff00;
+}
+
+html[data-alto-contraste="true"] .accessibilityClose,
+html[data-alto-contraste="true"] .accessibilityCloseButton {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .accessibilityShortcut {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+html[data-alto-contraste="true"] .accessibilityShortcut kbd {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .accessibilitySettingsLink {
+  background: #ffff00;
+  color: #000000;
 }

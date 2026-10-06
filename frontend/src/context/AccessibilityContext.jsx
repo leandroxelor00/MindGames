@@ -36,9 +36,10 @@ export function AccessibilityProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem("fonteEscala", fonteEscala);
+
     document.documentElement.style.setProperty(
       "--fonte-escala",
-      fonteEscala
+      fonteEscala,
     );
   }, [fonteEscala]);
 
@@ -64,7 +65,7 @@ export function AccessibilityProvider({ children }) {
       setVozesDisponiveis(vozes);
 
       const vozSelecionadaExiste = vozes.some(
-        (voz) => voz.name === vozNarrador
+        (voz) => voz.name === vozNarrador,
       );
 
       if (vozNarrador !== "automatica" && !vozSelecionadaExiste) {
@@ -76,13 +77,13 @@ export function AccessibilityProvider({ children }) {
 
     window.speechSynthesis.addEventListener(
       "voiceschanged",
-      carregarVozes
+      carregarVozes,
     );
 
     return () => {
       window.speechSynthesis.removeEventListener(
         "voiceschanged",
-        carregarVozes
+        carregarVozes,
       );
     };
   }, [vozNarrador]);
