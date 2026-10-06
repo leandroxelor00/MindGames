@@ -79,7 +79,9 @@
 }
 
 .input {
+  display: block;
   width: 100%;
+  text-overflow: ellipsis;
   padding: 0.85rem 1rem 0.85rem 2.6rem;
   border: 1px solid var(--cor-borda);
   border-radius: 12px;
@@ -100,6 +102,7 @@
 }
 
 .submitButton {
+  width: 100%;
   margin-top: 0.5rem;
   padding: 0.85rem 1rem;
   border: none;

@@ -5,8 +5,10 @@
 
 .navbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 12px 16px;
   max-width: 900px;
   margin: 0 auto;
   padding: 20px 24px 0;
@@ -20,8 +22,9 @@
 
 .navActions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
+  gap: 12px 20px;
 }
 
 .navLink {
@@ -36,6 +39,8 @@
 }
 
 .navButtonPrimary {
+  display: inline-block;
+  white-space: nowrap;
   padding: 8px 16px;
   border-radius: 8px;
   background: var(--cor-accent);
@@ -52,11 +57,13 @@
 
 .navUser {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
 }
 
 .navEmail {
+  overflow-wrap: anywhere;
   font-size: 14px;
   color: var(--cor-texto-suave);
 }
@@ -334,6 +341,13 @@ a:nth-child(even) {
 @media (prefers-reduced-motion: reduce) {
   .card {
     transition: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

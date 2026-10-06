@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 12px;
@@ -108,6 +109,24 @@
     font-size: 1rem;
   }
 
+  .item + .item::before {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .container {
+    gap: 8px;
+  }
+
+  .item {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 8px 10px;
+    white-space: normal;
+  }
+
+  /* com quebra de linha, o separador ficaria solto */
   .item + .item::before {
     display: none;
   }
