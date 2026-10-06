@@ -1,7 +1,7 @@
 export const CHAVE_TOKEN = "mindgames_auth_token";
 export const CHAVE_USER = "mindgames_auth_user";
 
-const BASE_URL = "http://localhost:3001/api";
+const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001/api";
 
 export async function apiFetch(path, options = {}) {
   const token = localStorage.getItem(CHAVE_TOKEN);

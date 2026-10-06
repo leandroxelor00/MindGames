@@ -1,5 +1,10 @@
 import { apiFetch, CHAVE_TOKEN } from "./api";
-import { salvarPendente ,getPendentes, salvarListaPendentes } from "./pendingScores";
+import {
+  salvarPendente,
+  getPendentes,
+  salvarListaPendentes,
+  deveReenviar,
+} from "./pendingScores";
 import { getCurrentUserId, getUserId } from "./userId";
 
 export async function postScore(result) {
@@ -16,7 +21,9 @@ export async function postScore(result) {
       body: JSON.stringify(resultadoComUsuario),
     });
   } catch (error) {
-    salvarPendente(resultadoComUsuario);
+    if (deveReenviar(error)) {
+      salvarPendente(resultadoComUsuario);
+    }
     throw error;
   }
 }
@@ -107,9 +114,11 @@ export async function reenviarPendentes() {
         method: "POST",
         body: JSON.stringify(resultado),
       });
-    // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      aindaFalharam.push(resultado);
+      // 4xx = back recusou o dado; descarta para não repetir o erro todo load
+      if (deveReenviar(error)) {
+        aindaFalharam.push(resultado);
+      }
     }
   }
 
