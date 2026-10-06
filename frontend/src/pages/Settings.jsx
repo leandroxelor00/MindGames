@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
-
 import { useAccessibility } from "../context/AccessibilityContext";
-
 import styles from "./Settings.module.css";
 
 export function Settings() {
@@ -15,6 +13,8 @@ export function Settings() {
     vozNarrador,
     setVozNarrador,
     vozesDisponiveis,
+    narracaoHover,
+    setNarracaoHover,
   } = useAccessibility();
 
   return (
@@ -34,6 +34,7 @@ export function Settings() {
         </p>
 
         <div className={styles.opcoes}>
+          {/* Alto contraste */}
           <div className={styles.opcao}>
             <div className={styles.info}>
               <label htmlFor="alto-contraste" className={styles.nome}>
@@ -54,6 +55,7 @@ export function Settings() {
             />
           </div>
 
+          {/* Reduzir animações */}
           <div className={styles.opcao}>
             <div className={styles.info}>
               <label htmlFor="reduzir-animacoes" className={styles.nome}>
@@ -74,6 +76,7 @@ export function Settings() {
             />
           </div>
 
+          {/* Tamanho da fonte */}
           <div className={styles.opcao}>
             <div className={styles.info}>
               <label htmlFor="tamanho-fonte" className={styles.nome}>
@@ -94,7 +97,9 @@ export function Settings() {
                 max="1.5"
                 step="0.1"
                 value={fonteEscala}
-                onChange={(event) => setFonteEscala(Number(event.target.value))}
+                onChange={(event) =>
+                  setFonteEscala(Number(event.target.value))
+                }
                 aria-label="Tamanho da fonte"
               />
 
@@ -104,6 +109,7 @@ export function Settings() {
             </div>
           </div>
 
+          {/* Voz do narrador */}
           <div className={styles.opcao}>
             <div className={styles.info}>
               <label htmlFor="voz-narrador" className={styles.nome}>
@@ -124,11 +130,36 @@ export function Settings() {
               <option value="automatica">Automática</option>
 
               {vozesDisponiveis.map((voz) => (
-                <option key={`${voz.name}-${voz.lang}`} value={voz.name}>
+                <option
+                  key={`${voz.name}-${voz.lang}`}
+                  value={voz.name}
+                >
                   {voz.name} ({voz.lang})
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Narração ao passar o mouse */}
+          <div className={styles.opcao}>
+            <div className={styles.info}>
+              <label htmlFor="narracao-hover" className={styles.nome}>
+                Narração ao passar o mouse
+              </label>
+
+              <span className={styles.detalhe}>
+                Lê o texto em voz alta quando você passa o mouse ou foca com o
+                teclado.
+              </span>
+            </div>
+
+            <input
+              id="narracao-hover"
+              className={styles.checkbox}
+              type="checkbox"
+              checked={narracaoHover}
+              onChange={(event) => setNarracaoHover(event.target.checked)}
+            />
           </div>
         </div>
       </section>
