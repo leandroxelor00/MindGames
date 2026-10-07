@@ -37,6 +37,39 @@
 
   --cor-desativado: #b8b3f2;
 
+  --raio-sm: 8px;
+  --raio-md: 12px;
+  --raio-lg: 16px;
+  --raio-xl: 22px;
+
+  --sombra-sm: 0 4px 14px rgba(30, 41, 59, 0.06);
+  --sombra-md: 0 8px 24px rgba(30, 41, 59, 0.08);
+  --sombra-lg: 0 12px 28px rgba(30, 41, 59, 0.12);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --duracao-curta: 160ms;
+  --curva-suave: ease;
+
+  --categoria-memoria: #1d4ed8;
+  --categoria-memoria-fundo: #dbeafe;
+  --categoria-memoria-borda: #93c5fd;
+  --categoria-atencao: #9a3412;
+  --categoria-atencao-fundo: #ffedd5;
+  --categoria-atencao-borda: #fdba74;
+  --categoria-velocidade: #166534;
+  --categoria-velocidade-fundo: #dcfce7;
+  --categoria-velocidade-borda: #86efac;
+  --categoria-logica: #6b21a8;
+  --categoria-logica-fundo: #f3e8ff;
+  --categoria-logica-borda: #d8b4fe;
+
   --fonte-titulo: "Space Grotesk", sans-serif;
 }
 
