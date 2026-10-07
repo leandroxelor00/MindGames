@@ -9,10 +9,10 @@ export function RankingList({
 }) {
   if (items.length === 0) {
     return (
-      <p className={styles.empty}>
-        Ainda não há jogadores no ranking. Jogue algumas partidas para
-        aparecer aqui!
-      </p>
+      <div className={styles.empty}>
+        <span aria-hidden="true">🏆</span>
+        <p>Ainda não há jogadores no ranking.</p>
+      </div>
     );
   }
 

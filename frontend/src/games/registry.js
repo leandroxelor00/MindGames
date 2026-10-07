@@ -36,6 +36,18 @@ export const gamesRegistry = [
     ],
   },
   {
+    id: "priority-tower",
+    name: "Torre de Prioridade",
+    description:
+      "Use pistas de posição, ordem e proximidade para descobrir a sequência correta dos itens.",
+    rules: [
+      "Leia todas as pistas antes de montar a torre.",
+      "Clique nos itens do primeiro ao último lugar.",
+      "Você pode desfazer o último item escolhido antes de confirmar.",
+      "Acertos aumentam sua pontuação e fazem a dificuldade subir.",
+    ],
+  },
+  {
     id: "visual-memory",
     name: "Memória Visual",
     description:
