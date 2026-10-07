@@ -59,8 +59,7 @@ export function AccessibilityProvider({ children }) {
     getBooleanStorage(STORAGE_KEYS.narracaoHover),
   );
 
-  const [vozesDisponiveis, setVozesDisponiveis] =
-    useState([]);
+  const [vozesDisponiveis, setVozesDisponiveis] = useState([]);
 
   const narradorInicializado = useRef(false);
 
@@ -161,6 +160,13 @@ export function AccessibilityProvider({ children }) {
       const utterance =
         new SpeechSynthesisUtterance(textoLimpo);
 
+      const vozSelecionada =
+        vozNarrador !== "automatica"
+          ? vozesDisponiveis.find(
+              (voz) => voz.name === vozNarrador,
+            )
+          : null;
+
       const vozPortuguesBrasil =
         vozesDisponiveis.find(
           (voz) =>
@@ -172,7 +178,9 @@ export function AccessibilityProvider({ children }) {
           voz.lang?.toLowerCase().startsWith("pt"),
         );
 
-      if (vozPortuguesBrasil) {
+      if (vozSelecionada) {
+        utterance.voice = vozSelecionada;
+      } else if (vozPortuguesBrasil) {
         utterance.voice = vozPortuguesBrasil;
       } else if (vozPortugues) {
         utterance.voice = vozPortugues;
@@ -186,7 +194,7 @@ export function AccessibilityProvider({ children }) {
 
       window.speechSynthesis.speak(utterance);
     },
-    [vozesDisponiveis],
+    [vozesDisponiveis, vozNarrador],
   );
 
   const stopSpeaking = useCallback(() => {
@@ -265,24 +273,17 @@ export function AccessibilityProvider({ children }) {
     () => ({
       altoContraste,
       setAltoContraste,
-
       fonteEscala,
       setFonteEscala,
-
       reduzirAnimacoes,
       setReduzirAnimacoes,
-
       vozNarrador,
       setVozNarrador,
-
       narracaoHover,
       setNarracaoHover,
-
       vozesDisponiveis,
-
       speak,
       stopSpeaking,
-
       ativarNarrador,
       desativarNarrador,
       alternarNarrador,
