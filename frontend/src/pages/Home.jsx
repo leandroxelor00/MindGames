@@ -29,6 +29,7 @@ const GAME_ICONS = {
   "memory-match": "🧠",
   "stroop-test": "🎨",
   "number-challenge": "🔢",
+  "priority-tower": "🗼",
   "visual-memory": "👁️",
   "food-memory": "🍎",
   "reaction-time": "⚡",
