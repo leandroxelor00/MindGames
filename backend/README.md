@@ -25,6 +25,18 @@ npm run dev            # ou: npm start
 
 As migrations rodam sozinhas a cada start e são idempotentes.
 
+## App + API em uma URL só (apresentação / túnel)
+Se `frontend/dist` existir, a API também serve o front. Assim uma única URL entrega tudo, sem CORS.
+```bash
+# 1) build do front apontando para a API na mesma origem
+cd frontend && VITE_API_URL=/api npm run build     # Windows (PowerShell): $env:VITE_API_URL="/api"; npm run build
+# 2) subir o back
+cd ../backend && npm start
+# 3) expor para fora (opcional)
+cloudflared tunnel --url http://localhost:3001
+```
+Na mesma rede (sala de aula), quem estiver nela também acessa por `http://IP-DA-SUA-MAQUINA:3001`.
+
 ## Testes
 ```bash
 npm test

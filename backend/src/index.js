@@ -7,6 +7,8 @@ if (!process.env.JWT_SECRET) {
 
 const { runMigrations } = require("./db/migrate");
 
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const { scoreRoutes } = require("./routes/scores.routes");
@@ -32,6 +34,19 @@ app.use("/api", scoreRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/ranking", rankingRoutes);
 app.use(healthRoutes);
+
+// Se o front já foi buildado (frontend/dist), a própria API o serve.
+// Assim uma única URL (ex.: a do túnel) entrega app + API, sem CORS.
+const frontDist = path.join(__dirname, "../../frontend/dist");
+
+if (fs.existsSync(frontDist)) {
+  app.use(express.static(frontDist));
+  app.use((req, res, next) => {
+    if (req.method !== "GET" || req.path.startsWith("/api")) return next();
+    res.sendFile(path.join(frontDist, "index.html"));
+  });
+}
+
 app.use(errorHandler);
 
 // As migrations rodam antes de aceitar requisições
