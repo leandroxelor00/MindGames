@@ -4,20 +4,31 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) auto;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
+  gap: 12px;
+  min-height: 58px;
+  padding: 11px 12px;
   border: 1px solid var(--cor-borda);
-  border-radius: 9px;
+  border-radius: var(--raio-md);
   background: var(--cor-superficie);
   color: var(--cor-texto);
-  font-size: 13px;
+  font-size: 14px;
+  transition:
+    transform var(--duracao-curta) var(--curva-suave),
+    border-color var(--duracao-curta) var(--curva-suave),
+    box-shadow var(--duracao-curta) var(--curva-suave);
+}
+
+.row:hover {
+  transform: translateY(-1px);
+  border-color: var(--cor-accent);
+  box-shadow: var(--sombra-sm);
 }
 
 .me {
@@ -27,7 +38,8 @@
 }
 
 .position {
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   text-align: center;
 }
 
@@ -35,16 +47,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 650;
 }
 
 .youTag {
-  margin-left: 6px;
-  padding: 1px 6px;
+  margin-left: 7px;
+  padding: 2px 7px;
   border-radius: 999px;
   border: 1px solid var(--cor-accent);
   color: var(--cor-accent);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -53,7 +66,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  font-weight: 700;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 800;
   white-space: nowrap;
 }
 
@@ -64,11 +79,25 @@
 }
 
 .empty {
-  margin: 0;
-  padding: 12px 4px;
-  font-size: 13px;
-  line-height: 1.5;
+  min-height: 150px;
+  padding: 20px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
   color: var(--cor-texto-suave);
+}
+
+.empty > span {
+  font-size: 24px;
+}
+
+.empty p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .srOnly {
@@ -81,4 +110,10 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    transition: none;
+  }
 }
