@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useAccessibility } from "../context/AccessibilityContext";
 import { Speakable } from "../components/Speakable/Speakable";
+import { ThemeSwitcher } from "../components/ThemeSwitcher/ThemeSwitcher";
 
 import styles from "./Settings.module.css";
 
@@ -46,6 +47,10 @@ export function Settings() {
       </div>
 
       <section className={styles.card}>
+        <div className={styles.aparencia}>
+          <ThemeSwitcher />
+        </div>
+
         <Speakable
           as="p"
           text="Personalize a experiência do MindGames de acordo com suas necessidades de acessibilidade."

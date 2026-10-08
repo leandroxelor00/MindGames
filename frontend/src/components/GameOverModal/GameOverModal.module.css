@@ -1,6 +1,6 @@
 .mensagemVitoria {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--cor-sucesso-fundo);
+  color: var(--cor-sucesso-texto);
   padding: 16px 30px;
   border-radius: 8px;
   font-weight: bold;

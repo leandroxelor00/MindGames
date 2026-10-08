@@ -1,7 +1,7 @@
 .container {
   min-height: 100vh;
   padding: 48px 24px 64px;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--fonte-corpo);
 }
 
 .container > * {

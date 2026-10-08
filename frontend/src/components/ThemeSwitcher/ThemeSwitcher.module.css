@@ -1,0 +1,123 @@
+.row {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+  min-height: 56px;
+  padding: 4px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 18px;
+}
+
+.caption {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 12px;
+}
+
+.switch {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  background: var(--cor-superficie);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--raio-sm);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--duracao-curta) var(--curva-suave),
+    color var(--duracao-curta) var(--curva-suave);
+}
+
+.option:hover {
+  color: var(--cor-texto);
+}
+
+.option[aria-pressed="true"] {
+  background: var(--cor-superficie-suave);
+  color: var(--cor-texto);
+  box-shadow: var(--sombra-sm);
+}
+
+.check {
+  color: var(--cor-accent);
+  font-size: 11px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--cor-accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.chipDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cor-accent);
+}
+
+@media (max-width: 760px) {
+  .row {
+    width: min(100% - 24px, 1100px);
+  }
+
+  .switch {
+    order: 3;
+    width: 100%;
+  }
+
+  .option {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 48px;
+    padding: 4px 6px;
+    font-size: 11px;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .check {
+    display: none;
+  }
+}
+
+html[data-alto-contraste="true"] .switch {
+  background: #000000;
+  border-color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .option {
+  background: #000000;
+  border: 1px solid transparent;
+  color: #ffffff;
+}
+
+html[data-alto-contraste="true"] .option[aria-pressed="true"] {
+  background: #ffff00;
+  color: #000000;
+  border-color: #ffffff;
+}

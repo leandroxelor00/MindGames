@@ -7,18 +7,21 @@ import App from "./App.jsx";
 import { AccessibilityProvider } from "./context/AccessibilityContext.jsx";
 import { NotificationProvider } from "./context/NotificationContext.jsx";
 import { Toast } from "./components/Toast/Toast.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
  
 createRoot(document.getElementById("root")).render(
   <NotificationProvider>
     <Toast />
     <AuthProvider>
       <AccessibilityProvider>
-        <StrictMode>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </StrictMode>
+        <ThemeProvider>
+          <StrictMode>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </StrictMode>
+        </ThemeProvider>
       </AccessibilityProvider>
     </AuthProvider>
   </NotificationProvider>,
-);
+);

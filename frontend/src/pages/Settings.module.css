@@ -1,7 +1,7 @@
 .container {
   min-height: 100vh;
   padding: 2.5rem;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--fonte-corpo);
 }
 
 .topo {
@@ -35,6 +35,16 @@
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
   border-radius: 0.875rem;
+}
+
+.aparencia {
+  margin: 0 0 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.aparencia > div {
+  width: 100%;
 }
 
 .descricao {

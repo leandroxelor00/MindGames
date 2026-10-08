@@ -9,13 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>MindGames</title>
+
+    <!-- Aplica o tema salvo antes do React carregar (evita piscar o visual errado) -->
+    <script>
+      try {
+        var t = localStorage.getItem("mindgames-seasonal-theme");
+        if (t === "subtle" || t === "halloween" || t === "original") {
+          document.documentElement.dataset.theme = t;
+        }
+      } catch (e) {}
+    </script>
   </head>
 
   <body>
@@ -23,4 +33,4 @@
 
     <script type="module" src="/src/main.jsx"></script>
   </body>
-</html>
+</html>

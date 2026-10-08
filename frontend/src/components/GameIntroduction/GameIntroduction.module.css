@@ -2,7 +2,7 @@
   max-width: 900px;
   margin: 24px auto 0;
   padding: 32px;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--fonte-corpo);
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
   border-radius: 14px;
@@ -102,7 +102,7 @@
   border: 1px solid var(--cor-accent);
   border-radius: 8px;
   background: var(--cor-accent);
-  color: #fff;
+  color: var(--cor-accent-texto);
   font-family: inherit;
   font-size: 1.25rem;
   font-weight: 600;

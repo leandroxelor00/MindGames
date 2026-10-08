@@ -86,7 +86,7 @@
 /* Estados */
 
 .idle {
-  background: #5b4fe8;
+  background: var(--cor-reacao-idle);
 }
 
 .waiting {
