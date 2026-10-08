@@ -10,6 +10,9 @@ export const gameComponents = {
   "number-challenge": lazy(() =>
     import("./number-challenge/NumberChallenge.jsx").then((m) => ({ default: m.NumberChallenge }))
   ),
+  "priority-tower": lazy(() =>
+    import("./priority-tower/PriorityTower.jsx").then((m) => ({ default: m.PriorityTower }))
+  ),
   "visual-memory": lazy(() =>
     import("./visual-memory/VisualMemory.jsx").then((m) => ({ default: m.VisualMemory }))
   ),

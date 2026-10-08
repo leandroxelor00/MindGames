@@ -1,9 +1,10 @@
 # MindGames — Backend
 
-API em Express + SQLite nativo (`node:sqlite`).
+API em Express com SQLite via [libSQL](https://github.com/tursodatabase/libsql-client-ts):
+arquivo local no desenvolvimento e [Turso](https://turso.tech) (nuvem) em produção.
 
 ## Requisitos
-- **Node 22.13 ou superior** (o `node:sqlite` só funciona sem flag a partir daí).
+- Node 20 ou superior.
 
 ## Rodar
 ```bash
@@ -18,7 +19,23 @@ npm run dev            # ou: npm start
 | `JWT_SECRET` | Segredo do JWT (**obrigatório**) | — |
 | `PORT` | Porta da API | `3001` |
 | `CORS_ORIGIN` | Origem(ns) do front, separadas por vírgula | `http://localhost:5173` |
-| `DB_PATH` | Caminho do arquivo `.db` | `backend/mindgames.db` |
+| `TURSO_DATABASE_URL` | URL do banco no Turso (`libsql://...`) | — (usa arquivo local) |
+| `TURSO_AUTH_TOKEN` | Token do banco no Turso | — |
+| `DB_PATH` | Arquivo `.db` local (só sem Turso) | `backend/mindgames.db` |
+
+As migrations rodam sozinhas a cada start e são idempotentes.
+
+## App + API em uma URL só (apresentação / túnel)
+Se `frontend/dist` existir, a API também serve o front. Assim uma única URL entrega tudo, sem CORS.
+```bash
+# 1) build do front apontando para a API na mesma origem
+cd frontend && VITE_API_URL=/api npm run build     # Windows (PowerShell): $env:VITE_API_URL="/api"; npm run build
+# 2) subir o back
+cd ../backend && npm start
+# 3) expor para fora (opcional)
+cloudflared tunnel --url http://localhost:3001
+```
+Na mesma rede (sala de aula), quem estiver nela também acessa por `http://IP-DA-SUA-MAQUINA:3001`.
 
 ## Testes
 ```bash

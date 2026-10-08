@@ -8,7 +8,7 @@ const {
 
 const { isUuid } = require("../validators/validators");
 
-function createScore(req, res, next) {
+async function createScore(req, res, next) {
   let userId = "";
 
   if (req.user) {
@@ -33,7 +33,7 @@ function createScore(req, res, next) {
   }
 
   try {
-    const result = saveScore(score);
+    const result = await saveScore(score);
     return res.status(201).json({
       message: "Score criado com sucesso",
       result: result,
@@ -43,7 +43,7 @@ function createScore(req, res, next) {
   }
 }
 
-function getScoresByUser(req, res) {
+async function getScoresByUser(req, res, next) {
   let userId = "";
 
   if (req.user) {
@@ -54,21 +54,25 @@ function getScoresByUser(req, res) {
     return res.status(400).json({ message: "userId anônimo inválido" });
   }
 
-  const result = getScoresByUserId(userId);
+  try {
+    const result = await getScoresByUserId(userId);
 
-  if (result.length === 0) {
-    return res
-      .status(404)
-      .json({ message: "Nenhum score desse usuário encontrado" });
+    if (result.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Nenhum score desse usuário encontrado" });
+    }
+
+    return res.status(200).json({
+      message: "Usuário encontrado",
+      result,
+    });
+  } catch (e) {
+    next(e);
   }
-
-  return res.status(200).json({
-    message: "Usuário encontrado",
-    result,
-  });
 }
 
-function migrate(req, res, next) {
+async function migrate(req, res, next) {
   const oldUserId = req.body?.oldUserId;
   const newUserId = req.user.id;
 
@@ -77,7 +81,7 @@ function migrate(req, res, next) {
   }
 
   try {
-    const migrate = migrateScores(oldUserId, newUserId);
+    const migrate = await migrateScores(oldUserId, newUserId);
     if (migrate > 0) {
       return res.status(200).json({
         message: "Migração concluida com sucesso",
@@ -94,7 +98,7 @@ function migrate(req, res, next) {
   }
 }
 
-function getSummary(req, res, next) {
+async function getSummary(req, res, next) {
   let userId = "";
 
   if (req.user) {
@@ -106,7 +110,7 @@ function getSummary(req, res, next) {
   }
 
   try {
-    const result = summary(userId);
+    const result = await summary(userId);
     return res.status(200).json({
       message: "Resumo calculado com sucesso",
       result: result,
@@ -116,7 +120,7 @@ function getSummary(req, res, next) {
   }
 }
 
-function getStreakController(req, res, next) {
+async function getStreakController(req, res, next) {
   let userId = "";
 
   if (req.user) {
@@ -128,7 +132,7 @@ function getStreakController(req, res, next) {
   }
 
   try {
-    const result = getStreak(userId);
+    const result = await getStreak(userId);
     return res
       .status(200)
       .json({ message: "Streak consultado com sucesso", result: result });

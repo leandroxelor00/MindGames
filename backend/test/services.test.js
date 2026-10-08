@@ -7,9 +7,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const { db } = require("../src/db/connection");
-require("../src/db/migrations/001_create_scores");
-require("../src/db/migrations/002_create_users");
-require("../src/db/migrations/003_add_username_to_users");
+const { runMigrations } = require("../src/db/migrate");
 
 const {
   saveScore,
@@ -22,23 +20,28 @@ const { points } = require("../src/services/points.service");
 
 const UUID = "11111111-1111-4111-8111-111111111111";
 
-function clearScores() {
-  db.exec("DELETE FROM scores");
+test.before(async () => {
+  await runMigrations();
+});
+
+async function clearScores() {
+  await db.execute("DELETE FROM scores");
 }
 
-function insertAt(userId, gameId, playedAt, extra = {}) {
-  db.prepare(
-    `INSERT INTO scores (userId, gameId, score, accuracy, avgReactionTime, levelReached, playedAt)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-  ).run(
-    userId,
-    gameId,
-    extra.score ?? 1,
-    extra.accuracy ?? 100,
-    extra.avgReactionTime ?? 0,
-    extra.levelReached ?? 1,
-    playedAt,
-  );
+async function insertAt(userId, gameId, playedAt, extra = {}) {
+  await db.execute({
+    sql: `INSERT INTO scores (userId, gameId, score, accuracy, avgReactionTime, levelReached, playedAt)
+          VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    args: [
+      userId,
+      gameId,
+      extra.score ?? 1,
+      extra.accuracy ?? 100,
+      extra.avgReactionTime ?? 0,
+      extra.levelReached ?? 1,
+      playedAt,
+    ],
+  });
 }
 
 // "YYYY-MM-DD HH:MM:SS" em UTC, como o SQLite grava
@@ -52,7 +55,7 @@ function spDay(date) {
   }).format(date);
 }
 
-test("saveScore rejeita valores absurdos e inválidos", () => {
+test("saveScore rejeita valores absurdos e inválidos", async () => {
   const base = {
     userId: UUID,
     gameId: "stroop-test",
@@ -61,35 +64,38 @@ test("saveScore rejeita valores absurdos e inválidos", () => {
     avgReactionTime: 500,
     levelReached: 1,
   };
-  assert.throws(() => saveScore({ ...base, score: 999999999 }), { status: 400 });
-  assert.throws(() => saveScore({ ...base, accuracy: 101 }), { status: 400 });
-  assert.throws(() => saveScore({ ...base, score: NaN }), { status: 400 });
-  assert.throws(() => saveScore({ ...base, gameId: "nao-existe" }), {
+  await assert.rejects(saveScore({ ...base, score: 999999999 }), { status: 400 });
+  await assert.rejects(saveScore({ ...base, accuracy: 101 }), { status: 400 });
+  await assert.rejects(saveScore({ ...base, score: NaN }), { status: 400 });
+  await assert.rejects(saveScore({ ...base, gameId: "nao-existe" }), {
     status: 400,
   });
-  clearScores();
-  assert.ok(saveScore(base));
+  await clearScores();
+  const saved = await saveScore(base);
+  assert.equal(saved.changes, 1);
+  // precisa ser serializável (sem BigInt)
+  assert.doesNotThrow(() => JSON.stringify(saved));
 });
 
-test("migrateScores move só os scores do id antigo", () => {
-  clearScores();
-  insertAt(UUID, "memory-match", "2026-01-01 12:00:00");
-  insertAt("outro", "memory-match", "2026-01-01 12:00:00");
+test("migrateScores move só os scores do id antigo", async () => {
+  await clearScores();
+  await insertAt(UUID, "memory-match", "2026-01-01 12:00:00");
+  await insertAt("outro", "memory-match", "2026-01-01 12:00:00");
 
-  assert.equal(migrateScores(UUID, 7), 1);
-  assert.equal(getScoresByUserId("7").length, 1);
-  assert.equal(getScoresByUserId(UUID).length, 0);
-  assert.equal(getScoresByUserId("outro").length, 1);
+  assert.equal(await migrateScores(UUID, 7), 1);
+  assert.equal((await getScoresByUserId("7")).length, 1);
+  assert.equal((await getScoresByUserId(UUID)).length, 0);
+  assert.equal((await getScoresByUserId("outro")).length, 1);
 });
 
-test("summary usa pontos por categoria (reaction-time não vira 100%)", () => {
-  clearScores();
+test("summary usa pontos por categoria (reaction-time não vira 100%)", async () => {
+  await clearScores();
   // 325 ms = metade entre 150 e 500 -> 50 pontos
-  insertAt(UUID, "reaction-time", "2026-01-01 12:00:00", {
+  await insertAt(UUID, "reaction-time", "2026-01-01 12:00:00", {
     accuracy: 100,
     avgReactionTime: 325,
   });
-  const result = summary(UUID);
+  const result = await summary(UUID);
   assert.equal(result.velocidade, 50);
   assert.equal(result.memoria, 0);
 });
@@ -100,29 +106,29 @@ test("points limita entre 0 e 100", () => {
   assert.throws(() => points({ gameId: "nao-existe" }));
 });
 
-test("getStreak: sem partidas é 0", () => {
-  clearScores();
-  assert.equal(getStreak(UUID), 0);
+test("getStreak: sem partidas é 0", async () => {
+  await clearScores();
+  assert.equal(await getStreak(UUID), 0);
 });
 
-test("getStreak: hoje + ontem = 2; buraco quebra a sequência", () => {
-  clearScores();
+test("getStreak: hoje + ontem = 2; buraco quebra a sequência", async () => {
+  await clearScores();
   const now = new Date();
-  insertAt(UUID, "memory-match", sqliteUtc(now));
-  insertAt(UUID, "memory-match", sqliteUtc(new Date(now - 24 * 3600 * 1000)));
+  await insertAt(UUID, "memory-match", sqliteUtc(now));
+  await insertAt(UUID, "memory-match", sqliteUtc(new Date(now - 24 * 3600 * 1000)));
   // 3 dias atrás (pula um dia) não entra
-  insertAt(UUID, "memory-match", sqliteUtc(new Date(now - 72 * 3600 * 1000)));
-  assert.equal(getStreak(UUID), 2);
+  await insertAt(UUID, "memory-match", sqliteUtc(new Date(now - 72 * 3600 * 1000)));
+  assert.equal(await getStreak(UUID), 2);
 });
 
-test("getStreak: partida às 23h30 de SP conta no dia de SP, não no dia UTC", () => {
-  clearScores();
+test("getStreak: partida às 23h30 de SP conta no dia de SP, não no dia UTC", async () => {
+  await clearScores();
   const now = new Date();
   // hoje (SP) às 02:30 UTC = ontem (SP) às 23:30
   const lateNight = new Date(`${spDay(now)}T02:30:00Z`);
   assert.notEqual(spDay(lateNight), spDay(now));
 
-  insertAt(UUID, "memory-match", sqliteUtc(now));
-  insertAt(UUID, "memory-match", sqliteUtc(lateNight));
-  assert.equal(getStreak(UUID), 2);
+  await insertAt(UUID, "memory-match", sqliteUtc(now));
+  await insertAt(UUID, "memory-match", sqliteUtc(lateNight));
+  assert.equal(await getStreak(UUID), 2);
 });

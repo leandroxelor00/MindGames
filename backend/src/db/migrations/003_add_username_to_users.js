@@ -1,12 +1,16 @@
-const { db } = require("../connection");
+const { db, query } = require("../connection");
 
-const columns = db.prepare("PRAGMA table_info(users)").all();
+async function up() {
+  const columns = await query("PRAGMA table_info(users)");
 
-if (!columns.some((column) => column.name === "username")) {
-  db.exec(`ALTER TABLE users ADD COLUMN username TEXT`);
+  if (!columns.some((column) => column.name === "username")) {
+    await db.execute("ALTER TABLE users ADD COLUMN username TEXT");
+  }
+
+  await db.execute(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username
+    ON users(username COLLATE NOCASE)
+  `);
 }
 
-db.exec(`
-  CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username
-  ON users(username COLLATE NOCASE)
-`);
+module.exports = { up };
