@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 72" fill="none">
+  <g fill="#a88758" stroke="#a88758" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Vassoura -->
+    <path d="M25 55 108 38" stroke-width="2.8"/>
+    <path d="m24 50 2 11 7-10-2 12 10-13-3 11 9-14" stroke-width="1.7"/>
+    <!-- Capa e vestido ao vento -->
+    <path d="M48 31c-7 3-10 9-15 15l18-4 10 5 8-10-12-8-9 2Z" stroke="none"/>
+    <!-- Rosto e cabelo -->
+    <path d="M53 23c0-5 4-8 8-7 4 1 6 5 4 9l-4 5-6-2-2-5Z" stroke="none"/>
+    <path d="M54 24c-5 0-7 5-4 9l5 2 3-8-4-3Z" stroke="none"/>
+    <!-- Chapéu pontudo -->
+    <path d="M45 20 62 4 59 22c-5 2-10 1-14-2Z" stroke="none"/>
+    <path d="M40 22c7-3 17-3 25 0-8 4-17 4-25 0Z" stroke="none"/>
+    <!-- Braços e pernas apoiados na vassoura -->
+    <path d="M53 34 64 40l8-2M48 38l12 8 10-3" stroke-width="2.6"/>
+    <path d="M59 29c2 4 2 8-1 11" stroke-width="2.6"/>
+  </g>
+</svg>

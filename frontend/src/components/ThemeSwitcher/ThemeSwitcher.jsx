@@ -26,11 +26,9 @@ export function ThemeSwitcher() {
           >
             <span aria-hidden="true">{option.icon}</span>
             <span className={styles.optionLabel}>{option.label}</span>
-            {theme === option.id && (
-              <span className={styles.check} aria-hidden="true">
+              <span className={styles.check} data-active={theme === option.id} aria-hidden="true">
                 ✓
               </span>
-            )}
           </button>
         ))}
       </div>

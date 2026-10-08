@@ -18,7 +18,10 @@ import { useAccessibility } from "../context/AccessibilityContext";
 import { useTheme } from "../context/ThemeContext";
 import { ThemeSwitcher } from "../components/ThemeSwitcher/ThemeSwitcher";
 import { SeasonGhost } from "../components/ThemeSwitcher/SeasonGhost";
+
 import halloweenBanner from "../assets/halloween-banner.jpg";
+
+import { GameIcon } from "../components/GameIcon/GameIcon";
 
 import styles from "./Home.module.css";
 
@@ -27,17 +30,6 @@ const CATEGORY_LABELS = {
   attention: "Atenção",
   velocity: "Velocidade",
   logic: "Lógica",
-};
-
-const GAME_ICONS = {
-  "memory-match": "🧠",
-  "stroop-test": "🎨",
-  "number-challenge": "🔢",
-  "priority-tower": "🗼",
-  "visual-memory": "👁️",
-  "food-memory": "🍎",
-  "reaction-time": "⚡",
-  "sound-sequence": "🔊",
 };
 
 function parsePlayedAt(value) {
@@ -121,8 +113,7 @@ function formatBestResult(gameId, value) {
 export function Home() {
   const { user, setUser } = useAuth();
 
-  const { vozNarrador, alternarNarrador, altoContraste } =
-    useAccessibility();
+  const { vozNarrador, alternarNarrador, altoContraste } = useAccessibility();
   const { theme } = useTheme();
   const seasonal = theme !== "original";
 
@@ -323,11 +314,7 @@ export function Home() {
 
       <ThemeSwitcher />
 
-      <header
-        className={`${styles.hero} ${
-          theme === "halloween" && !altoContraste ? styles.heroComImagem : ""
-        }`}
-      >
+      <header className={styles.hero}>
         {theme === "halloween" && !altoContraste && (
           <img
             className={styles.heroImage}
@@ -344,9 +331,7 @@ export function Home() {
 
         <div className={styles.heroCopy}>
           <span className={styles.heroEyebrow}>
-            {seasonal
-              ? "MENTES CURIOSAS. DESAFIOS ARREPIANTES."
-              : "MINDGAMES"}
+            {seasonal ? "MENTES CURIOSAS. DESAFIOS ARREPIANTES." : "MINDGAMES"}
           </span>
 
           <Speakable as="span" text="Treine sua mente com ciência.">
@@ -381,10 +366,7 @@ export function Home() {
           </Speakable>
 
           <section className={styles.challengeCard}>
-            <Speakable
-              as="span"
-              text="Desafio do dia. Sua seleção de hoje."
-            >
+            <Speakable as="span" text="Desafio do dia. Sua seleção de hoje.">
               <div>
                 <span className={styles.challengeEyebrow}>DESAFIO DO DIA</span>
                 <h2 className={styles.challengeTitle}>Sua seleção de hoje</h2>
@@ -409,12 +391,13 @@ export function Home() {
                       key={gameId}
                       as="span"
                       text={`${game?.name ?? gameId}. ${
-                        completed
-                          ? "Concluído hoje."
-                          : "Ainda não jogado hoje."
+                        completed ? "Concluído hoje." : "Ainda não jogado hoje."
                       }`}
                     >
-                      <Link to={`/game/${gameId}`} className={styles.challengeGame}>
+                      <Link
+                        to={`/game/${gameId}`}
+                        className={styles.challengeGame}
+                      >
                         <span className={styles.challengeGameName}>
                           {game?.name ?? gameId}
                         </span>
@@ -427,7 +410,10 @@ export function Home() {
                             ✓
                           </span>
                         ) : (
-                          <span className={styles.challengeArrow} aria-hidden="true">
+                          <span
+                            className={styles.challengeArrow}
+                            aria-hidden="true"
+                          >
                             →
                           </span>
                         )}
@@ -439,15 +425,13 @@ export function Home() {
             )}
           </section>
 
-          {seasonal && (
-            <div className={styles.seasonNote}>
-              <div className={styles.seasonNoteHead}>
-                <span aria-hidden="true">👻</span>
-                Bons sustos, bons treinos.
-              </div>
-              <p>Neste Halloween, dê um susto na sua zona de conforto.</p>
+          <div className={styles.seasonNote} hidden={!seasonal}>
+            <div className={styles.seasonNoteHead}>
+              <span aria-hidden="true">👻</span>
+              Bons sustos, bons treinos.
             </div>
-          )}
+            <p>Neste Halloween, dê um susto na sua zona de conforto.</p>
+          </div>
         </aside>
 
         <main className={styles.gamesArea}>
@@ -487,8 +471,12 @@ export function Home() {
                     <Link className={styles.link} to={`/game/${registry.id}`}>
                       <article className={styles.card}>
                         <div className={styles.gameTop}>
-                          <span className={styles.gameIcon} aria-hidden="true">
-                            {GAME_ICONS[registry.id] ?? "🎯"}
+                          <span
+                            className={styles.gameIcon}
+                            data-category={categoryKey}
+                            aria-hidden="true"
+                          >
+                            <GameIcon gameId={registry.id} />
                           </span>
                           <span
                             className={styles.categoryTag}
@@ -509,11 +497,26 @@ export function Home() {
                         <div className={styles.gameFooter}>
                           {stats?.partidas ? (
                             <>
-                              <span>{stats.partidas} {stats.partidas === 1 ? "partida" : "partidas"}</span>
-                              {bestResult && <span>Melhor: {bestResult}</span>}
+                              <span className={styles.playedStats}>
+                                <span>
+                                  {stats.partidas}{" "}
+                                  {stats.partidas === 1
+                                    ? "partida"
+                                    : "partidas"}
+                                </span>
+                                {bestResult && (
+                                  <span>Melhor: {bestResult}</span>
+                                )}
+                              </span>
                             </>
                           ) : (
-                            <span className={styles.notPlayed}>○ Ainda não jogado</span>
+                            <span className={styles.notPlayed}>
+                              <span
+                                className={styles.statusDot}
+                                aria-hidden="true"
+                              />
+                              Ainda não jogado
+                            </span>
                           )}
                           <span className={styles.gameArrow} aria-hidden="true">
                             →

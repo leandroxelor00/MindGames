@@ -1,4 +1,6 @@
 .page {
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
   font-family: var(--fonte-corpo);
   padding-bottom: 48px;
@@ -6,6 +8,8 @@
 
 /* Cabeçalho do site: faixa com logo, links centrais e ações */
 .siteHeader {
+  position: relative;
+  z-index: 1;
   width: 100%;
   border-bottom: 1px solid var(--cor-borda);
   background: var(--cor-superficie);
@@ -331,6 +335,8 @@
 }
 
 .hero {
+  min-height: 300px;
+  z-index: 1;
   width: min(1100px, calc(100% - 32px));
   margin: 20px auto 28px;
   padding: 38px 42px;
@@ -355,10 +361,6 @@
   object-fit: cover;
   object-position: right 68%;
   pointer-events: none;
-}
-
-.heroComImagem {
-  min-height: 300px;
 }
 
 /* Halloween discreto: fantasminha flutuando */
@@ -425,9 +427,9 @@
 .headline {
   font-family: var(--fonte-titulo);
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: 3rem;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   margin: 0 0 12px;
 }
 
@@ -440,6 +442,8 @@
 }
 
 .homeContent {
+  position: relative;
+  z-index: 1;
   width: min(1100px, calc(100% - 32px));
   margin: 0 auto;
   display: grid;
@@ -491,6 +495,7 @@
 
 .gamesGrid {
   display: grid;
+  grid-auto-rows: 1fr;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
 }
@@ -513,6 +518,7 @@
 }
 
 .card {
+  height: 100%;
   min-height: 226px;
   padding: 18px;
   display: flex;
@@ -841,7 +847,6 @@
 }
 
 @media (max-width: 560px) {
-
   .heroImage {
     opacity: 0.32;
     object-position: 72%;
@@ -872,6 +877,10 @@
     padding: 28px 24px;
   }
 
+  .headline {
+    font-size: 2rem;
+  }
+
   .dailySummary {
     grid-template-columns: 1fr;
   }
@@ -885,7 +894,6 @@
   .navActions {
     width: 100%;
   }
-
 
   .card {
     min-height: 214px;

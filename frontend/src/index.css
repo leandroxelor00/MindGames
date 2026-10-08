@@ -70,7 +70,11 @@
   --categoria-logica-fundo: #f3e8ff;
   --categoria-logica-borda: #d8b4fe;
 
-  --fonte-corpo: -apple-system, "Segoe UI", sans-serif;
+  --fonte-corpo: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+  --cor-decor-contorno: oklch(0.57 0.08 55);
+  --cor-decor-luz: oklch(0.84 0.14 70);
+  --decor-opacidade: 0.16;
+  --mascara-decor: linear-gradient(to right, oklch(0 0 0) 60%, transparent 100%);
   --cor-reacao-idle: #5b4fe8;
   --cor-borda-botao: lightgray;
   --cor-botao-realce: aliceblue;
@@ -112,11 +116,13 @@
 
 html {
   font-size: calc(16px * var(--fonte-escala));
+  scrollbar-gutter: stable;
 }
 
 body {
   background: var(--cor-fundo);
   color: var(--cor-texto);
+  font-family: var(--fonte-corpo);
 }
 
 /* =========================================================
@@ -128,7 +134,6 @@ body {
 
 /* Halloween discreto: meio-termo entre o clean original e o tema completo */
 html[data-theme="subtle"] {
-  --fonte-corpo: "DM Sans", -apple-system, "Segoe UI", sans-serif;
 
   --cor-fundo: oklch(0.979 0.005 70);
   --cor-superficie: oklch(1 0 0);
@@ -164,8 +169,9 @@ html[data-theme="subtle"] {
 /* Halloween completo: tema escuro com laranja-abóbora */
 html[data-theme="halloween"] {
   color-scheme: dark;
-
-  --fonte-corpo: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+  --cor-decor-contorno: oklch(0.72 0.08 55);
+  --cor-decor-luz: oklch(0.8 0.17 65);
+  --decor-opacidade: 0.88;
 
   --cor-fundo: oklch(0.167 0.004 285);
   --cor-superficie: oklch(0.209 0.006 285);
@@ -408,4 +414,4 @@ a {
 :focus-visible {
   outline: 3px solid #2563eb;
   outline-offset: 3px;
-}
+}
