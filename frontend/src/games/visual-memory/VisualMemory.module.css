@@ -9,9 +9,9 @@
 .p {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #555;
+  color: var(--cor-texto-secundario);
   margin-bottom: 1.5rem;
-  background: #dce0e4;
+  background: var(--cor-trilho-suave);
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
@@ -20,7 +20,7 @@
 .gridContainer {
   display: grid;
   gap: 0.625rem;
-  background: #dce0e4;
+  background: var(--cor-trilho-suave);
   padding: 1rem;
   border-radius: 0.75rem;
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
@@ -53,8 +53,8 @@
 }
 
 .cell {
-  background-color: #fff;
-  border: 2px solid #eaeaea;
+  background-color: var(--cor-superficie);
+  border: 2px solid var(--cor-borda-card);
 }
 
 .highlightedCell {
@@ -81,8 +81,8 @@
 }
 
 .neutralCell {
-  background-color: #ffffff;
-  border: 2px solid #eaeaea;
+  background-color: var(--cor-superficie);
+  border: 2px solid var(--cor-borda-card);
 }
 
 .leitorTela {
@@ -102,4 +102,8 @@
   .neutralCell {
     width: 50px;
   }
+}
+
+:global(html[data-theme="halloween"]) .highlightedCell {
+  background-color: #fdba74;
 }

@@ -11,9 +11,9 @@
   margin: 0 auto 20px;
   padding: 10px;
 
-  background: #ffffff;
+  background: var(--cor-superficie);
 
-  border: 2px solid #eaeaea;
+  border: 2px solid var(--cor-borda-card);
   border-radius: 14px;
 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -29,9 +29,9 @@
 
   padding: 10px 18px;
 
-  background: #f8f9fa;
+  background: var(--cor-superficie-suave);
 
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--cor-borda-card);
   border-radius: 10px;
 
   white-space: nowrap;
@@ -48,14 +48,14 @@
 }
 
 .label {
-  color: #555;
+  color: var(--cor-texto-secundario);
 
   font-size: 0.95rem;
   font-weight: 700;
 }
 
 .value {
-  color: #5b4fe8;
+  color: var(--cor-accent);
 
   font-size: 1.1rem;
   font-weight: 800;
@@ -76,7 +76,7 @@
   width: 1px;
   height: 28px;
 
-  background-color: #dee2e6;
+  background-color: var(--cor-trilho);
 }
 
 /* =========================

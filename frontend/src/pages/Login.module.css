@@ -4,8 +4,8 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background: linear-gradient(#a0d5f1 0%, #eeecfc 60%);
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  background: linear-gradient(var(--auth-grad-a) 0%, var(--auth-grad-b) 60%);
+  font-family: var(--fonte-corpo);
 }
 
 .card {
@@ -107,8 +107,8 @@
   padding: 0.85rem 1rem;
   border: none;
   border-radius: 12px;
-  background: #e0dcfa;
-  color: #000000;
+  background: var(--cor-botao-sec-fundo);
+  color: var(--cor-botao-sec-texto);
   font-size: 0.95rem;
   font-weight: 500;
   font-family: var(--fonte-titulo);
@@ -117,7 +117,7 @@
 }
 
 .submitButton:hover {
-  background: #abc5fa;
+  background: var(--cor-botao-sec-hover);
 }
 
 .submitButton:disabled {
@@ -179,4 +179,4 @@ html[data-alto-contraste="true"] .submitButton:disabled {
   background: #666666;
   color: #000000;
   border-color: #666666;
-}
+}

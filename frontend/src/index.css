@@ -70,16 +70,180 @@
   --categoria-logica-fundo: #f3e8ff;
   --categoria-logica-borda: #d8b4fe;
 
+  --fonte-corpo: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+  --cor-decor-contorno: oklch(0.57 0.08 55);
+  --cor-decor-luz: oklch(0.84 0.14 70);
+  --decor-opacidade: 0.16;
+  --mascara-decor: linear-gradient(to right, oklch(0 0 0) 60%, transparent 100%);
+  --cor-reacao-idle: #5b4fe8;
+  --cor-borda-botao: lightgray;
+  --cor-botao-realce: aliceblue;
+
+  /* Tokens extras: no tema original têm exatamente os valores antigos dos CSS Modules */
+  --cor-accent-texto: #ffffff;
+  --cor-accent-suave: #f5f3ff;
+  --cor-texto-forte: #333333;
+  --cor-texto-titulo: #000000;
+  --cor-superficie-hover: #f1f3f5;
+  --cor-borda-card: #eaeaea;
+  --cor-borda-forte: #ced4da;
+  --cor-trilho: #dee2e6;
+  --cor-trilho-suave: #dce0e4;
+
+  --cor-sucesso-borda: #28a745;
+  --cor-erro-card-fundo: #f8d7da;
+  --cor-erro-card-texto: #721c24;
+  --cor-erro-borda: #dc3545;
+  --cor-aviso-fundo: #fff3cd;
+  --cor-aviso-texto: #856404;
+  --cor-ok-suave-fundo: #e8f5e9;
+  --cor-ok-suave-texto: #2e7d32;
+
+  --cor-botao-sec-fundo: #e0dcfa;
+  --cor-botao-sec-hover: #abc5fa;
+  --cor-botao-sec-texto: #000000;
+
+  --cor-toast-fundo: #1a1d29;
+  --cor-toast-texto: #ffffff;
+
+  --fundo-hero: linear-gradient(135deg, #ffffff 0%, #f0f3ff 100%);
+  --auth-grad-a: #a0d5f1;
+  --auth-grad-b: #eeecfc;
+  --memoria-verso: linear-gradient(135deg, #be2942 0%, #580e24 100%);
+
   --fonte-titulo: "Space Grotesk", sans-serif;
 }
 
 html {
   font-size: calc(16px * var(--fonte-escala));
+  scrollbar-gutter: stable;
 }
 
 body {
   background: var(--cor-fundo);
   color: var(--cor-texto);
+  font-family: var(--fonte-corpo);
+}
+
+/* =========================================================
+   Temas sazonais (Halloween) — escolhidos em <ThemeSwitcher />
+   O atributo data-theme é definido por ThemeContext.jsx.
+   "original" não precisa de bloco: usa os valores do :root.
+   Ficam ANTES do alto contraste, que continua tendo prioridade.
+   ========================================================= */
+
+/* Halloween discreto: meio-termo entre o clean original e o tema completo */
+html[data-theme="subtle"] {
+
+  --cor-fundo: oklch(0.979 0.005 70);
+  --cor-superficie: oklch(1 0 0);
+  --cor-superficie-suave: oklch(0.952 0.015 65);
+
+  --cor-borda: oklch(0.906 0.019 65);
+  --cor-borda-suave: oklch(0.93 0.015 65);
+  --cor-borda-card: oklch(0.915 0.017 65);
+
+  --cor-accent: oklch(0.57 0.17 45);
+  --cor-accent-hover: oklch(0.5 0.17 45);
+  --cor-accent-texto: oklch(0.99 0 0);
+  --cor-accent-suave: oklch(0.96 0.03 60);
+  --cor-desativado: oklch(0.8 0.06 55);
+
+  --cor-input: oklch(0.979 0.005 70);
+  --cor-reacao-idle: oklch(0.5 0.17 45);
+  --cor-botao-realce: oklch(0.96 0.03 62);
+
+  --cor-botao-sec-fundo: oklch(0.93 0.05 60);
+  --cor-botao-sec-hover: oklch(0.87 0.09 55);
+
+  --fundo-hero: linear-gradient(135deg, oklch(1 0 0) 0%, oklch(0.955 0.03 62) 100%);
+  --auth-grad-a: oklch(0.89 0.07 62);
+  --auth-grad-b: oklch(0.965 0.02 70);
+  --memoria-verso: linear-gradient(135deg, oklch(0.62 0.17 45) 0%, oklch(0.36 0.1 300) 100%);
+
+  --sombra-sm: 0 4px 14px oklch(0.3 0.04 50 / 0.07);
+  --sombra-md: 0 8px 24px oklch(0.3 0.04 50 / 0.09);
+  --sombra-lg: 0 12px 28px oklch(0.3 0.04 50 / 0.14);
+}
+
+/* Halloween completo: tema escuro com laranja-abóbora */
+html[data-theme="halloween"] {
+  color-scheme: dark;
+  --cor-decor-contorno: oklch(0.72 0.08 55);
+  --cor-decor-luz: oklch(0.8 0.17 65);
+  --decor-opacidade: 0.88;
+
+  --cor-fundo: oklch(0.167 0.004 285);
+  --cor-superficie: oklch(0.209 0.006 285);
+  --cor-superficie-suave: oklch(0.256 0.006 285);
+  --cor-superficie-hover: oklch(0.29 0.008 285);
+
+  --cor-texto: oklch(0.94 0.006 80);
+  --cor-texto-suave: oklch(0.7 0.01 285);
+  --cor-texto-secundario: oklch(0.78 0.008 285);
+  --cor-texto-forte: oklch(0.9 0.006 80);
+  --cor-texto-titulo: oklch(0.96 0.006 80);
+
+  --cor-borda: oklch(0.305 0.008 285);
+  --cor-borda-suave: oklch(0.27 0.007 285);
+  --cor-borda-card: oklch(0.305 0.008 285);
+  --cor-borda-forte: oklch(0.4 0.01 285);
+  --cor-trilho: oklch(0.32 0.008 285);
+  --cor-trilho-suave: oklch(0.29 0.007 285);
+
+  --cor-accent: oklch(0.745 0.176 49);
+  --cor-accent-hover: oklch(0.81 0.17 52);
+  --cor-accent-texto: oklch(0.18 0.013 45);
+  --cor-accent-suave: oklch(0.29 0.04 50);
+  --cor-desativado: oklch(0.4 0.02 285);
+
+  --cor-input: oklch(0.167 0.004 285);
+  --cor-reacao-idle: oklch(0.42 0.14 300);
+  --cor-borda-botao: oklch(0.38 0.01 285);
+  --cor-botao-realce: oklch(0.29 0.008 285);
+  --cor-input-focus: oklch(0.19 0.005 285);
+
+  --cor-erro-fundo: oklch(0.28 0.08 27);
+  --cor-erro-texto: oklch(0.82 0.13 27);
+  --cor-sucesso-fundo: oklch(0.28 0.06 155);
+  --cor-sucesso-texto: oklch(0.83 0.13 155);
+  --cor-sucesso-borda: oklch(0.6 0.13 155);
+  --cor-erro-card-fundo: oklch(0.28 0.08 27);
+  --cor-erro-card-texto: oklch(0.82 0.13 27);
+  --cor-erro-borda: oklch(0.62 0.17 27);
+  --cor-aviso-fundo: oklch(0.3 0.06 85);
+  --cor-aviso-texto: oklch(0.86 0.12 85);
+  --cor-ok-suave-fundo: oklch(0.28 0.06 155);
+  --cor-ok-suave-texto: oklch(0.83 0.13 155);
+
+  --cor-botao-sec-fundo: oklch(0.745 0.176 49);
+  --cor-botao-sec-hover: oklch(0.81 0.17 52);
+  --cor-botao-sec-texto: oklch(0.18 0.013 45);
+
+  --cor-toast-fundo: oklch(0.3 0.01 285);
+  --cor-toast-texto: oklch(0.96 0.006 80);
+
+  --categoria-memoria: oklch(0.8 0.12 290);
+  --categoria-memoria-fundo: color-mix(in oklab, oklch(0.76 0.12 290) 16%, transparent);
+  --categoria-memoria-borda: color-mix(in oklab, oklch(0.76 0.12 290) 45%, transparent);
+  --categoria-atencao: oklch(0.82 0.15 52);
+  --categoria-atencao-fundo: color-mix(in oklab, oklch(0.77 0.15 52) 16%, transparent);
+  --categoria-atencao-borda: color-mix(in oklab, oklch(0.77 0.15 52) 45%, transparent);
+  --categoria-velocidade: oklch(0.82 0.11 170);
+  --categoria-velocidade-fundo: color-mix(in oklab, oklch(0.78 0.11 170) 16%, transparent);
+  --categoria-velocidade-borda: color-mix(in oklab, oklch(0.78 0.11 170) 45%, transparent);
+  --categoria-logica: oklch(0.8 0.13 320);
+  --categoria-logica-fundo: color-mix(in oklab, oklch(0.76 0.13 320) 16%, transparent);
+  --categoria-logica-borda: color-mix(in oklab, oklch(0.76 0.13 320) 45%, transparent);
+
+  --fundo-hero: linear-gradient(135deg, oklch(0.22 0.006 285) 0%, oklch(0.18 0.01 300) 100%);
+  --auth-grad-a: oklch(0.26 0.06 300);
+  --auth-grad-b: oklch(0.17 0.01 285);
+  --memoria-verso: linear-gradient(135deg, oklch(0.7 0.17 50) 0%, oklch(0.32 0.1 300) 100%);
+
+  --sombra-sm: 0 4px 18px oklch(0.08 0 0 / 0.3);
+  --sombra-md: 0 8px 24px oklch(0.08 0 0 / 0.4);
+  --sombra-lg: 0 12px 28px oklch(0.08 0 0 / 0.5);
 }
 
 /* Alto contraste */
@@ -108,6 +272,37 @@ html[data-alto-contraste="true"] {
   --cor-sucesso-texto: #00ff66;
 
   --cor-desativado: #666666;
+
+  /* Tokens extras (também ganham prioridade sobre o tema escolhido) */
+  --cor-accent-texto: #000000;
+  --cor-accent-suave: #111111;
+  --cor-texto-forte: #ffffff;
+  --cor-texto-titulo: #ffffff;
+  --cor-superficie-hover: #111111;
+  --cor-borda-card: #ffffff;
+  --cor-borda-forte: #ffffff;
+  --cor-trilho: #444444;
+  --cor-trilho-suave: #222222;
+
+  --cor-sucesso-borda: #00ff66;
+  --cor-erro-card-fundo: #000000;
+  --cor-erro-card-texto: #ff6b6b;
+  --cor-erro-borda: #ff6b6b;
+  --cor-aviso-fundo: #000000;
+  --cor-aviso-texto: #ffff00;
+  --cor-ok-suave-fundo: #000000;
+  --cor-ok-suave-texto: #00ff66;
+
+  --cor-botao-sec-fundo: #ffff00;
+  --cor-botao-sec-hover: #ffff66;
+  --cor-botao-sec-texto: #000000;
+
+  --cor-toast-fundo: #000000;
+  --cor-toast-texto: #ffffff;
+
+  --fundo-hero: #000000;
+  --auth-grad-a: #000000;
+  --auth-grad-b: #000000;
 }
 
 html[data-alto-contraste="true"] body {

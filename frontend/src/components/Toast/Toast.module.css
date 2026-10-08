@@ -5,8 +5,8 @@
     transform: translateX(-50%);
     z-index: 1000;
   
-    background: #1a1d29;
-    color: #ffffff;
+    background: var(--cor-toast-fundo);
+    color: var(--cor-toast-texto);
     padding: 14px 24px;
     border-radius: 10px;
     font-size: 0.9rem;

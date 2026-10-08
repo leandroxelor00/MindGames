@@ -142,7 +142,7 @@
 
 .itemCardSelected {
   border-color: var(--cor-accent);
-  background: #f5f3ff;
+  background: var(--cor-accent-suave);
   box-shadow: inset 0 0 0 1px var(--cor-accent);
 }
 
@@ -218,7 +218,7 @@
 .primaryButton {
   border: 1px solid var(--cor-accent);
   background: var(--cor-accent);
-  color: #fff;
+  color: var(--cor-accent-texto);
 }
 
 .primaryButton:hover:not(:disabled) {

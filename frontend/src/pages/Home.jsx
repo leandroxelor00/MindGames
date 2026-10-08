@@ -15,6 +15,13 @@ import { RankingList } from "../components/RankingList/RankingList";
 import { RankingModal } from "../components/RankingModal/RankingModal";
 import { Speakable } from "../components/Speakable/Speakable";
 import { useAccessibility } from "../context/AccessibilityContext";
+import { useTheme } from "../context/ThemeContext";
+import { ThemeSwitcher } from "../components/ThemeSwitcher/ThemeSwitcher";
+import { SeasonGhost } from "../components/ThemeSwitcher/SeasonGhost";
+
+import halloweenBanner from "../assets/halloween-banner.jpg";
+
+import { GameIcon } from "../components/GameIcon/GameIcon";
 
 import styles from "./Home.module.css";
 
@@ -23,17 +30,6 @@ const CATEGORY_LABELS = {
   attention: "Atenção",
   velocity: "Velocidade",
   logic: "Lógica",
-};
-
-const GAME_ICONS = {
-  "memory-match": "🧠",
-  "stroop-test": "🎨",
-  "number-challenge": "🔢",
-  "priority-tower": "🗼",
-  "visual-memory": "👁️",
-  "food-memory": "🍎",
-  "reaction-time": "⚡",
-  "sound-sequence": "🔊",
 };
 
 function parsePlayedAt(value) {
@@ -117,7 +113,9 @@ function formatBestResult(gameId, value) {
 export function Home() {
   const { user, setUser } = useAuth();
 
-  const { vozNarrador, alternarNarrador } = useAccessibility();
+  const { vozNarrador, alternarNarrador, altoContraste } = useAccessibility();
+  const { theme } = useTheme();
+  const seasonal = theme !== "original";
 
   const [streak, setStreak] = useState(0);
   const [dailyChallenge, setDailyChallenge] = useState([]);
@@ -176,102 +174,180 @@ export function Home() {
 
   return (
     <div className={styles.page}>
-      <nav className={styles.navbar}>
-        <Speakable as="span" text="MindGames">
-          <span className={styles.brand}>MindGames</span>
-        </Speakable>
-
-        <div className={styles.navActions}>
-          <Speakable as="span" text="Ver meu histórico">
-            <Link to="/dashboard" className={styles.navLink}>
-              Ver meu histórico
+      <header className={styles.siteHeader}>
+        <nav className={styles.headerInner} aria-label="Navegação principal">
+          <Speakable as="span" text="MindGames">
+            <Link to="/" className={styles.brandLink}>
+              <svg
+                className={styles.brandIcon}
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
+                <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
+                <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+                <path d="M17.599 6.5a3 3 0 0 0 .399-1.375" />
+                <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />
+              </svg>
+              <span className={styles.brand}>MindGames</span>
             </Link>
+          </Speakable>
+
+          <div className={styles.navCenter}>
+            <Speakable as="span" text="Início">
+              <Link
+                to="/"
+                className={`${styles.navLink} ${styles.navLinkActive}`}
+                aria-current="page"
+              >
+                Início
+              </Link>
+            </Speakable>
+
+            <Speakable as="span" text="Meu histórico">
+              <Link to="/dashboard" className={styles.navLink}>
+                Meu histórico
+              </Link>
+            </Speakable>
+          </div>
+
+          <div className={styles.navActions}>
+            <Speakable
+              as="span"
+              text={
+                vozNarrador
+                  ? "Narrador ativado. Botão para desativar o narrador."
+                  : "Narrador desativado. Botão para ativar o narrador."
+              }
+            >
+              <button
+                type="button"
+                className={styles.accessibilityButton}
+                onClick={handleNarrador}
+                aria-pressed={vozNarrador}
+                aria-label={
+                  vozNarrador ? "Desativar narrador" : "Ativar narrador"
+                }
+                title={vozNarrador ? "Desativar narrador" : "Ativar narrador"}
+              >
+                <span aria-hidden="true">♿</span>
+                <span className={styles.accessibilityText}>
+                  {vozNarrador ? "Narrador ativado" : "Ativar narrador"}
+                </span>
+              </button>
+            </Speakable>
+
+            <Speakable as="span" text="Configurações">
+              <Link
+                to="/settings"
+                className={styles.settingsLink}
+                aria-label="Configurações"
+                title="Configurações"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M20 7h-9" />
+                  <path d="M14 17H5" />
+                  <circle cx="17" cy="17" r="3" />
+                  <circle cx="7" cy="7" r="3" />
+                </svg>
+              </Link>
+            </Speakable>
+
+            {user ? (
+              <div className={styles.navUser}>
+                <Speakable
+                  as="span"
+                  text={`Olá, ${user.username ?? "Jogador"}`}
+                >
+                  <span className={styles.navUsername}>
+                    Olá, <strong>{user.username ?? "Jogador"}</strong>
+                  </span>
+                </Speakable>
+
+                <Speakable as="span" text="Sair">
+                  <button
+                    type="button"
+                    className={styles.navButtonGhost}
+                    onClick={handleLogout}
+                  >
+                    Sair
+                  </button>
+                </Speakable>
+              </div>
+            ) : (
+              <>
+                <Speakable as="span" text="Entrar">
+                  <Link to="/login" className={styles.navLinkEntrar}>
+                    Entrar
+                  </Link>
+                </Speakable>
+
+                <Speakable as="span" text="Criar conta">
+                  <Link to="/register" className={styles.navButtonPrimary}>
+                    Criar conta <span aria-hidden="true">↗</span>
+                  </Link>
+                </Speakable>
+              </>
+            )}
+          </div>
+        </nav>
+      </header>
+
+      <ThemeSwitcher />
+
+      <header className={styles.hero}>
+        {theme === "halloween" && !altoContraste && (
+          <img
+            className={styles.heroImage}
+            src={halloweenBanner}
+            alt=""
+            width={1536}
+            height={640}
+          />
+        )}
+
+        {theme === "subtle" && !altoContraste && (
+          <SeasonGhost className={styles.heroGhost} size={100} />
+        )}
+
+        <div className={styles.heroCopy}>
+          <span className={styles.heroEyebrow}>
+            {seasonal ? "MENTES CURIOSAS. DESAFIOS ARREPIANTES." : "MINDGAMES"}
+          </span>
+
+          <Speakable as="span" text="Treine sua mente com ciência.">
+            <h1 className={styles.headline}>Treine sua mente com ciência.</h1>
           </Speakable>
 
           <Speakable
             as="span"
-            text={
-              vozNarrador
-                ? "Narrador ativado. Botão para desativar o narrador."
-                : "Narrador desativado. Botão para ativar o narrador."
-            }
+            text="Jogos curtos que medem atenção, memória e tempo de reação. Acompanhe sua evolução partida após partida."
           >
-            <button
-              type="button"
-              className={styles.accessibilityButton}
-              onClick={handleNarrador}
-              aria-pressed={vozNarrador}
-              aria-label={
-                vozNarrador ? "Desativar narrador" : "Ativar narrador"
-              }
-              title={vozNarrador ? "Desativar narrador" : "Ativar narrador"}
-            >
-              <span aria-hidden="true">♿</span>
-              <span>{vozNarrador ? "Narrador ativado" : "Ativar narrador"}</span>
-            </button>
-          </Speakable>
-
-          {user ? (
-            <div className={styles.navUser}>
-              <Speakable
-                as="span"
-                text={`Olá, ${user.username ?? "Jogador"}`}
-              >
-                <span className={styles.navUsername}>
-                  Olá, <strong>{user.username ?? "Jogador"}</strong>
-                </span>
-              </Speakable>
-
-              <Speakable as="span" text="Sair">
-                <button
-                  type="button"
-                  className={styles.navButtonGhost}
-                  onClick={handleLogout}
-                >
-                  Sair
-                </button>
-              </Speakable>
-            </div>
-          ) : (
-            <>
-              <Speakable as="span" text="Entrar">
-                <Link to="/login" className={styles.navLink}>
-                  Entrar
-                </Link>
-              </Speakable>
-
-              <Speakable as="span" text="Criar conta">
-                <Link to="/register" className={styles.navButtonPrimary}>
-                  Criar conta
-                </Link>
-              </Speakable>
-            </>
-          )}
-
-          <Speakable as="span" text="Configurações">
-            <Link to="/settings" className={styles.navLink}>
-              Configurações
-            </Link>
+            <p className={styles.subtitle}>
+              Jogos curtos que medem atenção, memória e tempo de reação —
+              acompanhe sua evolução partida após partida.
+            </p>
           </Speakable>
         </div>
-      </nav>
-
-      <header className={styles.hero}>
-        <span className={styles.heroEyebrow}>MINDGAMES</span>
-
-        <Speakable as="span" text="Treine sua mente com ciência.">
-          <h1 className={styles.headline}>Treine sua mente com ciência.</h1>
-        </Speakable>
-
-        <Speakable
-          as="span"
-          text="Jogos curtos que medem atenção, memória e tempo de reação. Acompanhe sua evolução partida após partida."
-        >
-          <p className={styles.subtitle}>
-            Jogos curtos que medem atenção, memória e tempo de reação —
-            acompanhe sua evolução partida após partida.
-          </p>
-        </Speakable>
       </header>
 
       <div className={styles.homeContent}>
@@ -290,10 +366,7 @@ export function Home() {
           </Speakable>
 
           <section className={styles.challengeCard}>
-            <Speakable
-              as="span"
-              text="Desafio do dia. Sua seleção de hoje."
-            >
+            <Speakable as="span" text="Desafio do dia. Sua seleção de hoje.">
               <div>
                 <span className={styles.challengeEyebrow}>DESAFIO DO DIA</span>
                 <h2 className={styles.challengeTitle}>Sua seleção de hoje</h2>
@@ -318,12 +391,13 @@ export function Home() {
                       key={gameId}
                       as="span"
                       text={`${game?.name ?? gameId}. ${
-                        completed
-                          ? "Concluído hoje."
-                          : "Ainda não jogado hoje."
+                        completed ? "Concluído hoje." : "Ainda não jogado hoje."
                       }`}
                     >
-                      <Link to={`/game/${gameId}`} className={styles.challengeGame}>
+                      <Link
+                        to={`/game/${gameId}`}
+                        className={styles.challengeGame}
+                      >
                         <span className={styles.challengeGameName}>
                           {game?.name ?? gameId}
                         </span>
@@ -336,7 +410,10 @@ export function Home() {
                             ✓
                           </span>
                         ) : (
-                          <span className={styles.challengeArrow} aria-hidden="true">
+                          <span
+                            className={styles.challengeArrow}
+                            aria-hidden="true"
+                          >
                             →
                           </span>
                         )}
@@ -347,6 +424,14 @@ export function Home() {
               </div>
             )}
           </section>
+
+          <div className={styles.seasonNote} hidden={!seasonal}>
+            <div className={styles.seasonNoteHead}>
+              <span aria-hidden="true">👻</span>
+              Bons sustos, bons treinos.
+            </div>
+            <p>Neste Halloween, dê um susto na sua zona de conforto.</p>
+          </div>
         </aside>
 
         <main className={styles.gamesArea}>
@@ -386,8 +471,12 @@ export function Home() {
                     <Link className={styles.link} to={`/game/${registry.id}`}>
                       <article className={styles.card}>
                         <div className={styles.gameTop}>
-                          <span className={styles.gameIcon} aria-hidden="true">
-                            {GAME_ICONS[registry.id] ?? "🎯"}
+                          <span
+                            className={styles.gameIcon}
+                            data-category={categoryKey}
+                            aria-hidden="true"
+                          >
+                            <GameIcon gameId={registry.id} />
                           </span>
                           <span
                             className={styles.categoryTag}
@@ -408,11 +497,26 @@ export function Home() {
                         <div className={styles.gameFooter}>
                           {stats?.partidas ? (
                             <>
-                              <span>{stats.partidas} {stats.partidas === 1 ? "partida" : "partidas"}</span>
-                              {bestResult && <span>Melhor: {bestResult}</span>}
+                              <span className={styles.playedStats}>
+                                <span>
+                                  {stats.partidas}{" "}
+                                  {stats.partidas === 1
+                                    ? "partida"
+                                    : "partidas"}
+                                </span>
+                                {bestResult && (
+                                  <span>Melhor: {bestResult}</span>
+                                )}
+                              </span>
                             </>
                           ) : (
-                            <span className={styles.notPlayed}>○ Ainda não jogado</span>
+                            <span className={styles.notPlayed}>
+                              <span
+                                className={styles.statusDot}
+                                aria-hidden="true"
+                              />
+                              Ainda não jogado
+                            </span>
                           )}
                           <span className={styles.gameArrow} aria-hidden="true">
                             →

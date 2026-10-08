@@ -9,7 +9,7 @@
 }
 
 .titulo {
-  color: #000000;
+  color: var(--cor-texto-titulo);
   margin-bottom: 1rem;
   font-size: 2.5rem;
 }
@@ -21,9 +21,9 @@
   gap: 1.5rem;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #555;
+  color: var(--cor-texto-secundario);
   margin-bottom: 1.5rem;
-  background: #f8f9fa;
+  background: var(--cor-superficie-suave);
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
@@ -34,8 +34,8 @@
 }
 
 .mensagemVitoria {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--cor-sucesso-fundo);
+  color: var(--cor-sucesso-texto);
   padding: 1rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: bold;
@@ -111,7 +111,7 @@
 /* Face com o "❓" */
 
 .cartaFront {
-  background: linear-gradient(135deg, #be2942 0%, #580e24 100%);
+  background: var(--memoria-verso);
   color: white;
   transition:
     transform 0.2s ease,
@@ -128,22 +128,22 @@
 /* Face com o valor */
 
 .cartaBack {
-  background: #ffffff;
-  color: #333;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-forte);
   transform: rotateY(180deg);
 }
 
 /* Carta pareada */
 
 .cartaContainer.pareada .cartaBack {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--cor-ok-suave-fundo);
+  color: var(--cor-ok-suave-texto);
   box-shadow: inset 0 0 0.75rem rgba(0, 0, 0, 0.05);
 }
 
 .mensagemMemoria {
-  background: #fff3cd;
-  color: #856404;
+  background: var(--cor-aviso-fundo);
+  color: var(--cor-aviso-texto);
   padding: 0.75rem 1.5rem;
   border-radius: 0.625rem;
   font-weight: 600;
@@ -194,4 +194,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
+}
