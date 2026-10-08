@@ -1,7 +1,14 @@
+import { useEffect, useRef } from "react";
 import { useReactionTime } from "./useReactionTime";
 import styles from "./ReactionTime.module.css";
 
 export function ReactionTime() {
+  const areaRef = useRef(null);
+
+  useEffect(() => {
+    areaRef.current?.focus();
+  }, []);
+
   const {
     status,
     reactionTime,
@@ -105,6 +112,7 @@ export function ReactionTime() {
 
   return (
     <div
+      ref={areaRef}
       className={`${styles.area} ${styles[status]}`}
       role="button"
       tabIndex={0}
@@ -136,9 +144,7 @@ export function ReactionTime() {
             <p className={styles.tempo}>{reactionTime.toFixed(0)} ms</p>
 
             <div className={styles.resumo}>
-              <p>
-                Média após {totalTentativas} tentativas
-              </p>
+              <p>Média após {totalTentativas} tentativas</p>
 
               <div className={styles.resultados}>
                 {tempos.map((tempo, index) => (
