@@ -102,4 +102,8 @@
   .neutralCell {
     width: 50px;
   }
-}
+}
+
+:global(html[data-theme="halloween"]) .highlightedCell {
+  background-color: #fdba74;
+}
